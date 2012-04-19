@@ -1,0 +1,7 @@
+package be.ibiiztera.md.pmatrix.pushmatrix.gui;
+
+public interface Controleur
+{
+	public enregistrerComposant(PictureComposant pc);
+	
+}

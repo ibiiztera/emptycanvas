@@ -1,0 +1,1 @@
+SimpleSphere((0.0,0.0,0.0) 3 (0, 255, 255) "c:\Users\Mary\im1.jpg" )
