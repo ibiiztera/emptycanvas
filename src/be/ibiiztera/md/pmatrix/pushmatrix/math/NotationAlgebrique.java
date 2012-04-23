@@ -5,6 +5,7 @@
 package be.ibiiztera.md.pmatrix.pushmatrix.math;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.TreeMap;
 
 /**
@@ -23,8 +24,9 @@ public class NotationAlgebrique {
     }
     public String polonaise(String algebrique)
     {
-                int l = algebrique.length();
+        int l = algebrique.length();
         ArrayList<Bloc> blocs = new ArrayList<Bloc>();
+        ArrayList<Bloc> pile = new ArrayList<Bloc>();
         TreeMap<String, String> arbre = new TreeMap<String, String>();
         String polonaise = "";
         /// rechercher les parentheses et fonctions
@@ -114,7 +116,40 @@ public class NotationAlgebrique {
         } 
         // Construire l'arbre à partir de la notation algébrique
         // TODO: 
-        
+        for(int o = 0; o<blocs.size(); o++)
+        {
+            Bloc b = blocs.get(o);
+            if(b.type==TypeBloc.FONCTION || b.type==TypeBloc.PARENTHESE)
+            {
+                Bloc min =null;
+                int start = b.end;
+                
+                Bloc sb;
+                Iterator<Bloc> it = blocs.iterator();
+                
+                while(it.hasNext())
+                {
+                    
+                    sb = it.next() ;
+                    if(sb!=b && (min==null || (sb.start>start && sb.start<min.start && sb.end<=b.end)))
+                    {
+                        min = sb;
+                    }
+                    if(min!=null)
+                    {
+                        b.contenu.add(min);
+                        blocs.remove(min);
+                    }
+                }
+            } else if(b.type == TypeBloc.OPERATEUR)
+            {
+                // Chercher si opérateurs de priorité supérieure précède
+                
+                // Si oui, réservez dans la pile
+                
+                // Si non ajoutez les opérandes
+            }
+        }
         return polonaise;
     }
     
@@ -122,7 +157,7 @@ public class NotationAlgebrique {
 {
     String [] str = new String []
     {
-        "a*b+4", "a b * 4 +"
+        "a*b+(4+1)*5", "a b * 4 1 + 5 * +"
     };
     
 }
