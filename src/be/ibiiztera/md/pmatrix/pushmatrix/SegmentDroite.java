@@ -81,4 +81,8 @@ public class SegmentDroite implements Representable{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    public Point3D calculerPoint3D(double d) {
+        return origine.plus(extremite.moins(origine).mult(d));
+    }
+
 }
