@@ -3,12 +3,16 @@ package be.ibiiztera.md.pmatrix.pushmatrix.generator;
 import be.ibiiztera.md.pmatrix.pushmatrix.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  *
  * @author Manuel DAHMEN
  */
 public class ApproximationFonction1D implements Courbe{
+    private ArrayList<Double> longueurs;
+    private Double slongueurs;
+    public double DELTA = 0.0001;
 
     @Override
     public String id() {
@@ -24,11 +28,6 @@ public class ApproximationFonction1D implements Courbe{
     public Representable place(MODObjet aThis) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    public class Point
-    {
-        public double x;
-        public double y;
-    }
     public static final int TYPE_DROITE = 0;
     public static final int TYPE_BEZIER = 1;
     private final ArrayList<Point3D> points;
@@ -39,6 +38,7 @@ public class ApproximationFonction1D implements Courbe{
     {
         points = new ArrayList<Point3D> ();
         objets = new ArrayList<Representable>();
+        longueurs = new ArrayList<Double>();
         r = new HashMap<Double, Representable>();
     }
     public void add(int type, double x, double y)
@@ -70,8 +70,45 @@ public class ApproximationFonction1D implements Courbe{
         }
     }
 
-    public ArrayList<Representable> getObjets() {
+    public ArrayList<Representable> getObjets() { 
         return objets;
     }
-    
+    public void rectification()
+    {
+        slongueurs = 0.0;
+        Iterator<Representable> it= objets.iterator();
+        while(it.hasNext())
+        {
+            Representable r = it.next();
+            if(r instanceof SegmentDroite)
+            {
+                SegmentDroite sd = (SegmentDroite)r;
+                double d = Point3D.distance(sd.getExtremite(), sd.getOrigine());
+                slongueurs += d;
+                longueurs.add(d);
+            } else if(r instanceof BezierCubique)
+            {
+                BezierCubique bc = (BezierCubique)r;
+                double d= 0;
+                for(double t = 0; t<1.0-DELTA; t+=DELTA)
+                    d += Point3D.distance(bc.calculerPoint3D(t), bc.calculerPoint3D(t+DELTA));
+                slongueurs += d;
+                longueurs.add(d);
+            }
+                
+        }
+    }
+    public Point3D calculerPoint3D(double t)
+    {
+        double t2=0;
+        int i=0;
+        while(i<longueurs.size() && t2+longueurs.get(i)/slongueurs <t)
+            t2 += longueurs.get(i++)/slongueurs;
+        Representable r2 = objets.get(i);
+        if(r2 instanceof BezierCubique)
+            return ((BezierCubique)r2).calculerPoint3D((t-t2)*longueurs.get(i));
+        else if(r2 instanceof SegmentDroite)
+            return ((SegmentDroite)r2).calculerPoint3D((t-t2)*longueurs.get(i));
+        return null;
+    }
 }
