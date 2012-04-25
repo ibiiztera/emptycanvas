@@ -24,13 +24,10 @@ public class NotationAlgebrique {
         public String fonction;
         public int priorite = -1;
         public int numero = 0;
-<<<<<<< HEAD
         public Double valeur;
-=======
->>>>>>> cd79cf1f893a7027277e28c2b87b004b015dcc76
     }
 
-    public String polonaise(String algebrique) {
+    public Bloc arbre(String algebrique) {
         int l = algebrique.length();
         ArrayList<Bloc> blocs = new ArrayList<Bloc>();
         ArrayList<Bloc> pile = new ArrayList<Bloc>();
@@ -122,7 +119,6 @@ public class NotationAlgebrique {
                 b.type = TypeBloc.OPERATEUR;
                 b.numero = ++numero;
             }
-<<<<<<< HEAD
             // Rercherche de nombres
             if (Character.isDigit(algebrique.charAt(i)) || algebrique.charAt(i)=='.') {
                 int cpt = i;
@@ -141,8 +137,6 @@ public class NotationAlgebrique {
                 i = cpt+1;
                 blocs.add(b);
             }
-=======
->>>>>>> cd79cf1f893a7027277e28c2b87b004b015dcc76
             // Recherche des variables
             if (Character.isLetter(algebrique.charAt(i))) {
                 int cpt = i;
@@ -174,7 +168,6 @@ public class NotationAlgebrique {
         // TODO: 
                 // Chercher si opérateurs de priorité supérieure précède
                 // Si oui, réservez dans la pile
-<<<<<<< HEAD
                // Si non ajoutez les opérandes
         // Chercher itérativement par ordre de priorité : de plus basse à plus haute
         // 1 Premier
@@ -183,10 +176,7 @@ public class NotationAlgebrique {
         // 4 Gauche -> Gauche Droite 
         // 5 Droite -> ....
         
-=======
-                // Si non ajoutez les opérandes
->>>>>>> cd79cf1f893a7027277e28c2b87b004b015dcc76
-        return polonaise;
+        return new Bloc();
     }
 
     public static void main(String[] args) {
