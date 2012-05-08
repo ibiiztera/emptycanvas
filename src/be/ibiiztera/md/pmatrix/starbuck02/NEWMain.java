@@ -10,6 +10,9 @@
 package be.ibiiztera.md.pmatrix.starbuck02;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.Scene;
+import com.sun.jnlp.PersistenceServiceImpl;
+import java.util.prefs.Preferences;
+import javax.jnlp.PersistenceService;
 import javax.swing.JFileChooser;
 
 /**
@@ -18,11 +21,13 @@ import javax.swing.JFileChooser;
  */
 public class NEWMain extends javax.swing.JFrame {
     private static boolean restart;
-    private String bundlePackage = "be/ibiiztera/md/pmatrix/starbuck02/";
+    private String bundlePackage = "be/ibiiztera/md/pmatrix/starbuck02/Bundle_";
+    private String bundleExtension = ".properties";
     private RenderPreviewPanel rpp = null;
-    private PreviewControleur pc = new PreviewControleurConcrete();
+    private PreviewControleur pc = new PreviewControleurConcrete(); 
     protected String txtCHEMIN;
     private String langue;
+    private Preferences prefs;
     
     
     public void restart()
@@ -33,18 +38,18 @@ public class NEWMain extends javax.swing.JFrame {
     {
         Config c = new Config();
         c.load();
-        c.saveProperty("langue", langue);
+        c.saveProperty("Langue", langue);
         c.save();
         this.langue = langue;
     }  
-    
      /** Creates new form NEWMain */
     public NEWMain() {
         initComponents();
 	//        String h = System.getProperty(java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/starbuck02/Bundle").getString("USER_HOME"));
         //String p = System.getProperty(java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/starbuck02/Bundle").getString("FILE_SEPARATOR"));
         //txtCHEMIN = h + p + java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/starbuck02/Bundle").getString("PMMATRIX_DATA") + p + java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/starbuck02/Bundle").getString("TESTSCRIPTS");
-
+        loadConfig();
+        
         rpp = new RenderPreviewPanel();
         rpp.setView(pc);
         this.splitEdtorView.setLeftComponent(rpp);
@@ -329,27 +334,28 @@ public class NEWMain extends javax.swing.JFrame {
         
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItemLangueActionPerformed
-
    public void loadConfig()
    {
+       prefs = Preferences.userNodeForPackage(this.getClass());
+       
        Config c = new Config();
        c.load();
-       this.langue = (String) c.getProperty("langue");
+       
+       this.langue = (String) c.getProperty("Langue");
+       System.out.println("locale: "+ langue);
    } 
     /**
     * @param args the command line arguments
     */
     public static void main(String args[]) {
-            
-        java.awt.EventQueue.invokeLater(new Runnable() {
+            java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 NEWMain nm = new NEWMain();
-                nm.loadConfig();
                 nm.setVisible(true);
             }
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cg_edt;
     private be.ibiiztera.md.pmatrix.starbuck02.ControlsEditor controlsEditor1;

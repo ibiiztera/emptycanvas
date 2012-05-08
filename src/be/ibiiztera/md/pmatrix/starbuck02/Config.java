@@ -42,16 +42,16 @@ class Config implements Serializable {
 
     public void load() {
         try {
-            Config c = new Config();
             String appName = java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/starbuck02/Bundle").getString("APPNAME");
 
             File configFile = new File(System.getProperty("user.home") + File.separator + "." + appName);
-            if(configFile.exists())
-            {
+            if (configFile.exists()) {
                 FileInputStream is = new FileInputStream(configFile);
                 p.load(is);
             }
-            
+            else
+                System.out.println("Fichier non trouvé: " + configFile.toString());
+
         } catch (IOException ex) {
             Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -61,11 +61,9 @@ class Config implements Serializable {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    static class getConfig extends Config {
+    static Config getConfig() {
 
-        public Config getConfig() {
-            return new Config();
-        }
+        return new Config();
     }
 
     public String toString() {
@@ -83,5 +81,4 @@ class Config implements Serializable {
     public Object getProperty(Object key) {
         return p.get(key);
     }
-    
 }

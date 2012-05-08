@@ -106,8 +106,8 @@ public class Langue extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Config c = new Config.getConfig();
-        c.langue(jList1.getSelectedValue().toString());
+        Config c = Config.getConfig();
+        c.langue(jList1.getSelectedValue().toString().toLowerCase().substring(0,2));
         c.save();
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
