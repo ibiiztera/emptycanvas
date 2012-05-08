@@ -17,10 +17,23 @@ import javax.swing.JFileChooser;
  * @author manuel
  */
 public class NEWMain extends javax.swing.JFrame {
+    private static boolean restart;
     private String bundlePackage = "be/ibiiztera/md/pmatrix/starbuck02/";
     private RenderPreviewPanel rpp = null;
     private PreviewControleur pc = new PreviewControleurConcrete();
     protected String txtCHEMIN;
+    private String langue;
+    
+    
+    public void restart()
+    {
+        restart = true;
+    }
+    public void sauvegarderChoixLangue(String langue)
+    {
+        this.langue = langue;
+    }  
+    
      /** Creates new form NEWMain */
     public NEWMain() {
         initComponents();
@@ -277,11 +290,11 @@ public class NEWMain extends javax.swing.JFrame {
                     {
                         pc.modeleModifie();
                         controlsEditor1.setText(pc.modeleTXT());
-                        jFormattedTextField1.setText(java.util.ResourceBundle.getBundle(bundlePackage+"Bundle").getString("NOUVEAU MODELE OK"));
+                        jFormattedTextField1.setText(java.util.ResourceBundle.getBundle(bundlePackage+ langue + "Bundle").getString("NOUVEAU MODELE OK"));
                     }
                     else
                     {
-                        jFormattedTextField1.setText(java.util.ResourceBundle.getBundle(bundlePackage+"Bundle").getString("ERREUR"));
+                        jFormattedTextField1.setText(java.util.ResourceBundle.getBundle(bundlePackage+ langue + "Bundle").getString("ERREUR"));
 
                     }
                 }//GEN-LAST:event_sv_edtActionPerformed
@@ -306,8 +319,12 @@ public class NEWMain extends javax.swing.JFrame {
     * @param args the command line arguments
     */
     public static void main(String args[]) {
+        restart = true;
+        while(restart)
+            
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                restart = false;
                 new NEWMain().setVisible(true);
             }
         });
