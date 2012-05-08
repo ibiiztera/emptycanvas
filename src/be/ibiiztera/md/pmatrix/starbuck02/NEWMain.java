@@ -31,6 +31,10 @@ public class NEWMain extends javax.swing.JFrame {
     }
     public void sauvegarderChoixLangue(String langue)
     {
+        Config c = new Config();
+        c.load();
+        c.saveProperty("langue", langue);
+        c.save();
         this.langue = langue;
     }  
     
@@ -200,6 +204,11 @@ public class NEWMain extends javax.swing.JFrame {
 
         jMenuItemLangue.setText(bundle.getString("LANGUE")); // NOI18N
         jMenuItemLangue.setName("jMenuItemLangue"); // NOI18N
+        jMenuItemLangue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemLangueActionPerformed(evt);
+            }
+        });
         jMenuOptions.add(jMenuItemLangue);
 
         jMenuBar1.add(jMenuOptions);
@@ -212,9 +221,6 @@ public class NEWMain extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(splitEdtorView, javax.swing.GroupLayout.DEFAULT_SIZE, 1203, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(cg_edt)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -233,7 +239,9 @@ public class NEWMain extends javax.swing.JFrame {
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jFormattedTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 1203, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(splitEdtorView, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1203, Short.MAX_VALUE)
+                            .addComponent(jFormattedTextField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1203, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -249,7 +257,7 @@ public class NEWMain extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16)
-                .addComponent(splitEdtorView, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+                .addComponent(splitEdtorView)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -315,17 +323,29 @@ public class NEWMain extends javax.swing.JFrame {
                    controlsEditor1.setControls(jCheckBoxMenuItemEditerLaScene.isSelected());
                 }//GEN-LAST:event_jCheckBoxMenuItemEditerLaSceneActionPerformed
 
+    private void jMenuItemLangueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLangueActionPerformed
+        Langue l = new Langue(this, true);
+        l.setVisible(true);
+        
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemLangueActionPerformed
+
+   public void loadConfig()
+   {
+       Config c = new Config();
+       c.load();
+       this.langue = (String) c.getProperty("langue");
+   } 
     /**
     * @param args the command line arguments
     */
     public static void main(String args[]) {
-        restart = true;
-        while(restart)
             
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                restart = false;
-                new NEWMain().setVisible(true);
+                NEWMain nm = new NEWMain();
+                nm.loadConfig();
+                nm.setVisible(true);
             }
         });
     }

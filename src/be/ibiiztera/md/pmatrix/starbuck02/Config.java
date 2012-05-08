@@ -15,22 +15,23 @@ import java.util.logging.Logger;
  *
  * @author Manuel DAHMEN
  */
-class Config implements Serializable{
-    private Properties p;
+class Config implements Serializable {
+
+    private Properties p = new Properties();
 
     void langue(String selectedValue) {
         this.p.put(java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/starbuck02/Bundle").getString("LANGUE"), selectedValue);
-   }
+    }
 
     void save() {
         try {
             String appName = java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/starbuck02/Bundle").getString("APPNAME");
-            
-            File configFile = new File(System.getProperty("user.home") + File.separator + "." + appName);   
+
+            File configFile = new File(System.getProperty("user.home") + File.separator + "." + appName);
             FileOutputStream os = null;
             try {
                 os = new FileOutputStream(configFile);
-                os.write(toString().getBytes());
+                p.store(os, "");
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -39,23 +40,48 @@ class Config implements Serializable{
         }
     }
 
+    public void load() {
+        try {
+            Config c = new Config();
+            String appName = java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/starbuck02/Bundle").getString("APPNAME");
+
+            File configFile = new File(System.getProperty("user.home") + File.separator + "." + appName);
+            if(configFile.exists())
+            {
+                FileInputStream is = new FileInputStream(configFile);
+                p.load(is);
+            }
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    void saveProperty(String langue, String langue0) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
     static class getConfig extends Config {
 
         public Config getConfig() {
             return new Config();
         }
     }
-    public String toString()
-    {
+
+    public String toString() {
         String t = "";
         Set<Object> k = p.keySet();
         Iterator<Object> i = k.iterator();
-        while(i.hasNext())
-        {
+        while (i.hasNext()) {
             Object key = i.next();
-            t+= key.toString()+"="+p.get(key).toString();
+            t += key.toString() + "=" + p.get(key).toString();
         }
-             
+
         return t;
     }
+
+    public Object getProperty(Object key) {
+        return p.get(key);
+    }
+    
 }
