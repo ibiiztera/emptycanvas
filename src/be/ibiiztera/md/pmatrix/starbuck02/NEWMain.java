@@ -10,9 +10,7 @@
 package be.ibiiztera.md.pmatrix.starbuck02;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.Scene;
-import com.sun.jnlp.PersistenceServiceImpl;
 import java.util.prefs.Preferences;
-import javax.jnlp.PersistenceService;
 import javax.swing.JFileChooser;
 
 /**
@@ -334,7 +332,7 @@ public class NEWMain extends javax.swing.JFrame {
         
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItemLangueActionPerformed
-   public void loadConfig()
+   public final void loadConfig()
    {
        prefs = Preferences.userNodeForPackage(this.getClass());
        
