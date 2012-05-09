@@ -11,6 +11,8 @@ import java.util.ResourceBundle;
  */
 public class TestObjet implements Test{
     private int version = 1;
+    private String template ="";
+    
     Properties properties = new Properties();
     private File dir = null;
     private Scene scene;
@@ -22,13 +24,19 @@ public class TestObjet implements Test{
     @Override
     public void init() {
         ResourceBundle bundle1 = ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/test/pushmatrix/newtest/Bundle.properties");
+        
         File dir = new File(bundle1.getString("testpath"));
         if(!dir.exists())
             dir.mkdirs();
         this.dir = new File(dir.getAbsolutePath()+File.separator+this.getClass().getName());
         if(!this.dir.exists())
             this.dir.mkdirs();
-       properties.put("name", this.getClass().getCanonicalName()); 
+       
+        template = bundle1.getString("template");
+        
+        properties.put("name", this.getClass().getCanonicalName());
+        properties.put("version", version);
+        
     }
 
     @Override
