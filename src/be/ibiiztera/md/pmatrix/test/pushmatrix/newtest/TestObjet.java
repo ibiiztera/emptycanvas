@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package be.ibiiztera.md.pmatrix.test.pushmatrix.newtest;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.Scene;
@@ -14,6 +10,7 @@ import java.util.ResourceBundle;
  * @author Manuel DAHMEN
  */
 public class TestObjet implements Test{
+    private int version = 1;
     Properties properties = new Properties();
     private File dir = null;
     private Scene scene;
