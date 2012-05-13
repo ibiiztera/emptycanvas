@@ -143,6 +143,11 @@ public class NEWMain extends javax.swing.JFrame {
 
         jButton4.setText(bundle.getString("btn4")); // NOI18N
         jButton4.setName("jButton4"); // NOI18N
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setText(bundle.getString("btn5")); // NOI18N
         jButton5.setName("jButton5"); // NOI18N
@@ -332,6 +337,12 @@ public class NEWMain extends javax.swing.JFrame {
         
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItemLangueActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        View4 v4 = new View4();
+        v4.addModel(this.pc.modele());
+        v4.setVisible(true);
+    }//GEN-LAST:event_jButton4ActionPerformed
    public final void loadConfig()
    {
        prefs = Preferences.userNodeForPackage(this.getClass());

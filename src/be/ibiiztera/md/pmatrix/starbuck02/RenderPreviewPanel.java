@@ -1,20 +1,22 @@
 package be.ibiiztera.md.pmatrix.starbuck02;
 
+import be.ibiiztera.md.pmatrix.pushmatrix.Scene;
+import be.ibiiztera.md.pmatrix.pushmatrix.ZBuffer;
+import be.ibiiztera.md.pmatrix.pushmatrix.ZBufferFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JPanel;
-import be.ibiiztera.md.pmatrix.pushmatrix.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 public class RenderPreviewPanel extends JPanel {

@@ -214,6 +214,11 @@ public class PreviewControleurConcrete implements PreviewControleur {
         }
     }
 
+    @Override
+    public Scene modele() {
+        return scene;
+    }
+
 
 
 }

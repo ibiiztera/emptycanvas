@@ -35,5 +35,7 @@ public interface PreviewControleur {
 
     public void renduFichier();
 
+    public Scene modele();
+
 
 }
