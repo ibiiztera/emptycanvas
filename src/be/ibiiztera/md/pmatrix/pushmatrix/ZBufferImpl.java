@@ -322,6 +322,11 @@ public class ZBufferImpl implements ZBuffer {
                         SegmentDroite p = (SegmentDroite) r;
                         test(p.getOrigine());
                         test(p.getExtremite());
+                    } else if (r instanceof TRI) {
+                        TRI t  = (TRI) r;
+                        test(t.getSommet()[0]);
+                        test(t.getSommet()[1]);
+                        test(t.getSommet()[2]);
                     } else if (r instanceof BSpline) {
                         BSpline b = (BSpline) r;
                         Iterator<Point3D> ts = b.iterator();
