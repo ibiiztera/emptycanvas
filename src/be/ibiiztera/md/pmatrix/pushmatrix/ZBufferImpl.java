@@ -27,6 +27,7 @@ public class ZBufferImpl implements ZBuffer {
     private Color COULEUR_FOND = Color.WHITE;
     public static final int PERSPECTIVE_ISOM = 0;
     public static final int PERSPECTIVE_OEIL = 1;
+    public int type_perspective;
 
     @Override
     public void suivante() {
@@ -37,6 +38,12 @@ public class ZBufferImpl implements ZBuffer {
 
         COULEUR_FOND = new Color(255, 255, 255, 255);
 
+    }
+
+    @Override
+    public void perspective(double z) {
+        type_perspective = PERSPECTIVE_OEIL;
+        camera = new Point3D(0,0,z);
     }
 
     public class Box2DPerspective {
@@ -60,6 +67,8 @@ public class ZBufferImpl implements ZBuffer {
     private Point3D[][] Sx;
     private Color[][] Sc;
     private int[][] Simeid;
+    private float[][] Simeprof;
+    public double INFINI_PROF = 1000000;
 
     @Override
     public int resX() {
@@ -82,13 +91,13 @@ public class ZBufferImpl implements ZBuffer {
     }
     
     public class ImageMapElement {
-
         private ImageMapElement instance;
 
         public ImageMapElement() {
             Sx = new Point3D[la][ha];
             Sc = new Color[la][ha];
             Simeid = new int[la][ha];
+            Simeprof = new float[la][ha];
         }
 
         public ImageMapElement getInstance(int x, int y) {
@@ -165,8 +174,21 @@ public class ZBufferImpl implements ZBuffer {
                 return false;
             }
         }
-    }
 
+        private double getElementProf(int x, int y) {
+            if (checkCoordonnees(x, y)) {
+                return Simeprof[x][y];
+            } else {
+                return INFINI_PROF;
+            }
+        }
+        private void setProf(int x, int y, double d) {
+            if (checkCoordonnees(x, y)) {
+                Simeprof[x][y] = (float) d;
+            }
+        }
+    }
+    public Point3D camera = new Point3D(0,0,-100);
     public class ImageMap {
 
         private ImageMapElement ime;
@@ -214,38 +236,68 @@ public class ZBufferImpl implements ZBuffer {
         public void testProf(Point3D x3d, Point coordonneesPointEcra, Color c) {
             int x = (int) coordonneesPointEcra.getX();
             int y = (int) coordonneesPointEcra.getY();
+            double prof = 0;
+            if(type_perspective==PERSPECTIVE_ISOM)
+            {
+            }
+            else
+            {
+                prof = camera.moins(x3d).norme();
+            }
             if (x >= 0 & x < la & y >= 0 & y < ha
-                    & x3d.getZ() < ime.getElementPoint(x, y).getZ()) {
+                    & x3d.getZ() < ime.getElementProf(x, y)) {
                 ime.setElementID(x, y, id);
                 ime.setElementPoint(x, y, x3d);
                 ime.setElementCouleur(x, y, c);
+                ime.setProf(x, y, prof);
             }
 
         }
 
         public void testProf(Point3D x3d, Color c) {
-            Point ce = coordonneesPointEcran(x3d);
+            Point ce ;
+            double prof = 0;
+            if(type_perspective==PERSPECTIVE_ISOM)
+            {
+                ce = coordonneesPointEcran(x3d);
+            }
+            else
+            {
+                ce = coordonneesPointEcranPerspective(x3d);
+                prof = camera.moins(x3d).norme();
+                
+            }
             int x = (int) ce.getX();
             int y = (int) ce.getY();
             if (x >= 0 & x < la & y >= 0 & y < ha
-                    && x3d.getZ() < ime.getElementPoint(x, y).getZ()) {
+                    && x3d.getZ() < ime.getElementProf(x, y)) {
                 ime.setElementID(x, y, id);
                 ime.setElementPoint(x, y, x3d);
                 ime.setElementCouleur(x, y, c);
+                ime.setProf(x, y, prof);
+
             }
-
         }
-
         public void dessine(Point3D x3d, Color c) {
-            Point ce = coordonneesPointEcran(x3d);
+            Point ce ;
+            double prof = 0;
+            if(type_perspective==PERSPECTIVE_ISOM)
+                ce = coordonneesPointEcran(x3d);
+            else
+            {
+                ce = coordonneesPointEcranPerspective(x3d);
+                prof = camera.moins(x3d).norme();
+            }
             int x = (int) ce.getX();
             int y = (int) ce.getY();
             if (x >= 0 & x < la & y >= 0 & y < ha) {
                 ime.setElementID(x, y, id);
                 ime.setElementPoint(x, y, x3d);
                 ime.setElementCouleur(x, y, c);
+                ime.setProf(x, y, prof);
             }
         }
+
     }
 
     public class Box2D {
@@ -1261,5 +1313,11 @@ public class ZBufferImpl implements ZBuffer {
 
     public void testPoint(Point3D p) {
         ime.testProf(p, p.getC());
+    }
+    public Point coordonneesPointEcranPerspective(Point3D x3d) {
+        return new Point(
+                (int)((x3d.getX()-0)*(box.getMaxx()-box.getMinx())+la/2),
+                (int)((x3d.getY()-0)*(box.getMaxy()-box.getMiny())+ha/2)
+        );
     }
 }

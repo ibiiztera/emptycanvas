@@ -23,4 +23,6 @@ public interface ZBuffer
 
     public void suivante();
 
+    public void perspective(double i);
+
 }

@@ -13,7 +13,7 @@ import java.awt.Color;
  *
  * @author Manuel DAHMEN
  */
-public class TestTriangle extends TestObjet{
+public class TestTrianglePerspective extends TestObjet{
     @Override
     public void testScene()
     {
@@ -27,8 +27,8 @@ public class TestTriangle extends TestObjet{
     
     public static void main(String [] args)
     {
-        TestTriangle testTriangle = new TestTriangle();
+        TestObjet testTriangle = new TestTrianglePerspective();
+        testTriangle.setPerspective(true);
         testTriangle.run();
     }
-
 }

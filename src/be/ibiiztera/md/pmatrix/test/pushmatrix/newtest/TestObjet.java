@@ -31,6 +31,8 @@ public class TestObjet implements Test{
     private File dir = null;
     protected Scene scene;
     protected String description;
+    private boolean perpective;
+    private boolean perspective;
     @Override
     public Scene scene() {
         return scene;
@@ -70,6 +72,9 @@ public class TestObjet implements Test{
         applyTemplate(getTemplate(), properties);
         
     }
+    public void setPerspective(boolean b) {
+        this.perspective = b;
+    }
 
     @Override
     public void run() {
@@ -79,6 +84,10 @@ public class TestObjet implements Test{
         try {
             ZBuffer z = ZBufferFactory.instance(resx, resy);
             z.scene(scene);
+            
+            if(perpective)
+                z.perspective(-100);
+            
             z.dessinerSilhouette3D();
             
             
