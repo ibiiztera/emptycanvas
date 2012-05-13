@@ -104,6 +104,9 @@ public class ZBufferImpl implements ZBuffer {
             Sc = new Color[la][ha];
             Simeid = new int[la][ha];
             Simeprof = new float[la][ha];
+            for(int i=0; i<la; i++)
+                for(int j=0; j<ha; j++)
+                    Simeprof[i][j] = (float) INFINI.getZ();
         }
 
         public ImageMapElement getInstance(int x, int y) {
@@ -1239,7 +1242,9 @@ public class ZBufferImpl implements ZBuffer {
 
     public Point coordonneesPointEcranPerspective(Point3D x3d) {
         return new Point(
-                (int) ((x3d.getX() - 0) * (box.getMaxx() - box.getMinx()) + la / 2),
-                (int) ((x3d.getY() - 0) * (box.getMaxy() - box.getMiny()) + ha / 2));
+                (int) ((x3d.getX() - 0) * (x3d.getZ()/camera.getZ()) 
+                    / (box.getMaxx() - box.getMinx()) * + la / 2),
+                (int) ((x3d.getY() - 0) * (x3d.getZ()/camera.getZ()) 
+                    / (box.getMaxy() - box.getMiny()) + ha / 2));
     }
 }

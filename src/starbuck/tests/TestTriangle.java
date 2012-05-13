@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package starbuck.tests;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
@@ -21,7 +17,7 @@ public class TestTriangle extends TestObjet{
         scene().add(new TRI(new Point3D(0,0,0),new Point3D(1,0,0), new Point3D(0,1,0), Color.green));
         scene().add(new TRI(new Point3D(1,1,0),new Point3D(1,0,0), new Point3D(0,1,0), Color.red));
         
-        
+        setPerspective(false);
         description = "Two triangles . One green down left . One red upper right";
     }
     
