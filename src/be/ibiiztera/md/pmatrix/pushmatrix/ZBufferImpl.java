@@ -849,6 +849,10 @@ public class ZBufferImpl implements ZBuffer {
             } else if (r instanceof SegmentDroite) {
                 SegmentDroite s = (SegmentDroite) r;
                 ligne(s.getOrigine(), s.getExtremite(), s.getC());
+            } else if (r instanceof TRI) {
+                TRI t  = (TRI) r;
+                tracerTriangle(t.getSommet()[0], t.getSommet()[1],
+                            t.getSommet()[2], t.getCouleur());
             } else if (r instanceof BSpline) {
                 BSpline b = (BSpline) r;
                 int nt = 100;
