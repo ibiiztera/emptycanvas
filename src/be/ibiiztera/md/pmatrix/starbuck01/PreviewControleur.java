@@ -1,6 +1,5 @@
 package be.ibiiztera.md.pmatrix.starbuck01;
 
-import starbuck01.actions.ViewAction;
 import be.ibiiztera.md.pmatrix.pushmatrix.*;
 import java.awt.Image;
 import java.io.File;
@@ -18,7 +17,6 @@ public interface PreviewControleur {
     public void WAIT(String msg);
     public void RELACHE_HACHE();
 
-    public boolean modifierModele(Scene s, ViewAction va);
     public boolean modifierModele(String text);
     public void asssignerVue(RenderPreviewPanel rpv);
 

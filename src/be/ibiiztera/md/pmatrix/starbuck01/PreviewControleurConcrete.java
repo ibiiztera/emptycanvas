@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import starbuck01.actions.ViewAction;
 import be.ibiiztera.md.pmatrix.pushmatrix.*;
 import be.ibiiztera.md.pmatrix.pushmatrix.scripts.Loader;
 import be.ibiiztera.md.pmatrix.pushmatrix.ui.ModeleIO;
@@ -50,15 +49,16 @@ public class PreviewControleurConcrete implements PreviewControleur {
         return ZBufferFactory.instance(vue.getWidth(), vue.getHeight());
     }
 
-    public boolean modifierModele(Scene scene, ViewAction act) {
+/*    public boolean modifierModele(Scene scene, ViewAction act) {
         HACHE();
         WAIT("MODIFIER MODELE");
         // Modifier scene...
         modeleModifie();
         RELACHE_HACHE();
         return false;
-    }
-
+    
+    * 
+    */
     public Image preview() {
         if (scene == null) {
             scene = new Scene();
