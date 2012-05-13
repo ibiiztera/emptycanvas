@@ -27,7 +27,7 @@ public class ZBufferImpl implements ZBuffer {
     private Color COULEUR_FOND = Color.WHITE;
     public static final int PERSPECTIVE_ISOM = 0;
     public static final int PERSPECTIVE_OEIL = 1;
-    public int type_perspective;
+    public int type_perspective = PERSPECTIVE_ISOM;
 
     @Override
     public void suivante() {
@@ -43,7 +43,12 @@ public class ZBufferImpl implements ZBuffer {
     @Override
     public void perspective(double z) {
         type_perspective = PERSPECTIVE_OEIL;
-        camera = new Point3D(0,0,z);
+        camera = new Point3D(0, 0, z);
+    }
+
+    @Override
+    public void isometrique() {
+        type_perspective = PERSPECTIVE_ISOM;
     }
 
     public class Box2DPerspective {
@@ -83,14 +88,15 @@ public class ZBufferImpl implements ZBuffer {
     public void couleurDeFond(Color c) {
         COULEUR_FOND = c;
     }
-    
-    public void zoom(float z)
-    {
-        if(z>0)
+
+    public void zoom(float z) {
+        if (z > 0) {
             zoom = z;
+        }
     }
-    
+
     public class ImageMapElement {
+
         private ImageMapElement instance;
 
         public ImageMapElement() {
@@ -182,13 +188,15 @@ public class ZBufferImpl implements ZBuffer {
                 return INFINI_PROF;
             }
         }
+
         private void setProf(int x, int y, double d) {
             if (checkCoordonnees(x, y)) {
                 Simeprof[x][y] = (float) d;
             }
         }
     }
-    public Point3D camera = new Point3D(0,0,-100);
+    public Point3D camera = new Point3D(0, 0, -100);
+
     public class ImageMap {
 
         private ImageMapElement ime;
@@ -237,11 +245,9 @@ public class ZBufferImpl implements ZBuffer {
             int x = (int) coordonneesPointEcra.getX();
             int y = (int) coordonneesPointEcra.getY();
             double prof = 0;
-            if(type_perspective==PERSPECTIVE_ISOM)
-            {
-            }
-            else
-            {
+            if (type_perspective == PERSPECTIVE_ISOM) {
+                prof = x3d.getZ();
+            } else {
                 prof = camera.moins(x3d).norme();
             }
             if (x >= 0 & x < la & y >= 0 & y < ha
@@ -255,17 +261,15 @@ public class ZBufferImpl implements ZBuffer {
         }
 
         public void testProf(Point3D x3d, Color c) {
-            Point ce ;
+            Point ce;
             double prof = 0;
-            if(type_perspective==PERSPECTIVE_ISOM)
-            {
+            if (type_perspective == PERSPECTIVE_ISOM) {
                 ce = coordonneesPointEcran(x3d);
-            }
-            else
-            {
+                prof = x3d.getZ();
+            } else {
                 ce = coordonneesPointEcranPerspective(x3d);
                 prof = camera.moins(x3d).norme();
-                
+
             }
             int x = (int) ce.getX();
             int y = (int) ce.getY();
@@ -278,13 +282,14 @@ public class ZBufferImpl implements ZBuffer {
 
             }
         }
+
         public void dessine(Point3D x3d, Color c) {
-            Point ce ;
+            Point ce;
             double prof = 0;
-            if(type_perspective==PERSPECTIVE_ISOM)
+            if (type_perspective == PERSPECTIVE_ISOM) {
                 ce = coordonneesPointEcran(x3d);
-            else
-            {
+                prof = -1000;
+            } else {
                 ce = coordonneesPointEcranPerspective(x3d);
                 prof = camera.moins(x3d).norme();
             }
@@ -297,7 +302,6 @@ public class ZBufferImpl implements ZBuffer {
                 ime.setProf(x, y, prof);
             }
         }
-
     }
 
     public class Box2D {
@@ -375,7 +379,7 @@ public class ZBufferImpl implements ZBuffer {
                         test(p.getOrigine());
                         test(p.getExtremite());
                     } else if (r instanceof TRI) {
-                        TRI t  = (TRI) r;
+                        TRI t = (TRI) r;
                         test(t.getSommet()[0]);
                         test(t.getSommet()[1]);
                         test(t.getSommet()[2]);
@@ -416,9 +420,11 @@ public class ZBufferImpl implements ZBuffer {
                         for (int x = 0; x < t.getMaxX() - 1; x++) {
                             for (int y = 0; y < t.getMaxY() - 1; y++) {
                                 t.getTris(x, y, ts);
-                                for(int i=0; i<2; i++)
-                                    for(int j=0; j<3; j++)
+                                for (int i = 0; i < 2; i++) {
+                                    for (int j = 0; j < 3; j++) {
                                         test(ts[i].getSommet()[j]);
+                                    }
+                                }
                             }
                         }
 
@@ -524,128 +530,67 @@ public class ZBufferImpl implements ZBuffer {
         }
     }
     /*
-    public class TrianglePix {
-
-    public class PP {
-
-    public Point p;
-    public Point3D p3d;
-
-    public PP(Point p, Point3D p3d) {
-    this.p = p;
-    this.p3d = p3d;
-    }
-    }
-    private HashMap<Integer, ArrayList<PP>> po2 = new HashMap<Integer, ArrayList<PP>>();
-    private Point3D p3dMin;
-    private Point3D p3dMax;
-
-    public boolean put(Integer arg0, PP arg1) {
-    if (po2.get(arg0) == null) {
-    po2.put(arg0, new ArrayList<ZBufferImpl.TrianglePix.PP>());
-    }
-    return po2.get(arg0).add(arg1);
-    }
-
-    public ArrayList<PP> get(Object arg0) {
-    return po2.get(arg0);
-    }
-
-    public int getMinY() {
-    Iterator<Integer> it = po2.keySet().iterator();
-    int min = 10000;
-    while (it.hasNext()) {
-    Integer n = it.next();
-    if (n < min) {
-    min = n;
-    }
-
-    }
-    return min;
-    }
-
-    public int getMaxY() {
-    Iterator<Integer> it = po2.keySet().iterator();
-    int max = -10000;
-    while (it.hasNext()) {
-    Integer n = it.next();
-
-    if (n > max) {
-    max = n;
-    }
-
-    }
-    return max;
-    }
-
-    public int getMinX(int y) {
-    if (po2.get(y) == null) {
-    return -1;
-    }
-    Iterator<PP> it = po2.get(y).iterator();
-    int minx = 10000;
-    while (it.hasNext()) {
-    PP n = it.next();
-    // System.out.println("N y= " + y + " :: x= " + n.getX());
-    if (n.p.getX() < minx) {
-    minx = (int) n.p.getX();
-    }
-
-    }
-    return minx;
-    }
-
-    public int getMaxX(int y) {
-    if (po2.get(y) == null) {
-    return -1;
-    }
-    Iterator<PP> it = po2.get(y).iterator();
-    int maxx = -10000;
-    while (it.hasNext()) {
-    PP n = it.next();
-    // System.out.println("N y= " + y + " :: x= " + n.getX());
-    if (n.p.getX() > maxx) {
-    maxx = (int) n.p.getX();
-    }
-
-    }
-    return maxx;
-    }
-
-    public void calculer3D(int y) {
-    if (po2.get(y) == null) {
-    p3dMin = new Point3D(0, 0, -2000);
-    p3dMax = new Point3D(0, 0, -2000);
-
-    return;
-    }
-    double minx = 10000;
-    double maxx = -10000;
-    for (int i = 0; i < po2.get(y).size(); i++) {
-
-    PP pp = po2.get(y).get(i);
-    Point n = pp.p;
-    Point3D n3d = pp.p3d;
-
-    if (n.getX() < minx) {
-    minx = n.getX();
-    p3dMin = n3d;
-    }
-    if (n.getX() < maxx) {
-    maxx = n.getX();
-    p3dMax = n3d;
-    }
-    }
-    }
-
-    public Point3D get3DXMin() {
-    return p3dMin;
-    }
-
-    public Point3D get3DXMax() {
-    return p3dMax;
-    }
-    }
+     * public class TrianglePix {
+     *
+     * public class PP {
+     *
+     * public Point p; public Point3D p3d;
+     *
+     * public PP(Point p, Point3D p3d) { this.p = p; this.p3d = p3d; } } private
+     * HashMap<Integer, ArrayList<PP>> po2 = new HashMap<Integer,
+     * ArrayList<PP>>(); private Point3D p3dMin; private Point3D p3dMax;
+     *
+     * public boolean put(Integer arg0, PP arg1) { if (po2.get(arg0) == null) {
+     * po2.put(arg0, new ArrayList<ZBufferImpl.TrianglePix.PP>()); } return
+     * po2.get(arg0).add(arg1); }
+     *
+     * public ArrayList<PP> get(Object arg0) { return po2.get(arg0); }
+     *
+     * public int getMinY() { Iterator<Integer> it = po2.keySet().iterator();
+     * int min = 10000; while (it.hasNext()) { Integer n = it.next(); if (n <
+     * min) { min = n; }
+     *
+     * }
+     * return min; }
+     *
+     * public int getMaxY() { Iterator<Integer> it = po2.keySet().iterator();
+     * int max = -10000; while (it.hasNext()) { Integer n = it.next();
+     *
+     * if (n > max) { max = n; }
+     *
+     * }
+     * return max; }
+     *
+     * public int getMinX(int y) { if (po2.get(y) == null) { return -1; }
+     * Iterator<PP> it = po2.get(y).iterator(); int minx = 10000; while
+     * (it.hasNext()) { PP n = it.next(); // System.out.println("N y= " + y + "
+     * :: x= " + n.getX()); if (n.p.getX() < minx) { minx = (int) n.p.getX(); }
+     *
+     * }
+     * return minx; }
+     *
+     * public int getMaxX(int y) { if (po2.get(y) == null) { return -1; }
+     * Iterator<PP> it = po2.get(y).iterator(); int maxx = -10000; while
+     * (it.hasNext()) { PP n = it.next(); // System.out.println("N y= " + y + "
+     * :: x= " + n.getX()); if (n.p.getX() > maxx) { maxx = (int) n.p.getX(); }
+     *
+     * }
+     * return maxx; }
+     *
+     * public void calculer3D(int y) { if (po2.get(y) == null) { p3dMin = new
+     * Point3D(0, 0, -2000); p3dMax = new Point3D(0, 0, -2000);
+     *
+     * return; } double minx = 10000; double maxx = -10000; for (int i = 0; i <
+     * po2.get(y).size(); i++) {
+     *
+     * PP pp = po2.get(y).get(i); Point n = pp.p; Point3D n3d = pp.p3d;
+     *
+     * if (n.getX() < minx) { minx = n.getX(); p3dMin = n3d; } if (n.getX() <
+     * maxx) { maxx = n.getX(); p3dMax = n3d; } } }
+     *
+     * public Point3D get3DXMin() { return p3dMin; }
+     *
+     * public Point3D get3DXMax() { return p3dMax; } }
      *
      *
      */
@@ -907,9 +852,9 @@ public class ZBufferImpl implements ZBuffer {
                 SegmentDroite s = (SegmentDroite) r;
                 ligne(s.getOrigine(), s.getExtremite(), s.getC());
             } else if (r instanceof TRI) {
-                TRI t  = (TRI) r;
+                TRI t = (TRI) r;
                 tracerTriangle(t.getSommet()[0], t.getSommet()[1],
-                            t.getSommet()[2], t.getCouleur());
+                        t.getSommet()[2], t.getCouleur());
             } else if (r instanceof BSpline) {
                 BSpline b = (BSpline) r;
                 int nt = 100;
@@ -956,34 +901,27 @@ public class ZBufferImpl implements ZBuffer {
                 TRIObjetGenerateurAbstract to = (TRIObjetGenerateurAbstract) r;
                 to.draw(this);
                 /*
-                TRIObjetGenerateurAbstract to = (TRIObjetGenerateurAbstract) r;
-                TRI[] tris = new TRI[2];
-                tris[0] = new TRI(INFINI, INFINI, INFINI);
-                tris[1] = new TRI(INFINI, INFINI, INFINI);
-                for (int numX = 0; numX < to.getMaxX() - 1; numX++) {
-                for (int numY = 0; numY < to.getMaxY() - 1; numY++) {
-                to.getTris(numX, numY, tris);
-
-                double incrMax = 1.0;
-                for (int t = 0; t < 2; t++) {
-                for (int c = 0; c < 3; c++) {
-                Point p1 = coordonneesPointEcran(tris[t].getSommet()[c]);
-                Point p2 = coordonneesPointEcran(tris[t].getSommet()[(c + 1) % 3]);
-                double incr = 1.0 / (Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY()));
-                if (incr < incrMax) {
-                incrMax = incr;
-                }
-                }
-                }
-
-                for (double rx = 0; rx < 1.0; rx += incrMax) {
-                for (double ry = 0; ry < 1.0; ry += incrMax) {
-                testPoint(to.getPoint3D(tris, numX, numY, rx, ry));
-                }
-                }
-
-                }
-                }
+                 * TRIObjetGenerateurAbstract to = (TRIObjetGenerateurAbstract)
+                 * r; TRI[] tris = new TRI[2]; tris[0] = new TRI(INFINI, INFINI,
+                 * INFINI); tris[1] = new TRI(INFINI, INFINI, INFINI); for (int
+                 * numX = 0; numX < to.getMaxX() - 1; numX++) { for (int numY =
+                 * 0; numY < to.getMaxY() - 1; numY++) { to.getTris(numX, numY,
+                 * tris);
+                 *
+                 * double incrMax = 1.0; for (int t = 0; t < 2; t++) { for (int
+                 * c = 0; c < 3; c++) { Point p1 =
+                 * coordonneesPointEcran(tris[t].getSommet()[c]); Point p2 =
+                 * coordonneesPointEcran(tris[t].getSommet()[(c + 1) % 3]);
+                 * double incr = 1.0 / (Math.abs(p1.getX() - p2.getX()) +
+                 * Math.abs(p1.getY() - p2.getY())); if (incr < incrMax) {
+                 * incrMax = incr; } } }
+                 *
+                 * for (double rx = 0; rx < 1.0; rx += incrMax) { for (double ry
+                 * = 0; ry < 1.0; ry += incrMax) { testPoint(to.getPoint3D(tris,
+                 * numX, numY, rx, ry)); } }
+                 *
+                 * }
+                 * }
                  */
             } else if (r instanceof PGeneratorZ) {
                 PGeneratorZ p = (PGeneratorZ) r;
@@ -1082,12 +1020,11 @@ public class ZBufferImpl implements ZBuffer {
      * @param p
      * @return
      *//*
-    private java.awt.Point coordonneesPointEcranPerspect(Point3D p) {
-
-    return new java.awt.Point((int)(la / 2 - p.getX() / (boxPerspect.d - p.getZ())
-    / boxPerspect.w * la), (int)(ha / 2 - p.getY()
-    / (boxPerspect.d - p.getZ()) / boxPerspect.h * ha));
-    }
+     * private java.awt.Point coordonneesPointEcranPerspect(Point3D p) {
+     *
+     * return new java.awt.Point((int)(la / 2 - p.getX() / (boxPerspect.d -
+     * p.getZ()) / boxPerspect.w * la), (int)(ha / 2 - p.getY() / (boxPerspect.d
+     * - p.getZ()) / boxPerspect.h * ha)); }
      */
 
     private void tracerAretes(Point3D point3d, Point3D point3d2, Color c) {
@@ -1136,44 +1073,29 @@ public class ZBufferImpl implements ZBuffer {
     private ArrayList<Representable> repr;
     private Perspective perspective = Perspective.getInstance(Perspective.P_CUBIQUE_LINEAIRE);
     /*
-    public void tracerTriangle3D(TrianglePix tpix) {
-    int ymin = tpix.getMinY();
-    int ymax = tpix.getMaxY();
-
-    for (int y = ymin; y < ymax; y++) {
-    int xmin = tpix.getMinX(y);
-    int xmax = tpix.getMaxX(y);
-    tpix.calculer3D(y);
-    Point3D pp1 = tpix.get3DXMin();
-    Point3D pp2 = tpix.get3DXMin();
-    double itere = 0.25 / (Math.abs(xmax - xmin));
-    if (xmin != -1 && xmax != -1 && xmin < xmax) {
-    for (double a = 0; a < 1; a += itere) {
-    // int x = (int) (xmin + a * (xmax - xmin));
-    Point3D pp = pp1.plus(pp1.mult(-1).plus(pp2).mult(a));
-    ime.testProf(pp, coordonneesPointEcran(pp), couleurCourante);
-    }
-    }
-    }
-    }
+     * public void tracerTriangle3D(TrianglePix tpix) { int ymin =
+     * tpix.getMinY(); int ymax = tpix.getMaxY();
+     *
+     * for (int y = ymin; y < ymax; y++) { int xmin = tpix.getMinX(y); int xmax
+     * = tpix.getMaxX(y); tpix.calculer3D(y); Point3D pp1 = tpix.get3DXMin();
+     * Point3D pp2 = tpix.get3DXMin(); double itere = 0.25 / (Math.abs(xmax -
+     * xmin)); if (xmin != -1 && xmax != -1 && xmin < xmax) { for (double a = 0;
+     * a < 1; a += itere) { // int x = (int) (xmin + a * (xmax - xmin)); Point3D
+     * pp = pp1.plus(pp1.mult(-1).plus(pp2).mult(a)); ime.testProf(pp,
+     * coordonneesPointEcran(pp), couleurCourante); } } } }
      */
     /*
-    public void tracerArete(Point3D pp1, Point3D pp2) {
-    Point p1 = coordonneesPointEcran(pp1);
-    Point p2 = coordonneesPointEcran(pp2);
-    double iteres = 0.25 / (Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY()));
-    for (double a = 0; a < 1.0; a += iteres) {
-    Point3D p3d = pp1.plus(pp1.mult(-1).plus(pp2).mult(a));
-    Point pp = coordonneesPointEcran(p3d)/*
-     * new Point( (int) (p1.getX() + (a * (p2.getX() -
-     * p1.getX()))), (int) (p1.getY() + (a * (p2.getY() -
-     * p1.getY()))))
-    ;
-    pi.put((int) pp.getY(), pi.new PP(pp, p3d));
-    // System.out.println(p3d.getZ());
-    }
-
-    }
+     * public void tracerArete(Point3D pp1, Point3D pp2) { Point p1 =
+     * coordonneesPointEcran(pp1); Point p2 = coordonneesPointEcran(pp2); double
+     * iteres = 0.25 / (Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() -
+     * p2.getY())); for (double a = 0; a < 1.0; a += iteres) { Point3D p3d =
+     * pp1.plus(pp1.mult(-1).plus(pp2).mult(a)); Point pp =
+     * coordonneesPointEcran(p3d)/* new Point( (int) (p1.getX() + (a *
+     * (p2.getX() - p1.getX()))), (int) (p1.getY() + (a * (p2.getY() -
+     * p1.getY())))) ; pi.put((int) pp.getY(), pi.new PP(pp, p3d)); //
+     * System.out.println(p3d.getZ()); }
+     *
+     * }
      */
 
     public void tracerTriangle(Point3D pp1, Point3D pp2, Point3D pp3, Color c) {
@@ -1314,10 +1236,10 @@ public class ZBufferImpl implements ZBuffer {
     public void testPoint(Point3D p) {
         ime.testProf(p, p.getC());
     }
+
     public Point coordonneesPointEcranPerspective(Point3D x3d) {
         return new Point(
-                (int)((x3d.getX()-0)*(box.getMaxx()-box.getMinx())+la/2),
-                (int)((x3d.getY()-0)*(box.getMaxy()-box.getMiny())+ha/2)
-        );
+                (int) ((x3d.getX() - 0) * (box.getMaxx() - box.getMinx()) + la / 2),
+                (int) ((x3d.getY() - 0) * (box.getMaxy() - box.getMiny()) + ha / 2));
     }
 }

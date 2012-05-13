@@ -25,4 +25,6 @@ public interface ZBuffer
 
     public void perspective(double i);
 
+    public void isometrique();
+
 }

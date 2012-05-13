@@ -87,7 +87,8 @@ public class TestObjet implements Test{
             
             if(perpective)
                 z.perspective(-100);
-            
+            else
+                z.isometrique();
             z.dessinerSilhouette3D();
             
             
