@@ -4,6 +4,8 @@
  */
 package be.ibiiztera.md.pmatrix.test.pushmatrix.newtest;
 
+import be.ibiiztera.md.pmatrix.pushmatrix.scripts.Loader;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -24,5 +26,20 @@ public class TestCollection {
     public void add(TestObjet to)
     {
         tests.add(to);
+    }
+    public void add(File fichier)
+    {
+        TestObjet to = new TestObjet();
+        new Loader().loadIF(fichier, to.scene());
+        add(to);
+    }
+    public void add(File [] fichiers)
+    {
+        for(int i=0; i<fichiers.length; i++)
+        {
+            TestObjet to = new TestObjet();
+            new Loader().loadIF(fichiers[i], to.scene());
+            add(to);
+        }
     }
 }
