@@ -88,6 +88,7 @@ public class TestObjet implements Test{
             g.drawString(description, 0, 1100);
             ImageIO.write(((RenderedImage)ri), type, file);
             System.out.println(file.getAbsolutePath());
+            System.out.println(scene.toString());
             
             
             

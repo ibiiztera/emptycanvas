@@ -5,7 +5,6 @@ import java.awt.Color;
 public class TRI implements Representable {
 
     private String id;
-    private static final long serialVersionUID = 198300003L;
     private Point3D[] sommet;
     private Color couleur;
 

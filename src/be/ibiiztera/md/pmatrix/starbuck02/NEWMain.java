@@ -19,7 +19,7 @@ import javax.swing.JFileChooser;
  */
 public class NEWMain extends javax.swing.JFrame {
     private static boolean restart;
-    private String bundlePackage = "be/ibiiztera/md/pmatrix/starbuck02/Bundle_";
+    private String bundlePackage = "be/ibiiztera/md/pmatrix/starbuck02/";
     private String bundleExtension = ".properties";
     private RenderPreviewPanel rpp = null;
     private PreviewControleur pc = new PreviewControleurConcrete(); 
@@ -301,11 +301,11 @@ public class NEWMain extends javax.swing.JFrame {
                     {
                         pc.modeleModifie();
                         controlsEditor1.setText(pc.modeleTXT());
-                        jFormattedTextField1.setText(java.util.ResourceBundle.getBundle(bundlePackage+ langue + "Bundle").getString("NOUVEAU MODELE OK"));
+                        jFormattedTextField1.setText(java.util.ResourceBundle.getBundle(bundlePackage+ "Bundle_"+langue ).getString("NOUVEAU MODELE OK"));
                     }
                     else
                     {
-                        jFormattedTextField1.setText(java.util.ResourceBundle.getBundle(bundlePackage+ langue + "Bundle").getString("ERREUR"));
+                        jFormattedTextField1.setText(java.util.ResourceBundle.getBundle(bundlePackage+ "Bundle_"+langue).getString("ERREUR"));
 
                     }
                 }//GEN-LAST:event_sv_edtActionPerformed
