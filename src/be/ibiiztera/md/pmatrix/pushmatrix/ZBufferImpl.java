@@ -1243,8 +1243,8 @@ public class ZBufferImpl implements ZBuffer {
     public Point coordonneesPointEcranPerspective(Point3D x3d) {
         return new Point(
                 (int) ((x3d.getX() - 0) * (x3d.getZ()/camera.getZ()) 
-                    / (box.getMaxx() - box.getMinx()) * + la / 2),
+                    / (box.getMaxx() - box.getMinx()) * la + la / 2),
                 (int) ((x3d.getY() - 0) * (x3d.getZ()/camera.getZ()) 
-                    / (box.getMaxy() - box.getMiny()) + ha / 2));
+                    / (box.getMaxy() - box.getMiny()) *ha + ha / 2));
     }
 }

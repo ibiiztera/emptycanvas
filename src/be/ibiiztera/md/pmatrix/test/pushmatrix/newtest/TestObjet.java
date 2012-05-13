@@ -33,6 +33,7 @@ public class TestObjet implements Test{
     protected String description;
     private boolean perpective;
     private boolean perspective;
+    private double camera;
     @Override
     public Scene scene() {
         return scene;
@@ -74,6 +75,12 @@ public class TestObjet implements Test{
     }
     public void setPerspective(boolean b) {
         this.perspective = b;
+        this.camera = -100;
+    }
+    
+    public void setPerspective(double i) {
+        setPerspective(true);
+        this.camera = i;
     }
 
     @Override
@@ -86,7 +93,7 @@ public class TestObjet implements Test{
             z.scene(scene);
             
             if(perpective)
-                z.perspective(-100);
+                z.perspective(this.camera);
             else
                 z.isometrique();
             z.dessinerSilhouette3D();
