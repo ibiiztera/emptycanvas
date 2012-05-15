@@ -7,6 +7,11 @@ import be.ibiiztera.md.pmatrix.pushmatrix.BezierCubique2D;
 import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 
 public class InterpreteBezier2D implements Interprete{
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 	private int pos;
 	@Override
 	public Object interprete(String text, int pos) throws InterpreteException{
@@ -31,7 +36,7 @@ public class InterpreteBezier2D implements Interprete{
 		pos = ib.getPosition();
 		
 		
-		ParseColor pc = new ParseColor();
+		InterpreteCouleur pc = new InterpreteCouleur();
 		Color c = (Color) pc.interprete(text, pos);
 		pos = pc.getPosition();
 		
@@ -64,7 +69,7 @@ public class InterpreteBezier2D implements Interprete{
 				
 				for(int j = 0; j<4; j++)
 				{
-					InterpretePoint3D ip = new InterpretePoint3D();
+					InterpretePoint3DBAK ip = new InterpretePoint3DBAK();
 					points[i][j] = (Point3D) ip.interprete(text, pos);
 					points[i][j].setC(c);
 					pos = ip.getPosition();

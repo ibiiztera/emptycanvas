@@ -26,6 +26,7 @@ public class InterpreteFacade {
     private String text;
     private int pos;
     private boolean okay;
+    private String répertoire;
 
     public InterpreteFacade(String text, int pos) {
         super();
@@ -122,7 +123,7 @@ public class InterpreteFacade {
     }
 
     public Point3D interpretePoint3D() throws InterpreteException {
-        ParsePoint pp = new ParsePoint();
+        InterpretePoint3D pp = new InterpretePoint3D();
         Point3D c = new Point3D();
         try {
             c = (Point3D) pp.interprete(text, pos);
@@ -149,7 +150,7 @@ public class InterpreteFacade {
     }
 
     public Color interpreteColor() throws InterpreteException {
-        ParseColor pc = new ParseColor();
+        InterpreteCouleur pc = new InterpreteCouleur();
         Color c = Color.BLACK;
         try {
             c = (Color) pc.interprete(text, pos);
@@ -453,5 +454,9 @@ public class InterpreteFacade {
             throw new InterpreteException(java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/pushmatrix/scripts/InterpreteLangage").getString("TRISPHERE :  ERREUR D'ANALYSE SYNTAXIQUE "), ex);
         }
         return s;
+    }
+
+    void setRépertoire(String répertoire) {
+        this.répertoire = répertoire;
     }
 }

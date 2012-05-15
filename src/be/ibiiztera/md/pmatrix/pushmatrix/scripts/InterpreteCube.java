@@ -9,6 +9,11 @@ import java.util.ArrayList;
  * @author manuel
  */
 class InterpreteCube implements Interprete {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
     private int position;
     public Object interprete(String text, int pos) throws InterpreteException {
         InterpretesBase ib = new InterpretesBase();
@@ -24,7 +29,7 @@ class InterpreteCube implements Interprete {
         pos = ib.getPosition();
 
 
-        ParsePoint pp = new ParsePoint();
+        InterpretePoint3D pp = new InterpretePoint3D();
         Point3D pposition = (Point3D) pp.interprete(text, pos);
         pos = pp.getPosition();
         

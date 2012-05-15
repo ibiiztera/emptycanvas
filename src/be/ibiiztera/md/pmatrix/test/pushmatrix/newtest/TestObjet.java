@@ -4,6 +4,7 @@ import be.ibiiztera.md.pmatrix.pushmatrix.Scene;
 import be.ibiiztera.md.pmatrix.pushmatrix.ZBuffer;
 import be.ibiiztera.md.pmatrix.pushmatrix.ZBufferFactory;
 import be.ibiiztera.md.pmatrix.pushmatrix.ZBufferImpl;
+import be.ibiiztera.md.pmatrix.pushmatrix.scripts.Loader;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -66,7 +67,19 @@ public class TestObjet implements Test{
     @Override
     public void testScene() {
     }
-
+    @Override
+    public void testScene(File f) {
+        if(f.getAbsolutePath().endsWith("mood")||f.getAbsolutePath().endsWith("moo"))
+        {
+            new Loader().loadIF(f, scene);
+        }
+        else
+        {
+            System.err.println("Erreur: extension incorrecte");
+            System.exit(1);
+    
+        }
+    }
     @Override
     public void publishResult() 
     {

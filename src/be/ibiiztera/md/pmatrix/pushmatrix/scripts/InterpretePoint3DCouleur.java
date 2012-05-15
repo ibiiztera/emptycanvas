@@ -6,6 +6,11 @@ import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 import java.awt.Color;
 
 public class InterpretePoint3DCouleur implements Interprete {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 
     private InterpreteConstants c;
     private int pos;
@@ -15,8 +20,8 @@ public class InterpretePoint3DCouleur implements Interprete {
 
     public Object interprete(String text, int pos) throws InterpreteException {
         InterpretesBase ib = new InterpretesBase();
-        ParsePoint pp;
-        ParseColor pc;
+        InterpretePoint3D pp;
+        InterpreteCouleur pc;
         Point3D p = null;
 
         ArrayList<Integer> pattern = new ArrayList<Integer>();
@@ -30,12 +35,12 @@ public class InterpretePoint3DCouleur implements Interprete {
 
         pos = ib.getPosition();
 
-        pp = new ParsePoint();
+        pp = new InterpretePoint3D();
         p = (Point3D) pp.interprete(text, pos);
 
         pos = pp.getPosition();
 
-        pc = new ParseColor();
+        pc = new InterpreteCouleur();
         Color cc = (Color) pc.interprete(text, pos);
 
         pos = pc.getPosition();
@@ -60,7 +65,7 @@ public class InterpretePoint3DCouleur implements Interprete {
 
     public static void main(String[] args) {
         InterpretePoint3DCouleur pp = new InterpretePoint3DCouleur();
-        InterpretePoint3D pp2 = new InterpretePoint3D();
+        InterpretePoint3DBAK pp2 = new InterpretePoint3DBAK();
         try {
             System.out.println("LONG FORMAT");
             String s = "(( 0.0, 1.0, 2.0) (255, 0, 0))\n";

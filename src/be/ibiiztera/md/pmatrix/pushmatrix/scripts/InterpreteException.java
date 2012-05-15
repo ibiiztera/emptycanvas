@@ -2,7 +2,8 @@ package be.ibiiztera.md.pmatrix.pushmatrix.scripts;
 
 @SuppressWarnings("serial")
 public class InterpreteException extends Exception {
-
+    private String répertoire;
+  
 	public InterpreteException(String string) {
 		super(string);
 	}

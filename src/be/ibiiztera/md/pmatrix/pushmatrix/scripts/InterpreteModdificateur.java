@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package be.ibiiztera.md.pmatrix.pushmatrix.scripts;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.*;
@@ -13,6 +8,11 @@ import java.util.ArrayList;
  * @author manuel
  */
 public class InterpreteModdificateur implements Interprete {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
     private int pos;
 
     public Object interprete(String text, int pos) throws InterpreteException {
@@ -46,7 +46,7 @@ public class InterpreteModdificateur implements Interprete {
             if(ib.read(text, pos).get(1) instanceof InterpretesBase.CODE)
             {
                 pos = ib.getPosition();
-                ParsePoint pp = new ParsePoint();
+                InterpretePoint3D pp = new InterpretePoint3D();
                 mh.centre((Point3D)pp.interprete(text, pos));
                 
                 pos = pp.getPosition();
@@ -94,7 +94,7 @@ public class InterpreteModdificateur implements Interprete {
                 pos = ib.getPosition();
                 Point3D vAxe [] = new Point3D[3];
                 for(int vecteur = 0; vecteur < 3; vecteur++){
-                    ParsePoint pp = new ParsePoint();
+                    InterpretePoint3D pp = new InterpretePoint3D();
                     vAxe[vecteur] = (Point3D)pp.interprete(text, pos);
 
                     pos = pp.getPosition();
@@ -102,7 +102,7 @@ public class InterpreteModdificateur implements Interprete {
 
                 mr.matrice(new Matrix33(vAxe));
 
-                ParsePoint pp = new ParsePoint();
+                InterpretePoint3D pp = new InterpretePoint3D();
                 mr.centre((Point3D)pp.interprete(text, pos));
 
 
@@ -140,7 +140,7 @@ public class InterpreteModdificateur implements Interprete {
             if(ib.read(text, pos).get(1) instanceof InterpretesBase.CODE)
             {
                 pos = ib.getPosition();
-                ParsePoint pp = new ParsePoint();
+                InterpretePoint3D pp = new InterpretePoint3D();
                 mt.translation((Point3D)pp.interprete(text, pos));
 
 

@@ -3,6 +3,11 @@ package be.ibiiztera.md.pmatrix.pushmatrix.scripts;
 // TODO IMPLEMENT OR REMOVE
 public class InterpreteShapeIdentifier implements Interprete
 {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 
 	@Override
 	public Object interprete(String text, int pos) throws InterpreteException {

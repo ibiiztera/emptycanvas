@@ -18,6 +18,11 @@ import javax.imageio.ImageIO;
  * @date 23-mars-2012
  */
 public class InterpreteTRISphere implements Interprete {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 	private int pos;
 	public Object interprete(String text, int pos) throws InterpreteException {
 		Point3D ps = null;
@@ -31,7 +36,7 @@ public class InterpreteTRISphere implements Interprete {
 		ib.read(text, pos);
 		pos = ib.getPosition();
 
-			ParsePoint pp = new ParsePoint();
+			InterpretePoint3D pp = new InterpretePoint3D();
 			ps = (Point3D) pp.interprete(text, pos);
 			pos = pp.getPosition();
 

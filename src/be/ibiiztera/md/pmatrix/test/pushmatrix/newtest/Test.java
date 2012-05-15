@@ -1,6 +1,7 @@
 package be.ibiiztera.md.pmatrix.test.pushmatrix.newtest;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.Scene;
+import java.io.File;
 import java.util.Properties;
 
 /**
@@ -12,6 +13,7 @@ public interface Test {
     
     public void init();
     public void testScene();
+    public void testScene(File f);
     
     public void run();
     

@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class InterpreteListeTriangle implements Interprete {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 
     private int pos = 0;
     private int numFacettes;

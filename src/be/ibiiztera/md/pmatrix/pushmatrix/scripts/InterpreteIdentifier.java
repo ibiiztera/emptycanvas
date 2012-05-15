@@ -1,6 +1,11 @@
 package be.ibiiztera.md.pmatrix.pushmatrix.scripts;
 
 public class InterpreteIdentifier implements Interprete {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 
 	private int pos;
 

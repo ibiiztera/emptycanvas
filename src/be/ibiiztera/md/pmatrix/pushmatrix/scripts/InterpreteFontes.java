@@ -20,6 +20,11 @@ import be.ibiiztera.md.pmatrix.pushmatrix.SegmentDroite;
  * 
  */
 public class InterpreteFontes implements Interprete {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 	private int pos;
 
 	/*
@@ -48,7 +53,7 @@ public class InterpreteFontes implements Interprete {
 
 			InterpreteSegment is = new InterpreteSegment();
 			InterpreteBezier ib = new InterpreteBezier();
-			InterpretePoint3D ip = new InterpretePoint3D();
+			InterpretePoint3DBAK ip = new InterpretePoint3DBAK();
 
 			InterpretesBase isb;
 			ArrayList<Integer> pattern;

@@ -13,6 +13,11 @@ import java.util.ArrayList;
  */
 public class InterpreteAttracteurEtrange implements Interprete{
     private int pos;
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
     @Override
     public Object interprete(String text, int pos) throws InterpreteException {
         InterpretesBase ib = new InterpretesBase();

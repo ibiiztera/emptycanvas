@@ -5,6 +5,11 @@ import java.util.ArrayList;
 
 public class InterpreteLumiere implements Interprete
 {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 	private int pos;
 	public Object interprete(String text, int pos) throws InterpreteException {
 		InterpretesBase ib = new InterpretesBase();
@@ -17,7 +22,7 @@ public class InterpreteLumiere implements Interprete
 		ArrayList<Object> os = ib.read(text, pos);
 		this.pos = ib.getPosition();
 
-		ParseColor ic = new ParseColor();
+		InterpreteCouleur ic = new InterpreteCouleur();
 		Color c  = (Color) ic.interprete(text, pos);
 		
 

@@ -3,8 +3,13 @@ package be.ibiiztera.md.pmatrix.pushmatrix.scripts;
 import java.awt.Color;
 import java.util.ArrayList;
 
-public class ParseColor implements Interprete
+public class InterpreteCouleur implements Interprete
 {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 	private int pos;
 	public Object interprete(String text, int pos) throws InterpreteException {
 		InterpretesBase ib = new InterpretesBase();

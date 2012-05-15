@@ -6,6 +6,11 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 public class InterpretePolygone implements Interprete {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 
     private int pos = 0;
 
@@ -29,7 +34,7 @@ public class InterpretePolygone implements Interprete {
 
         boolean md5 = true;
         while (md5) {
-            ParsePoint pp = new ParsePoint();
+            InterpretePoint3D pp = new InterpretePoint3D();
             try {
                 Point3D p = (Point3D) pp.interprete(text, pos);
                 if (pp.getPosition() > pos) {
@@ -48,7 +53,7 @@ public class InterpretePolygone implements Interprete {
         ib.compile(pattern);
         ib.read(text, pos);
         pos = ib.getPosition();
-        ParseColor pc = new ParseColor();
+        InterpreteCouleur pc = new InterpreteCouleur();
         Color c = (Color) pc.interprete(text, pos);
         pos = pc.getPosition();
         ib = new InterpretesBase();

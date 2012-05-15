@@ -19,6 +19,11 @@ import be.ibiiztera.md.pmatrix.pushmatrix.SegmentDroite;
  *
  */
 public class InterpreteSegment implements Interprete {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 	private int pos;
 	/* (non-Javadoc)
 	 * @see be.ibiiztera.md.pmatrix.pushmatrix.scripts.Interprete#interprete(java.lang.String, int)
@@ -36,14 +41,14 @@ public class InterpreteSegment implements Interprete {
 		isb.read(text, pos);
 		pos = isb.getPosition();
 
-		InterpretePoint3D ip3 = new InterpretePoint3D();
+		InterpretePoint3DBAK ip3 = new InterpretePoint3DBAK();
 		Point3D p1 = (Point3D) ip3.interprete(text, pos);
 		pos = ip3.getPosition();
-		ip3 = new InterpretePoint3D();
+		ip3 = new InterpretePoint3DBAK();
 		Point3D p2 = (Point3D) ip3.interprete(text, pos);
 		pos = ip3.getPosition();
 		
-		ParseColor ic = new ParseColor();
+		InterpreteCouleur ic = new InterpreteCouleur();
 		Color c = (Color) ic.interprete(text, pos);
 		pos = ic.getPosition();
 

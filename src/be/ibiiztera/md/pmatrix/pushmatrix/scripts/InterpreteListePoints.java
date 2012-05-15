@@ -4,6 +4,11 @@ import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 import java.util.ArrayList;
 
 public class InterpreteListePoints implements Interprete {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 
     private int pos = 0;
 
@@ -25,7 +30,7 @@ public class InterpreteListePoints implements Interprete {
 
         boolean md5 = true;
         while (md5) {
-            ParsePoint pp = new ParsePoint();
+            InterpretePoint3D pp = new InterpretePoint3D();
             try {
                 Point3D p = (Point3D) pp.interprete(text, pos);
                 if (pp.getPosition() > pos) {

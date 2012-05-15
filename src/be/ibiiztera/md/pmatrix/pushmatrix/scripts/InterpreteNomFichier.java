@@ -15,17 +15,23 @@ import java.io.File;
  */
 public class InterpreteNomFichier implements Interprete {
 	private int pos;
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r)
+    {
+        this.répertoire = r;
+    }
 	/* (non-Javadoc)
 	 * @see be.ibiiztera.md.pmatrix.pushmatrix.scripts.Interprete#interprete(java.lang.String, int)
 	 */
 	@Override
 	public Object interprete(String text, int pos) throws InterpreteException {
-		int pos1 = text.indexOf("\"", pos);
-		int pos2 = text.indexOf("\"", pos1+1);
+		int pos1 = text.indexOf(File.separator, pos);
+		int pos2 = text.indexOf(File.separator, pos1+1);
 		
 		this.pos = pos2+1;
 		
-		return new File(text.substring(pos1+1, pos2));
+		return new File(répertoire+File.separator+text.substring(pos1+1, pos2));
 	}
 
 	/* (non-Javadoc)

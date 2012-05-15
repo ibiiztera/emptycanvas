@@ -1,7 +1,13 @@
 package be.ibiiztera.md.pmatrix.pushmatrix.scripts;
 
 public class InterpreteString implements Interprete {
-	private int pos;
+    private String répertoire;
+
+        @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
+private int pos;
 
 	@Override
 	public Object interprete(String text, int pos) throws InterpreteException {

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class Loader implements SceneLoader {
 
     private int pos;
+    private String répertoire;
 
     public void loadFObject(String data, Scene sc) throws Exception {
         interprete(data, sc);
@@ -70,6 +71,18 @@ public class Loader implements SceneLoader {
     }
 
     public boolean loadIF(File file, Scene sc) {
+        String dir = null;
+        if(file.getAbsolutePath().endsWith("mood")||file.getAbsolutePath().endsWith("moo"))
+            ;    
+        else
+        {
+            System.err.println("Extension de fichier requise: .mood");
+            System.exit(1);
+        }
+        dir = file.getAbsolutePath().substring(0, file.getAbsolutePath().lastIndexOf(File.separator));
+        
+        setRépertoire(dir);
+        
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(file);
@@ -94,26 +107,26 @@ public class Loader implements SceneLoader {
     public boolean loadIF(String t, Scene sc) {
         boolean failed = false;
         boolean end = false;
-        InterpreteFacade interpeteH = new InterpreteFacade(t, 0);
+        InterpreteFacade interpreteH = new InterpreteFacade(t, 0);
 
-
+        interpreteH.setRépertoire(répertoire);
 
 
         String id = "";
 
-        while (interpeteH.getPosition() < t.length() && !end && !failed) {
-            if (interpeteH.parseEND().equals(")")) {
+        while (interpreteH.getPosition() < t.length() && !end && !failed) {
+            if (interpreteH.parseEND().equals(")")) {
                 end = true;
                 continue;
             }
             failed = true;
             try {
-                id = interpeteH.interpreteIdentifier();
+                id = interpreteH.interpreteIdentifier();
 
                 id = id.toLowerCase();
 
 
-                pos = interpeteH.getPosition();
+                pos = interpreteH.getPosition();
             } catch (InterpreteException e1) {
                 failed = true;
                 e1.printStackTrace();
@@ -128,7 +141,7 @@ public class Loader implements SceneLoader {
                 try {
                     ib.read(t, pos);
                     pos = ib.getPosition();
-                    interpeteH.setPosition(pos);
+                    interpreteH.setPosition(pos);
                     failed = false;
                 } catch (Exception ex) {
                     Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
@@ -137,7 +150,7 @@ public class Loader implements SceneLoader {
             } else if ("bezier".equals(id)) {
                 BezierCubique bc = null;
                 try {
-                    bc = interpeteH.interpreteBezier();
+                    bc = interpreteH.interpreteBezier();
                     sc.add(bc);
                     failed = false;
 
@@ -148,7 +161,7 @@ public class Loader implements SceneLoader {
             } else if ("p".equals(id)) {
                 Point3D p = null;
                 try {
-                    p = interpeteH.interpretePoint3DAvecCouleur();
+                    p = interpreteH.interpretePoint3DAvecCouleur();
                     sc.add(p);
                     failed = false;
 
@@ -159,7 +172,7 @@ public class Loader implements SceneLoader {
             } else if ("poly".equals(id)) {
                 Polygone p = null;
                 try {
-                    p = interpeteH.interpretePolygone();
+                    p = interpreteH.interpretePolygone();
                     sc.add(p);
                     failed = false;
 
@@ -170,7 +183,7 @@ public class Loader implements SceneLoader {
             } else if ("droite".equals(id)) {
                 SegmentDroite p = null;
                 try {
-                    p = interpeteH.intepreteSegmentDroite();
+                    p = interpreteH.intepreteSegmentDroite();
                     sc.add(p);
                     failed = false;
 
@@ -181,7 +194,7 @@ public class Loader implements SceneLoader {
             } else if ("bezier2d".equals(id)) {
                 BezierCubique2D bc = null;
                 try {
-                    bc = interpeteH.interpreteBezier2d();
+                    bc = interpreteH.interpreteBezier2d();
                     sc.add(bc);
                     failed = false;
 
@@ -192,7 +205,7 @@ public class Loader implements SceneLoader {
             } else if ("cube".equals(id)) {
                 Cube c = null;
                 try {
-                    c = interpeteH.interpreteCube();
+                    c = interpreteH.interpreteCube();
                     sc.add(c);
                     failed = false;
 
@@ -202,7 +215,7 @@ public class Loader implements SceneLoader {
                 }
             } else if ("tris".equals(id)) {
                 try {
-                    TRIObject tris = interpeteH.interpreteTriangles();
+                    TRIObject tris = interpreteH.interpreteTriangles();
                     sc.add(tris);
                     failed = false;
                 } catch (InterpreteException e) {
@@ -211,7 +224,7 @@ public class Loader implements SceneLoader {
                 }
             } else if ("bspline".equals(id)) {
                 try {
-                    BSpline b = interpeteH.interpreteBSpline();
+                    BSpline b = interpreteH.interpreteBSpline();
                     sc.add(b);
                     failed = false;
                 } catch (InterpreteException e) {
@@ -219,17 +232,17 @@ public class Loader implements SceneLoader {
                     e.printStackTrace();
                 }
             } else if ("tourbillon".equals(id)) {
-                sc.add(interpeteH.intepreteTourbillon());
+                sc.add(interpreteH.intepreteTourbillon());
                 failed = false;
                 break;
             } else if ("colline".equals(id)) {
-                Colline c = (Colline) interpeteH.intepreteColline();
+                Colline c = (Colline) interpreteH.intepreteColline();
                 sc.add(c);
                 failed = false;
                 break;
             } else if ("attracteuretrange".equals(id)) {
                 try {
-                    AttracteurEtrange ae = interpeteH.intepreteAttracteurEtrange();
+                    AttracteurEtrange ae = interpreteH.intepreteAttracteurEtrange();
                     sc.add(ae);
                     failed = false;
                     break;
@@ -239,7 +252,7 @@ public class Loader implements SceneLoader {
                 }
             } else if ("tubulaire".equals(id)) {
                 try {
-                    Tubulaire ae = interpeteH.intepreteTubulaire();
+                    Tubulaire ae = interpreteH.intepreteTubulaire();
                     sc.add(ae);
                     failed = false;
                     break;
@@ -249,7 +262,7 @@ public class Loader implements SceneLoader {
                 }
             } else if ("simplesphere".equals(id)) {
                 try {
-                    SimpleSphere ss = interpeteH.intepreteSimpleSphere();
+                    SimpleSphere ss = interpreteH.intepreteSimpleSphere();
                     sc.add(ss);
                     failed = false;
                 } catch (InterpreteException ex) {
@@ -258,7 +271,7 @@ public class Loader implements SceneLoader {
                 }
             } else if ("simplespheretexture".equals(id)) {
                 try {
-                    SimpleSphereAvecTexture ss = interpeteH.interpreteSimpleSphereAvecTexture();
+                    SimpleSphereAvecTexture ss = interpreteH.interpreteSimpleSphereAvecTexture();
                     sc.add(ss);
                     failed = false;
                 } catch (InterpreteException ex) {
@@ -267,7 +280,7 @@ public class Loader implements SceneLoader {
                 }
             } else if ("tetraedre".equals(id)) {
                 try {
-                    Tetraedre t2 = interpeteH.interpreteTetraedre();
+                    Tetraedre t2 = interpreteH.interpreteTetraedre();
                     sc.add(t2);
                     failed = false;
 
@@ -276,7 +289,7 @@ public class Loader implements SceneLoader {
                 }
             } else if ("plan".equals(id)) {
                 try {
-                    Plan3D t2 = interpeteH.interpretePlan3D();
+                    Plan3D t2 = interpreteH.interpretePlan3D();
                     sc.add(t2);
                     failed = false;
 
@@ -285,7 +298,7 @@ public class Loader implements SceneLoader {
                 }
             } else if ("ellipsoide".equals(id)) {
                 try {
-                    TRIEllipsoide t2 = interpeteH.interpreteTRIEllipsoide();
+                    TRIEllipsoide t2 = interpreteH.interpreteTRIEllipsoide();
                     sc.add(t2);
                     failed = false;
 
@@ -294,7 +307,7 @@ public class Loader implements SceneLoader {
                 }
             } else if ("sphere".equals(id)) {
                 try {
-                    TRISphere t2 = interpeteH.interpreteTRISphere();
+                    TRISphere t2 = interpreteH.interpreteTRISphere();
                     sc.add(t2);
                     failed = false;
 
@@ -302,7 +315,7 @@ public class Loader implements SceneLoader {
                     Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            interpeteH.interpreteBlank();
+            interpreteH.interpreteBlank();
         }
         return !failed;
     }
@@ -318,5 +331,9 @@ public class Loader implements SceneLoader {
 
         this.loadIF(new File(txtCHEMIN + string), s);
 
+    }
+
+    private void setRépertoire(String dir) {
+        this.répertoire  =dir;
     }
 }

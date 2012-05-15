@@ -8,12 +8,17 @@ import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 import be.ibiiztera.md.pmatrix.pushmatrix.Tour;
 
 public class InterpreteTour implements Interprete{
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 
 	private int pos;
 	@Override
 	public Object interprete(String text, int pos) throws InterpreteException {
 		ArrayList <Object> objects=  new  ArrayList<Object>();
-		ParsePoint pp = new ParsePoint();
+		InterpretePoint3D pp = new InterpretePoint3D();
 		InterpretesBase ib = new InterpretesBase();
 		ArrayList<Integer> pattern = new ArrayList<Integer>();
 		pattern.add(ib.BLANK);

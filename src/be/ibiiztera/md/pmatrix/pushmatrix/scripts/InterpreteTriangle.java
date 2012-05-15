@@ -6,14 +6,19 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 public class InterpreteTriangle implements Interprete{
-	private int pos = 0;
+    private String répertoire;
+	    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
+private int pos = 0;
 	private static TRI tri;
 	
 	@Override
 	public Object interprete(String text, int pos) throws InterpreteException {
 		ArrayList <Object> objects=  new  ArrayList<Object>();
-		ParsePoint pp = new ParsePoint();
-		ParseColor pc = new ParseColor();
+		InterpretePoint3D pp = new InterpretePoint3D();
+		InterpreteCouleur pc = new InterpreteCouleur();
 		InterpretesBase ib = new InterpretesBase();
 		ArrayList<Integer> pattern = new ArrayList<Integer>();
 		pattern.add(ib.BLANK);

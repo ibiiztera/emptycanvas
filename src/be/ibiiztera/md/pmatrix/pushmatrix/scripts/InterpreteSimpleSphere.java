@@ -18,6 +18,11 @@ import be.ibiiztera.md.pmatrix.pushmatrix.extras.SimpleSphere;
  *
  */
 public class InterpreteSimpleSphere implements Interprete {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 	private int pos;
 	/* (non-Javadoc)
 	 * @see be.ibiiztera.md.pmatrix.pushmatrix.scripts.Interprete#interprete(java.lang.String, int)
@@ -29,8 +34,8 @@ public class InterpreteSimpleSphere implements Interprete {
 		Color col = Color.black;
 		
 		InterpretesBase ib;
-		InterpretePoint3D ip;
-		ParseColor pc;
+		InterpretePoint3DBAK ip;
+		InterpreteCouleur pc;
 		ArrayList<Integer> patt = null;
 		
 		ib = new InterpretesBase();
@@ -43,7 +48,7 @@ public class InterpreteSimpleSphere implements Interprete {
 		ib.read(text, pos);
 		pos = ib.getPosition();
 		
-		ip = new InterpretePoint3D();
+		ip = new InterpretePoint3DBAK();
 		c = (Point3D) ip.interprete(text, pos);
 		pos = ip.getPosition();
 		
@@ -59,7 +64,7 @@ public class InterpreteSimpleSphere implements Interprete {
 		pos = ib.getPosition();
 		r = (Double) ib.get().get(1);
 		
-		pc = new ParseColor();
+		pc = new InterpreteCouleur();
 		col = (Color) pc.interprete(text, pos);
 		pos = pc.getPosition();
 		

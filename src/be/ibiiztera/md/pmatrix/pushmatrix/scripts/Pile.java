@@ -12,6 +12,11 @@ public class Pile implements Interprete, Definition
     private ArrayList<Type> types;
     private ArrayList<Variable> variables;
     private ArrayList<Operateur> operateurs;
+
+    @Override
+    public void setRépertoire(String r) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     public class Type
     {
 	public String nom;

@@ -18,6 +18,11 @@ import javax.imageio.ImageIO;
  * @date 23-mars-2012
  */
 public class InterpreteTRIEllipsoide implements Interprete {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 	private int pos;
 	public Object interprete(String text, int pos) throws InterpreteException {
  		Point3D[] ps = new Point3D[2];
@@ -34,7 +39,7 @@ public class InterpreteTRIEllipsoide implements Interprete {
 		pattern = new ArrayList<Integer>();
 		pattern.add(ib.BLANK);
 		for (int i = 0; i < 2; i++) {
-			ParsePoint pp = new ParsePoint();
+			InterpretePoint3D pp = new InterpretePoint3D();
 			ps[i] = (Point3D) pp.interprete(text, pos);
 			pos = pp.getPosition();
 

@@ -8,6 +8,11 @@ import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 import be.ibiiztera.md.pmatrix.pushmatrix.generator.Tubulaire;
 
 public class InterpreteTubulaire implements Interprete {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 
     private int pos = 0;
 
@@ -19,7 +24,7 @@ public class InterpreteTubulaire implements Interprete {
             InterpretesBase ib = null;
             ArrayList<Integer> pattern = null;
             InterpreteListePoints ilp = null;
-            ParseColor pc = null;
+            InterpreteCouleur pc = null;
 
             ib = new InterpretesBase();
             pattern = new ArrayList<Integer>();
@@ -45,7 +50,7 @@ public class InterpreteTubulaire implements Interprete {
 
 			double radius = (Double) os.get(1);
 
-            pc = new ParseColor();
+            pc = new InterpreteCouleur();
             Color c = (Color) pc.interprete(text, pos);
             pos = pc.getPosition();
 

@@ -7,7 +7,12 @@ import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 import be.ibiiztera.md.pmatrix.pushmatrix.Tetraedre;
 
 public class InterpreteTetraedre implements Interprete {
-	private int pos;
+    private String répertoire;
+	    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
+private int pos;
 
 	@Override
 	public Object interprete(String text, int pos) throws InterpreteException {
@@ -25,7 +30,7 @@ public class InterpreteTetraedre implements Interprete {
 		pattern = new ArrayList<Integer>();
 		pattern.add(ib.BLANK);
 		for (int i = 0; i < 4; i++) {
-			ParsePoint pp = new ParsePoint();
+			InterpretePoint3D pp = new InterpretePoint3D();
 			ps[i] = (Point3D) pp.interprete(text, pos);
 			pos = pp.getPosition();
 
@@ -35,7 +40,7 @@ public class InterpreteTetraedre implements Interprete {
 			pos = ib.getPosition();
 		}
 		
-		ParseColor pc = new ParseColor();
+		InterpreteCouleur pc = new InterpreteCouleur();
 		Color c = (Color) pc.interprete(text, pos);
 		pos = pc.getPosition();
 		pattern = new ArrayList<Integer>();

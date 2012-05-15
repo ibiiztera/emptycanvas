@@ -18,13 +18,14 @@ import javax.imageio.ImageIO;
  */
 public class InterpretePlan3D implements Interprete {
     private int position;
+    private String répertoire;
 
     public Object interprete(String text, int pos) throws InterpreteException {
         try {
             Plan3D plan = new Plan3D();
             InterpretesBase ib = null;
             ArrayList<Integer> pattern;
-            ParsePoint pp;
+            InterpretePoint3D pp;
             InterpreteNomFichier is;
             ib = new InterpretesBase();
             pattern = new ArrayList<Integer>();
@@ -34,16 +35,17 @@ public class InterpretePlan3D implements Interprete {
             ib.compile(pattern);
             ib.read(text, pos);
             pos = ib.getPosition();
-            pp = new ParsePoint();
+            pp = new InterpretePoint3D();
             plan.pointOrigine((Point3D) pp.interprete(text, pos));
             pos = pp.getPosition();
-            pp = new ParsePoint();
+            pp = new InterpretePoint3D();
             plan.pointXExtremite((Point3D) pp.interprete(text, pos));
             pos = pp.getPosition();
-            pp = new ParsePoint();
+            pp = new InterpretePoint3D();
             plan.pointYExtremite((Point3D) pp.interprete(text, pos));
             pos = pp.getPosition();
             is = new InterpreteNomFichier();
+            is.setRépertoire(répertoire);
             File f = (File) is.interprete(text, pos);
             plan.map(ImageIO.read(f), f.getAbsolutePath());
             pos = is.getPosition();
@@ -65,6 +67,11 @@ public class InterpretePlan3D implements Interprete {
 
     public void setConstant(InterpreteConstants c) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
     }
     
 }

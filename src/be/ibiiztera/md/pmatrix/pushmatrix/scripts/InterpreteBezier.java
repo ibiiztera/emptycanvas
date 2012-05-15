@@ -15,6 +15,11 @@ import javax.imageio.ImageIO;
 
 public class InterpreteBezier implements Interprete
 {
+    private String répertoire;
+    @Override
+    public void setRépertoire(String r) {
+        this.répertoire = r;
+    }
 	private int pos=0;
 	private int numPoints=0;
 	@Override
@@ -41,7 +46,7 @@ public class InterpreteBezier implements Interprete
 		pos = is.getPosition();		
 		*/
 		
-		ParseColor pc = new ParseColor();
+		InterpreteCouleur pc = new InterpreteCouleur();
 		Color c = (Color) pc.interprete(text, pos);
 		b.setColor(c);
 		pos = pc.getPosition();
@@ -49,7 +54,7 @@ public class InterpreteBezier implements Interprete
 		boolean ok = true;
 		while(ok)
 		{
-			ParsePoint ifa = new ParsePoint();
+			InterpretePoint3D ifa = new InterpretePoint3D();
 			try
 			{
 			b.add((Point3D)ifa.interprete(text, pos));
