@@ -56,20 +56,17 @@ public class Polygone implements Representable, TRIGenerable{
 
     @Override
     public TRIObject generate() {
+        int size = points.size();
         TRIObject to = new TRIObject();
         Point3D centre = new Point3D();
-        for(int i=0; i<points.size()-1;i++)
+        for(int i=0; i<size;i++)
         {
-            to.add(new TRI(points.get(i), points.get(i+1), null, couleur));
-            centre = centre.plus(points.get(i));
+            centre = centre.plus(points.get(i).mult(1.0/size));
         }
-        centre = centre.plus(points.get(points.size()-1));
-        for(int i=0; i<to.getTriangles().size();i++)
+        for(int i=0; i<points.size();i++)
         {
-            to.getTriangles().get(i).getSommet()[2] = centre;
+            to.add(new TRI(points.get(i%size), points.get((i+1)%size), centre, couleur));
         }
-        
-        
         return to;
     }
 
