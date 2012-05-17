@@ -131,12 +131,17 @@ public class TestObjet implements Test{
 
     @Override
     public String getTemplate() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //throw new UnsupportedOperationException("Not supported yet.");
+        return "";
     }
 
     @Override
     public String applyTemplate(String template, Properties properties) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return "";
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+    public File getFile() {
+        return file;
+    }
+
 }
