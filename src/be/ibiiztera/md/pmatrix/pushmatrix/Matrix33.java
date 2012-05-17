@@ -13,6 +13,16 @@ package be.ibiiztera.md.pmatrix.pushmatrix;
  */
 public class Matrix33 {
 	private double [] d;
+        
+        public static final Matrix33 XYZ;
+        public static final Matrix33 YZX;
+        public static final Matrix33 ZXY;
+        static
+        {
+            XYZ = new Matrix33(new double[] {1, 0, 0, 0, 1, 0, 0, 0, 1});
+            YZX = new Matrix33(new double[] {0, 1, 0, 0, 0, 1, 1, 0, 0});
+            ZXY = new Matrix33(new double[] {0, 0, 1, 1, 0, 0, 0, 1, 0});
+        }
 	public Matrix33() {
 		d = new double[9];
 	}
