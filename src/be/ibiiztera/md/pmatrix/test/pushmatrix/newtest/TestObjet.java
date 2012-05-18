@@ -16,6 +16,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import starbuck.tests.ShowTestResult;
 
 /**
  *
@@ -83,8 +84,7 @@ public class TestObjet implements Test{
     @Override
     public void publishResult() 
     {
-        applyTemplate(getTemplate(), properties);
-        
+        new ShowTestResult(getFile()).run();
     }
     public void setPerspective(boolean b) {
         this.perspective = b;

@@ -4,7 +4,6 @@ import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 import be.ibiiztera.md.pmatrix.pushmatrix.TRI;
 import be.ibiiztera.md.pmatrix.test.pushmatrix.newtest.TestObjet;
 import java.awt.Color;
-import java.io.File;
 
 /**
  *
@@ -29,7 +28,6 @@ public class TestCubeTroué extends TestObjet{
         TestCubeTroué testObjet = new TestCubeTroué();
         testObjet.setPerspective(-2.0);
         testObjet.run();
-        new ShowTestResult(testObjet.getFile()).run();
     }
 
  

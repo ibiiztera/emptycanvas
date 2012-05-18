@@ -4,6 +4,7 @@
  */
 package starbuck.tests;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -44,6 +45,7 @@ public class ShowTestResult extends javax.swing.JFrame implements Runnable {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    @Override
     public void run() {
         while (true) {
             dessine();
@@ -60,11 +62,19 @@ public class ShowTestResult extends javax.swing.JFrame implements Runnable {
             if (jPanel1 != null) {
                 Graphics g = jPanel1.getGraphics();
                 if (g != null) {
-                    g.drawImage(
+                    jPanel1.getGraphics().drawImage(
                             image,
-                            getWidth(),
-                            getHeight(),
-                            this);
+                            0,
+                            0,
+                            jPanel1.getWidth(),
+                            jPanel1.getHeight(),
+                            0,
+                            0,
+                            image.getWidth(),
+                            image.getHeight(),
+                            null);
+                    //jPanel1.getGraphics().setColor(Color.red);
+                    //jPanel1.getGraphics().drawRect(0, 0, 400, 200);
                 }
             }
         }
@@ -153,6 +163,7 @@ public class ShowTestResult extends javax.swing.JFrame implements Runnable {
          */
         java.awt.EventQueue.invokeLater(new Runnable() {
 
+            @Override
             public void run() {
                 new ShowTestResult().setVisible(true);
             }
