@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import be.ibiiztera.md.pmatrix.pushmatrix.*;
 import be.ibiiztera.md.pmatrix.pushmatrix.generator.*;
 import be.ibiiztera.md.pmatrix.pushmatrix.extras.*;
+import java.io.*;
 
 import java.util.ArrayList;
 
@@ -72,17 +73,15 @@ public class Loader implements SceneLoader {
 
     public boolean loadIF(File file, Scene sc) {
         String dir = null;
-        if(file.getAbsolutePath().endsWith("mood")||file.getAbsolutePath().endsWith("moo"))
-            ;    
-        else
-        {
+        if (file.getAbsolutePath().endsWith("mood") || file.getAbsolutePath().endsWith("moo"))
+            ; else {
             System.err.println("Extension de fichier requise: .mood");
             System.exit(1);
         }
         dir = file.getAbsolutePath().substring(0, file.getAbsolutePath().lastIndexOf(File.separator));
-        
+
         setRépertoire(dir);
-        
+
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(file);
@@ -332,8 +331,30 @@ public class Loader implements SceneLoader {
         this.loadIF(new File(txtCHEMIN + string), s);
 
     }
+    public String[] listeTESTS() {
+        String h = System.getProperty("user.home");
+        String p = System.getProperty("file.separator");
+        String txtCHEMIN = h + p + "PMMatrix.data" + p + "testscripts" + p;
+
+        File dir = new File(txtCHEMIN);
+        return liste(dir);
+    }
+    public String[] liste(File dir) {
+        if(!dir.exists() || !dir.isDirectory())
+            return null;
+        return dir.list(new FilenameFilter() {
+
+            @Override
+            public boolean accept(File dir, String name) {
+                if(name.endsWith(".mood")||name.endsWith(".moo"))
+                    return true;
+                else 
+                    return false;
+            }
+        });
+    }
 
     private void setRépertoire(String dir) {
-        this.répertoire  =dir;
+        this.répertoire = dir;
     }
 }
