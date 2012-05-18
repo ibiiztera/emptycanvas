@@ -167,6 +167,7 @@ public class InterpreteFacade {
         TRI t = null;
         try {
             t = (TRI) interpreteH.interprete(text, pos);
+            interpreteH.setRépertoire(répertoire);
             pos = interpreteH.getPosition();
         } catch (Exception e) {
             throw new InterpreteException(java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/pushmatrix/scripts/InterpreteLangage").getString("ERRUER"));
@@ -177,6 +178,7 @@ public class InterpreteFacade {
 
     public TRIObject interpreteTriangles() throws InterpreteException {
         InterpreteListeTriangle interpreteH = new InterpreteListeTriangle();
+            interpreteH.setRépertoire(répertoire);
         TRIObject fo = null;
         try {
             fo = (TRIObject) interpreteH.interprete(text, pos);
@@ -190,6 +192,7 @@ public class InterpreteFacade {
 
     public BSpline interpreteBSpline() throws InterpreteException {
         InterpreteBSpline interpreteH = new InterpreteBSpline();
+            interpreteH.setRépertoire(répertoire);
         BSpline b = null;
         try {
             b = (BSpline) interpreteH.interprete(text, pos);
@@ -208,6 +211,7 @@ public class InterpreteFacade {
 
     public BezierCubique interpreteBezier() throws InterpreteException {
         InterpreteBezier interpreteH = new InterpreteBezier();
+            interpreteH.setRépertoire(répertoire);
         BezierCubique b = null;
         try {
             b = (BezierCubique) interpreteH.interprete(text, pos);
@@ -221,6 +225,7 @@ public class InterpreteFacade {
 
     public BezierCubique2D interpreteBezier2d() throws InterpreteException {
         InterpreteBezier2D interpreteH = new InterpreteBezier2D();
+            interpreteH.setRépertoire(répertoire);
         BezierCubique2D b = null;
         try {
             b = (BezierCubique2D) interpreteH.interprete(text, pos);
@@ -234,6 +239,7 @@ public class InterpreteFacade {
 
     public Tubulaire interpreteTubulaire() throws InterpreteException {
         InterpreteBezier2D interpreteH = new InterpreteBezier2D();
+            interpreteH.setRépertoire(répertoire);
         Tubulaire t = null;
         try {
             t = (Tubulaire) interpreteH.interprete(text, pos);
@@ -288,6 +294,7 @@ public class InterpreteFacade {
     public AttracteurEtrange intepreteAttracteurEtrange()
             throws InterpreteException {
         InterpreteAttracteurEtrange interpreteH = new InterpreteAttracteurEtrange();
+            interpreteH.setRépertoire(répertoire);
         AttracteurEtrange t = null;
         try {
             t = (AttracteurEtrange) interpreteH.interprete(text, pos);
@@ -303,6 +310,7 @@ public class InterpreteFacade {
     public Tubulaire intepreteTubulaire()
             throws InterpreteException {
         InterpreteTubulaire interpreteH = new InterpreteTubulaire();
+            interpreteH.setRépertoire(répertoire);
         Tubulaire t = null;
         try {
             t = (Tubulaire) interpreteH.interprete(text, pos);
@@ -325,6 +333,7 @@ public class InterpreteFacade {
             throws InterpreteException {
 
         InterpreteSegment interpreteH = new InterpreteSegment();
+            interpreteH.setRépertoire(répertoire);
         SegmentDroite t = null;
         try {
             t = (SegmentDroite) interpreteH.interprete(text, pos);
@@ -342,6 +351,7 @@ public class InterpreteFacade {
      */
     public SimpleSphere intepreteSimpleSphere() throws InterpreteException {
         InterpreteSimpleSphere interpreteH = new InterpreteSimpleSphere();
+            interpreteH.setRépertoire(répertoire);
         SimpleSphere t = null;
         try {
             t = (SimpleSphere) interpreteH.interprete(text, pos);
@@ -356,6 +366,7 @@ public class InterpreteFacade {
 
     public SimpleSphereAvecTexture interpreteSimpleSphereAvecTexture() throws InterpreteException {
         InterpreteSimpleSphereTexture interpreteH = new InterpreteSimpleSphereTexture();
+            interpreteH.setRépertoire(répertoire);
         SimpleSphereAvecTexture t = null;
         try {
             t = (SimpleSphereAvecTexture) interpreteH.interprete(text, pos);
@@ -374,6 +385,7 @@ public class InterpreteFacade {
      */
     public Tetraedre interpreteTetraedre() throws InterpreteException {
         InterpreteTetraedre interpreteH = new InterpreteTetraedre();
+            interpreteH.setRépertoire(répertoire);
         Tetraedre t = null;
         try {
             t = (Tetraedre) interpreteH.interprete(text, pos);
@@ -389,6 +401,7 @@ public class InterpreteFacade {
 
     public Cube interpreteCube() throws InterpreteException {
         InterpreteCube interpreteH = new InterpreteCube();
+            interpreteH.setRépertoire(répertoire);
         Cube c = null;
         try {
             c = (Cube) interpreteH.interprete(text, pos);
@@ -401,6 +414,7 @@ public class InterpreteFacade {
 
     public Plan3D interpretePlan3D() throws InterpreteException {
         InterpretePlan3D interpreteH = new InterpretePlan3D();
+            interpreteH.setRépertoire(répertoire);
         Plan3D c = null;
         try {
             c = (Plan3D) interpreteH.interprete(text, pos);
@@ -413,6 +427,7 @@ public class InterpreteFacade {
 
     public TRIEllipsoide interpreteTRIEllipsoide() throws InterpreteException {
         InterpreteTRIEllipsoide interpreteH = new InterpreteTRIEllipsoide();
+            interpreteH.setRépertoire(répertoire);
         TRIEllipsoide e = new TRIEllipsoide(new Point3D(0, 0, 0), new Point3D(1, 2, 3));
         try {
             e = (TRIEllipsoide) interpreteH.interprete(text, pos);
@@ -425,6 +440,7 @@ public class InterpreteFacade {
 
     public TRISphere interpreteTRISphere() throws InterpreteException {
         InterpreteTRISphere interpreteH = new InterpreteTRISphere();
+            interpreteH.setRépertoire(répertoire);
         TRISphere s = new TRISphere(new Point3D(0, 0, 0), 1.0);
         try {
             s = (TRISphere) interpreteH.interprete(text, pos);
@@ -446,6 +462,7 @@ public class InterpreteFacade {
 
     Polygone interpretePolygone() throws InterpreteException {
         InterpretePolygone interpreteH = new InterpretePolygone();
+            interpreteH.setRépertoire(répertoire);
         Polygone s = null;
         try {
             s = (Polygone) interpreteH.interprete(text, pos);
