@@ -79,5 +79,10 @@ public class Polygone implements Representable, TRIGenerable{
         t += "\n\t)\n\t"+CouleurOutils.toStringColor(couleur)+"\n)";
         return t;
      }
+
+    public void setPoints(Point3D[] point3D) {
+        for(int i=0; i<point3D.length; i++)
+            points.add(point3D[i]);
+    }
     
 }

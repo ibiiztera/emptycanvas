@@ -16,7 +16,7 @@ public class TestMite extends TestObjet{
     public static void main(String [] args)
     {
         TestMite to = new TestMite();
-        to.setPerspective(-3);
+        to.setPerspective(-100, -20);
         to.run();
         
     }

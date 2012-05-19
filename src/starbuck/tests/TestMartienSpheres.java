@@ -13,7 +13,7 @@ public class TestMartienSpheres extends TestObjet
     public static void main(String [] args)
     {
         TestMartienSpheres to = new TestMartienSpheres();
-        to.setPerspective(-3);
+        to.setPerspective(-100, -20);
         to.run();
         
     }

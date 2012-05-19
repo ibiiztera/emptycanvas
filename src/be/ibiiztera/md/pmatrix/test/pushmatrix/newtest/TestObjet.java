@@ -33,9 +33,9 @@ public class TestObjet implements Test{
     private File dir = null;
     protected Scene scene;
     protected String description;
-    private boolean perpective;
     private boolean perspective;
     private double camera;
+    private double planproj;
     @Override
     public Scene scene() {
         return scene;
@@ -91,9 +91,10 @@ public class TestObjet implements Test{
         this.camera = -100;
     }
     
-    public void setPerspective(double i) {
+    public void setPerspective(double i, double j) {
         setPerspective(true);
         this.camera = i;
+        this.planproj = j;
     }
 
     @Override
@@ -105,8 +106,8 @@ public class TestObjet implements Test{
             ZBuffer z = ZBufferFactory.instance(resx, resy);
             z.scene(scene);
             
-            if(perpective)
-                z.perspective(this.camera);
+            if(perspective)
+                z.perspective(this.camera, this.planproj);
             else
                 z.isometrique();
             z.dessinerSilhouette3D();

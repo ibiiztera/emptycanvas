@@ -23,11 +23,13 @@ import java.util.Iterator;
  */
 public class ZBufferImpl implements ZBuffer {
 
-    private Point3D INFINI = new Point3D(0, 0, 11000);
+    private Point3D INFINI = new Point3D(0, 0, 1100000);
     private Color COULEUR_FOND = Color.WHITE;
     public static final int PERSPECTIVE_ISOM = 0;
     public static final int PERSPECTIVE_OEIL = 1;
     public int type_perspective = PERSPECTIVE_ISOM;
+    protected Point3D planproj = new Point3D(0, 0, -77);
+    protected Point3D camera = new Point3D(0, 0, -100);
 
     @Override
     public void suivante() {
@@ -41,9 +43,10 @@ public class ZBufferImpl implements ZBuffer {
     }
 
     @Override
-    public void perspective(double z) {
+    public void perspective(double camera, double planproj) {
         type_perspective = PERSPECTIVE_OEIL;
-        camera = new Point3D(0, 0, z);
+        this.camera = new Point3D(0, 0, camera);
+        this.planproj = new Point3D(0, 0, planproj);
     }
 
     @Override
@@ -198,7 +201,6 @@ public class ZBufferImpl implements ZBuffer {
             }
         }
     }
-    public Point3D camera = new Point3D(0, 0, -100);
 
     public class ImageMap {
 
@@ -1241,10 +1243,17 @@ public class ZBufferImpl implements ZBuffer {
     }
 
     public Point coordonneesPointEcranPerspective(Point3D x3d) {
+        double scale = ((planproj.getZ()-camera.getZ())/(x3d.getZ()-camera.getZ()));
         return new Point(
-                (int) ((x3d.getX() - 0) * (x3d.getZ()/camera.getZ()) 
-                    / (box.getMaxx() - box.getMinx()) * la + la / 2),
-                (int) ((x3d.getY() - 0) * (x3d.getZ()/camera.getZ()) 
-                    / (box.getMaxy() - box.getMiny()) *ha + ha / 2));
+                (int) ((x3d.getX() - 0) 
+                    / (box.getMaxx() - box.getMinx()) * la 
+                *  scale
+                + la / 2),
+                (int) ((x3d.getY() - 0) 
+                    / (box.getMaxy() - box.getMiny()) * ha 
+                    * scale
+                + ha / 2)
+                    
+                );
     }
 }
