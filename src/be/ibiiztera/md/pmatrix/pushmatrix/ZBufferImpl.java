@@ -614,6 +614,7 @@ public class ZBufferImpl implements ZBuffer {
         ime = new ImageMap(l, h);
     }
 
+    @Override
     public ZBuffer getInstance(int x, int y) {
         return new ZBufferImpl(x, y);
     }
@@ -1141,6 +1142,7 @@ public class ZBufferImpl implements ZBuffer {
 
     }
 
+    @Override
     public BufferedImage image() {
         BufferedImage bi2 = new BufferedImage(la, ha, BufferedImage.TYPE_INT_RGB);
         for (int i = 0; i < la; i++) {
@@ -1238,10 +1240,12 @@ public class ZBufferImpl implements ZBuffer {
         ime.testProf(p, c);
     }
 
+    @Override
     public void testPoint(Point3D p) {
         ime.testProf(p, p.getC());
     }
 
+    @Override
     public Point coordonneesPointEcranPerspective(Point3D x3d) {
         double scale = ((planproj.getZ()-camera.getZ())/(x3d.getZ()-camera.getZ()));
         return new Point(
