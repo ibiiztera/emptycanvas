@@ -11,7 +11,7 @@
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
             <name>emptycanvas</name>
             <source-roots>
-                <root id="src.dir"/>
+                <root id="src.src.dir"/>
             </source-roots>
             <test-roots/>
         </data>

@@ -73,7 +73,7 @@ public class Loader implements SceneLoader {
 
     public boolean loadIF(File file, Scene sc) {
         String dir = null;
-        if (file.getAbsolutePath().endsWith("mood") || file.getAbsolutePath().endsWith("moo"))
+        if (file.getAbsolutePath().toLowerCase().endsWith("mood") || file.getAbsolutePath().toLowerCase().endsWith("moo"))
             ; else {
             System.err.println("Extension de fichier requise: .mood");
             System.exit(1);
