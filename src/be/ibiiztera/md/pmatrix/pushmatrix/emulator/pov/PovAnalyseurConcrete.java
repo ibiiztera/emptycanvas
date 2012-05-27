@@ -9,12 +9,20 @@ import java.util.HashMap;
  * @author Manuel DAHMEN
  */
 public class PovAnalyseurConcrete implements PovAnalyseur{
-    private HashMap<String, Object> objets;
+    private HashMap<String, Object> objetsDéclarés;
+
+    
     @Override
     public String povVersion() {
         throw new UnsupportedOperationException(java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/pushmatrix/emulator/pov/Bundle").getString("NOT SUPPORTED YET"));
     }
 
+    protected String suppressionDesCommentaires(String pCode)
+    {
+        String MyCommentsRegex = "(?://.*)|(/\\*(?:.|[\\n\\r])*?\\*/)";
+	return pCode.replaceAll(MyCommentsRegex, " ");
+    }
+    
     @Override
     public void analyse(File povfile) {
         throw new UnsupportedOperationException(java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/pushmatrix/emulator/pov/Bundle").getString("NOT SUPPORTED YET"));
@@ -25,17 +33,20 @@ public class PovAnalyseurConcrete implements PovAnalyseur{
         int position = 0;
         
         // Suppression des commentaires
-        
+        povstring = suppressionDesCommentaires(povstring);
+        // Eliminer les blancs
+        povstring = suppressionDesBlancs(povstring);
         // Lecture du fichier
         
         while(position < povstring.length())
         {
             String ligne = povstring.substring(position, povstring.indexOf(Character.LINE_SEPARATOR, position));
-            if(ligne.startsWith("#include"))
+            String trim = ligne.trim();
+            if(trim.startsWith("#include"))
             {
-               analyse(new File(ligne.substring(ligne.indexOf("\"")+1, ligne.lastIndexOf("\""))));        
+               analyse(new File(trim.substring(ligne.indexOf("\"")+1, trim.lastIndexOf("\""))));        
             }
-            else if(ligne.startsWith("#declare"))
+            else if(trim.startsWith("#declare"))
             {
                 
             }
@@ -43,6 +54,10 @@ public class PovAnalyseurConcrete implements PovAnalyseur{
             position += ligne.length();
         }
         throw new UnsupportedOperationException(java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/pushmatrix/emulator/pov/Bundle").getString("NOT SUPPORTED YET"));
+    }
+
+    protected String suppressionDesBlancs(String povstring) {
+        return povstring;
     }
     
 }
