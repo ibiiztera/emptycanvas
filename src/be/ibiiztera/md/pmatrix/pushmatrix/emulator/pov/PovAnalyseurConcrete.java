@@ -42,6 +42,7 @@ public class PovAnalyseurConcrete implements PovAnalyseur{
         {
             String ligne = povstring.substring(position, povstring.indexOf(Character.LINE_SEPARATOR, position));
             String trim = ligne.trim();
+            // Préprocesseur
             if(trim.startsWith("#include"))
             {
                analyse(new File(trim.substring(ligne.indexOf("\"")+1, trim.lastIndexOf("\""))));        
@@ -50,8 +51,52 @@ public class PovAnalyseurConcrete implements PovAnalyseur{
             {
                 
             }
+            else if(trim.startsWith("#ifndef"))
+            {
+                
+            }
+            else if(trim.startsWith("#ifdef"))
+            {
+                
+            }
+            else if(trim.startsWith("#version"))
+            {
+                
+            }
+            else if(trim.startsWith("#version"))
+            {
+                
+            }
+            else if(trim.startsWith("#end"))
+            {
+                
+            }
+            else if(trim.startsWith("#macro"))
+            {
+                
+            }
+            else if(trim.startsWith("#local"))
+            {
+                
+            }
+            else if(trim.startsWith("#switch"))
+            {
+                
+            }
+            else if(trim.startsWith("#range"))
+            {
+                
+            }
+            else if(trim.startsWith("#if"))
+            {
+                
+            }
+            else if(trim.startsWith("#else"))
+            {
+                
+            }   
             
-            position += ligne.length();
+                    position += ligne.length();
         }
         throw new UnsupportedOperationException(java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/pushmatrix/emulator/pov/Bundle").getString("NOT SUPPORTED YET"));
     }
