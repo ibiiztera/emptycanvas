@@ -9,6 +9,6 @@ import java.io.File;
  */
 public interface PovAnalyseur {
     public String povVersion();
-    public void analyse(File povfile);
+    public void analyse(File povfile, Scene scene);
     public void analyse(String povstring, Scene scene);
 }
