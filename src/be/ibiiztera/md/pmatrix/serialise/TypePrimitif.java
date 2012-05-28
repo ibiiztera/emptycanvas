@@ -5,14 +5,15 @@ import java.io.OutputStream;
 
 
 
+
 /**
  *
  * @author Manuel DAHMEN
  */
 public class TypePrimitif implements Serialisable{
+    private Object valeur;
 	public TypePrimitif()
 	{
-		valeur = null;
 	}
     static Serialisable getInstance(Object object) {
         TypePrimitif tp = new TypePrimitif();
@@ -49,42 +50,9 @@ public class TypePrimitif implements Serialisable{
 
     @Override
     public Serialisable lecture(String s) {
-        int type  = Integer.parseInt(s);
-        switch(type)
-        {
-            case BOOLEAN:
-                valeur = (Boolean) s ? "true" : "false";
-                break;
-            case INTEGER:
-                resultat = ;
-                break;
-            case SHORT:
-                resultat = ((Integer) value).toString();
-                break;
-            case LONG:
-                resultat = ((Long) value).toString();
-                break;
-            case FLOAT:
-                resultat = ((Float) value).toString();
-                break;
-            case DOUBLE:
-                resultat = ((Double) value).toString();
-                break;
-            case CHARACTER:
-                resultat = ((Character) value).toString();
-                break;
-            case STRING:
-                resultat = ""+((String) value).length()+((String) value);
-                break;
-            default:
-                throw new TypeNotFoundException(type);
-
-        }
-        return "atome ("+taille() + " " + type()+" ) : " + resultat.length() + resultat;
+    return null;
     }
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
+        
     private static class TypeNotFoundException extends Exception {
 
         public TypeNotFoundException(int type) {
@@ -98,7 +66,6 @@ public class TypePrimitif implements Serialisable{
     public final int DOUBLE = 10;
     public final int CHARACTER = 11;
     public final int STRING = 12;
-    protected Object valeur = null;
     
     public int getCode()
     {
