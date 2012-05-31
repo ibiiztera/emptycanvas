@@ -64,7 +64,9 @@ public class TestObjet implements Test{
         scene = new Scene();
 
     }
-
+    /**
+     * Definir la scène scene().add(*)
+     */
     @Override
     public void testScene() {
     }
@@ -90,11 +92,10 @@ public class TestObjet implements Test{
         this.perspective = b;
         this.camera = -100;
     }
-    
-    public void setPerspective(double i, double j) {
+    public void setPerspective(double camera, double plan) {
         setPerspective(true);
-        this.camera = i;
-        this.planproj = j;
+        this.camera = camera;
+        this.planproj = plan;
     }
 
     @Override
