@@ -274,7 +274,7 @@ public class ZBufferImpl implements ZBuffer {
                 prof = camera.moins(x3d).norme();
             }
             if (x >= 0 & x < la & y >= 0 & y < ha
-                    & x3d.getZ() < ime.getElementProf(x, y)) {
+                    & prof < ime.getElementProf(x, y)) {
                 ime.setElementID(x, y, id);
                 ime.setElementPoint(x, y, x3d);
                 ime.setElementCouleur(x, y, c);
@@ -297,7 +297,7 @@ public class ZBufferImpl implements ZBuffer {
             int x = (int) ce.getX();
             int y = (int) ce.getY();
             if (x >= 0 & x < la & y >= 0 & y < ha
-                    && x3d.getZ() < ime.getElementProf(x, y)) {
+                    && prof < ime.getElementProf(x, y)) {
                 ime.setElementID(x, y, id);
                 ime.setElementPoint(x, y, x3d);
                 ime.setElementCouleur(x, y, c);
