@@ -50,8 +50,8 @@ public class TestCubeTrouéTriangles extends TestObjet {
     }
 
     public static void main(String[] args) {
-         TestCubeTrouéTriangles testObjet = new TestCubeTrouéTriangles();
-        testObjet.setPerspective(-15, -10);
+        TestCubeTrouéTriangles testObjet = new TestCubeTrouéTriangles();
+        testObjet.setPerspective(-2, -1.7);
         testObjet.run();
     }
 }

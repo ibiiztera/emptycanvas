@@ -39,9 +39,9 @@ public class TestMartienSpheres extends TestObjet
     @Override
     public void testScene()
     {
-        ResourceBundle rb = ResourceBundle.getBundle("starbuck/tests/Spheres");
+        ResourceBundle rb = ResourceBundle.getBundle("starbuck/tests/Mite");
         String mite = rb.getString("sphere1");
-        new Loader().loadIF(mite, scene);
+        new Loader().loadIF(mite, scene());
         description = "Primtive model. Green face made up with spheres";
     }
             

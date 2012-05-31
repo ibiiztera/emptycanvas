@@ -1126,11 +1126,11 @@ public class ZBufferImpl implements ZBuffer {
         Point p1 = coordonneesPointEcran(pp1);
         Point p2 = coordonneesPointEcran(pp2);
         Point p3 = coordonneesPointEcran(pp3);
-        double iteres1 = 1.0 / (Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY()));
+        double iteres1 = 1.0 / (1000+Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY()));
         for (double a = 0; a < 1.0; a += iteres1) {
             Point3D p3d = pp1.plus(pp1.mult(-1).plus(pp2).mult(a));
             Point pp = coordonneesPointEcran(p3d);
-            double iteres2 = 1.0 / (Math.abs(pp.getX() - p3.getX()) + Math.abs(pp.getY() - p3.getY()));
+            double iteres2 = 1.0 / (1000+Math.abs(pp.getX() - p3.getX()) + Math.abs(pp.getY() - p3.getY()));
             for (double b = 0; b < 1.0; b += iteres2) {
                 Point3D p = p3d.plus(p3d.mult(-1).plus(pp3).mult(b));
                 Point p22 = coordonneesPointEcran(p);
@@ -1268,11 +1268,11 @@ public class ZBufferImpl implements ZBuffer {
         double scale = ((planproj.getZ()-camera.getZ())/(x3d.getZ()-camera.getZ()));
         return new Point(
                 (int) ((x3d.getX() - 0) 
-                    / (box.getMaxx() - box.getMinx()) * la 
+                    / (box.getMaxx() - box.getMinx()) * la * 2 
                 *  scale
                 + la / 2),
                 (int) ((x3d.getY() - 0) 
-                    / (box.getMaxy() - box.getMiny()) * ha 
+                    / (box.getMaxy() - box.getMiny()) * ha * 2
                     * scale
                 + ha / 2)
                     
