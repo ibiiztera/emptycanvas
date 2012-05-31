@@ -1,22 +1,22 @@
 /*
 
-    Copyright (C) 2010-2012  DAHMEN, Manuel, Daniel
+ Copyright (C) 2010-2012  DAHMEN, Manuel, Daniel
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-*/
+ */
 package be.ibiiztera.md.pmatrix.pushmatrix;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.extras.SimpleSphere;
@@ -125,9 +125,11 @@ public class ZBufferImpl implements ZBuffer {
             Sc = new Color[la][ha];
             Simeid = new int[la][ha];
             Simeprof = new float[la][ha];
-            for(int i=0; i<la; i++)
-                for(int j=0; j<ha; j++)
+            for (int i = 0; i < la; i++) {
+                for (int j = 0; j < ha; j++) {
                     Simeprof[i][j] = (float) INFINI.getZ();
+                }
+            }
         }
 
         public ImageMapElement getInstance(int x, int y) {
@@ -1123,14 +1125,24 @@ public class ZBufferImpl implements ZBuffer {
      */
 
     public void tracerTriangle(Point3D pp1, Point3D pp2, Point3D pp3, Color c) {
-        Point p1 = coordonneesPointEcran(pp1);
-        Point p2 = coordonneesPointEcran(pp2);
-        Point p3 = coordonneesPointEcran(pp3);
-        double iteres1 = 1.0 / (1000+Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY()));
+        Point p1, p2, p3;
+        if (type_perspective == PERSPECTIVE_ISOM) {
+            p1 = coordonneesPointEcran(pp1);
+            p2 = coordonneesPointEcran(pp2);
+            p3 = coordonneesPointEcran(pp3);
+
+        } else {
+            p1 = coordonneesPointEcranPerspective(pp1);
+            p2 = coordonneesPointEcranPerspective(pp2);
+            p3 = coordonneesPointEcranPerspective(pp3);
+
+        }
+
+        double iteres1 = 1.0 / (Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY()));
         for (double a = 0; a < 1.0; a += iteres1) {
             Point3D p3d = pp1.plus(pp1.mult(-1).plus(pp2).mult(a));
             Point pp = coordonneesPointEcran(p3d);
-            double iteres2 = 1.0 / (1000+Math.abs(pp.getX() - p3.getX()) + Math.abs(pp.getY() - p3.getY()));
+            double iteres2 = 1.0 / (Math.abs(pp.getX() - p3.getX()) + Math.abs(pp.getY() - p3.getY()));
             for (double b = 0; b < 1.0; b += iteres2) {
                 Point3D p = p3d.plus(p3d.mult(-1).plus(pp3).mult(b));
                 Point p22 = coordonneesPointEcran(p);
@@ -1265,17 +1277,15 @@ public class ZBufferImpl implements ZBuffer {
 
     @Override
     public Point coordonneesPointEcranPerspective(Point3D x3d) {
-        double scale = ((planproj.getZ()-camera.getZ())/(x3d.getZ()-camera.getZ()));
+        double scale = ((planproj.getZ() - camera.getZ()) / (x3d.getZ() - camera.getZ()));
         return new Point(
-                (int) ((x3d.getX() - 0) 
-                    / (box.getMaxx() - box.getMinx()) * la * 2 
-                *  scale
+                (int) ((x3d.getX() - 0)
+                / (box.getMaxx() - box.getMinx()) * la * 2
+                * scale
                 + la / 2),
-                (int) ((x3d.getY() - 0) 
-                    / (box.getMaxy() - box.getMiny()) * ha * 2
-                    * scale
-                + ha / 2)
-                    
-                );
+                (int) ((x3d.getY() - 0)
+                / (box.getMaxy() - box.getMiny()) * ha * 2
+                * scale
+                + ha / 2));
     }
 }
