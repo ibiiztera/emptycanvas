@@ -78,7 +78,7 @@ public class Polygone implements Representable, TRIGenerable{
         {
             centre = centre.plus(points.get(i).mult(1.0/size));
         }
-        for(int i=0; i<points.size();i++)
+        for(int i=0; i<size;i++)
         {
             to.add(new TRI(points.get(i%size), points.get((i+1)%size), centre, couleur));
         }
