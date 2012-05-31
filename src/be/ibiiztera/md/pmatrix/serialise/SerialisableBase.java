@@ -17,20 +17,12 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 */
-
-package be.ibiiztera.md.pmatrix.starbuck02;
-
+package be.ibiiztera.md.pmatrix.serialise;
 /**
  *
- * @author manuel
+ * @author Manuel DAHMEN
+ * @date
  */
-public class Main {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-    }
+public class SerialisableBase {
 
 }
