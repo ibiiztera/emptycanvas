@@ -20,6 +20,7 @@
 package be.ibiiztera.md.pmatrix.pushmatrix.emulator.pov;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.Scene;
+import be.ibiiztera.md.pmatrix.pushmatrix.imports.ModelePOV;
 import java.io.File;
 import java.util.HashMap;
 
@@ -27,10 +28,12 @@ import java.util.HashMap;
  *
  * @author Manuel DAHMEN
  */
-public class PovAnalyseurConcrete implements PovAnalyseur {
-
-    private HashMap<String, Object> objetsDéclarés;
-    private String rep;
+public class PovAnalyseurConcrete implements PovAnalyseur, ModelePOV {
+    protected static final String version = "3.5";
+    private File mood = null;
+    private HashMap<String, Object> objetsDéclarés = new HashMap<String, Object>();
+    private String rep = "";
+    private Scene scene = new Scene();
     
     @Override
     public String povVersion() {
@@ -41,7 +44,6 @@ public class PovAnalyseurConcrete implements PovAnalyseur {
         String MyCommentsRegex = "(?://.*)|(/\\*(?:.|[\\n\\r])*?\\*/)";
         return pCode.replaceAll(MyCommentsRegex, " ");
     }
-    
     @Override
     public void analyse(File povfile, Scene scene) {
         this.rep = povfile.getParent();
@@ -109,5 +111,30 @@ public class PovAnalyseurConcrete implements PovAnalyseur {
     
     protected String suppressionDesBlancs(String povstring) {
         return povstring;
+    }
+
+    @Override
+    public void charge(File f) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void chargeImages() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void chargeFontes() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Scene scene() {
+        return scene;
+    }
+
+    @Override
+    public void rendu(int x, int y, File rendu) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
