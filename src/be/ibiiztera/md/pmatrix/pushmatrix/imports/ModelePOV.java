@@ -18,20 +18,11 @@
 
 */
 package be.ibiiztera.md.pmatrix.pushmatrix.imports;
-
-import be.ibiiztera.md.pmatrix.pushmatrix.Scene;
-import java.io.File;
-
 /**
  *
- * @author manuel
+ * @author Manuel DAHMEN
+ * @date 2012 05 31
  */
-public interface Modele {
-    public void charge(File f);
-    public void chargeImages();
-    public void chargeFontes();
-    
-    public Scene scene();
-    
-    public void rendu(int x, int y, File rendu);
+public interface ModelePOV {
+
 }
