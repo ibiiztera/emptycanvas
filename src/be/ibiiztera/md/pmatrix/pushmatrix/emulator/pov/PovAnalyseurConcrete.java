@@ -102,6 +102,8 @@ public class PovAnalyseurConcrete implements PovAnalyseur, ModelePOV {
             } else if (trim.startsWith("#else")) {
                 throw new UnsupportedOperationException(java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/pushmatrix/emulator/pov/Bundle").getString("NOT SUPPORTED YET"));
                 
+            } else {
+                throw new UnsupportedOperationException(java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/pushmatrix/emulator/pov/Bundle").getString("NOT SUPPORTED YET"));
             }            
             
             position += ligne.length();
