@@ -23,6 +23,10 @@ public class TColor {
         return type;
     }
 
+    public void type(int t) {
+        type = t;
+    }
+
     public Color couleur(double rx, double ry) {
         if (type == TYPE_TEXTURE && image != null) {
             int x = (int) (rx * image.getWidth());
@@ -48,5 +52,11 @@ public class TColor {
 
     public TColor(BufferedImage i) {
         this.image = i;
+        type = TYPE_TEXTURE;
+    }
+
+    public TColor(Color c) {
+        this.couleur = c;
+        type = TYPE_COULEUR;
     }
 }
