@@ -2,10 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package be.ibiiztera.md.pmatrix.pushmatrix.newobjets;
+package be.ibiiztera.md.emptycanvas.base;
 
-import be.ibiiztera.md.pmatrix.pushmatrix.Matrix33;
-import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 import java.util.HashMap;
 
 /**
