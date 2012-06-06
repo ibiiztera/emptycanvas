@@ -20,6 +20,7 @@
 package be.ibiiztera.md.pmatrix.pushmatrix;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
+import java.io.Serializable;
 
 /**
  * cadre à la scène, avec possibilité d'élargir le cadre ou de ne pas en tenir compte
@@ -29,7 +30,7 @@ import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
  *
  * @date 24-mars-2012
  */
-public class SceneCadre {
+public class SceneCadre implements Serializable{
     private Point3D [] points = new Point3D[4];
     private boolean cadre = false;
     private boolean exterieur = false;

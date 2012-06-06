@@ -64,6 +64,24 @@ public class TestObjet implements Test{
         scene = new Scene();
 
     }
+
+    public void setResx(int resx) {
+        this.resx = resx;
+    }
+
+    public void setResy(int resy) {
+        this.resy = resy;
+    }
+
+    public int getResx() {
+        return resx;
+    }
+
+    public int getResy() {
+        return resy;
+    }
+    
+    
     /**
      * Definir la scène scene().add(*)
      */

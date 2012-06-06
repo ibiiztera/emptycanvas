@@ -1,22 +1,22 @@
 /*
 
-    Copyright (C) 2010-2012  DAHMEN, Manuel, Daniel
+ Copyright (C) 2010-2012  DAHMEN, Manuel, Daniel
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-*/
+ */
 package be.ibiiztera.md.pmatrix.pushmatrix.scripts;
 
 import java.io.DataInputStream;
@@ -36,15 +36,19 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Loader implements SceneLoader {
-
+    public static final Long TYPE_TEXT = 2l;
+    public static final Long TYPE_BINA = 1l;
+    
     private int pos;
     private String répertoire;
 
+    @Deprecated
     public void loadFObject(String data, Scene sc) throws Exception {
         interprete(data, sc);
     }
 
     @SuppressWarnings("deprecation")
+    @Deprecated
     public void loadFObject(File file, Scene sc) throws Exception {
         FileInputStream fis = null;
         try {
@@ -67,6 +71,7 @@ public class Loader implements SceneLoader {
         interprete(t, sc);
     }
 
+    @Deprecated
     private void interprete(String t, Scene sc) {
         InterpreteListeTriangle ilf = new InterpreteListeTriangle();
         InterpreteBSpline ib = new InterpreteBSpline();
@@ -95,7 +100,7 @@ public class Loader implements SceneLoader {
         if (file.getAbsolutePath().toLowerCase().endsWith("mood") || file.getAbsolutePath().toLowerCase().endsWith("moo"))
             ; else {
             System.err.println("Extension de fichier requise: .mood");
-            System.exit(1);
+            //throw new ExtensionFichierIncorrecteException();
         }
         dir = file.getAbsolutePath().substring(0, file.getAbsolutePath().lastIndexOf(File.separator));
 
@@ -108,6 +113,7 @@ public class Loader implements SceneLoader {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
         DataInputStream ds = new DataInputStream(fis);
         String text = "";
         String t = "";
@@ -338,6 +344,57 @@ public class Loader implements SceneLoader {
         return !failed;
     }
 
+    public Scene loadBin(File f) throws VersionNonSupportéeException, ExtensionFichierIncorrecteException {
+         if (f.getAbsolutePath().toLowerCase().endsWith("bmood") || f.getAbsolutePath().toLowerCase().endsWith("bmoo"))
+            ; else {
+            System.err.println("Extension de fichier requise: .bmood ou bmoo");
+            throw new ExtensionFichierIncorrecteException();
+        }
+        ObjectInputStream objectInputStream = null;
+        try {
+            FileInputStream fis = new FileInputStream(f);
+            objectInputStream = new ObjectInputStream(fis);
+            Long type = (Long) objectInputStream.readObject();
+            String version = (String) objectInputStream.readObject();
+            appelVersionSpecifiqueLoad(version, f);
+            if(type==TYPE_TEXT)
+                return null;
+            Scene sc = null;
+            sc = (Scene) objectInputStream.readObject();
+            return sc;
+        } catch (IOException ex) {
+            Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        return null;
+    }
+
+    public boolean saveBin(File f, Scene sc) throws VersionNonSupportéeException, ExtensionFichierIncorrecteException {
+         if (f.getAbsolutePath().toLowerCase().endsWith("bmood") || f.getAbsolutePath().toLowerCase().endsWith("bmoo"))
+            ; else {
+            System.err.println("Extension de fichier requise: .bmood ou bmoo");
+            throw new ExtensionFichierIncorrecteException();
+        }
+       ObjectOutputStream objectOutputStream = null;
+        try {
+            FileOutputStream fis = new FileOutputStream(f);
+            objectOutputStream = new ObjectOutputStream(fis);
+            Long type = TYPE_BINA;
+            String version = sc.VERSION;
+            objectOutputStream.writeObject(type);
+            objectOutputStream.writeObject(version);
+            appelVersionSpecifiqueSave(version, f);
+            if(type==TYPE_TEXT)
+                return false;
+            objectOutputStream.writeObject(sc);
+            return true;
+        } catch (IOException ex) {
+            Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
     /**
      * @param string
      * @param s
@@ -350,6 +407,7 @@ public class Loader implements SceneLoader {
         this.loadIF(new File(txtCHEMIN + string), s);
 
     }
+
     public String[] listeTESTS() {
         String h = System.getProperty("user.home");
         String p = System.getProperty("file.separator");
@@ -358,22 +416,38 @@ public class Loader implements SceneLoader {
         File dir = new File(txtCHEMIN);
         return liste(dir);
     }
+
     public String[] liste(File dir) {
-        if(!dir.exists() || !dir.isDirectory())
+        if (!dir.exists() || !dir.isDirectory()) {
             return null;
+        }
         return dir.list(new FilenameFilter() {
 
             @Override
             public boolean accept(File dir, String name) {
-                if(name.endsWith(".mood")||name.endsWith(".moo"))
+                if (name.endsWith(".mood") || name.endsWith(".moo")) {
                     return true;
-                else 
+                } else {
                     return false;
+                }
             }
         });
     }
 
     private void setRépertoire(String dir) {
         this.répertoire = dir;
+    }
+    void appelVersionSpecifiqueLoad(String version, File f) throws VersionNonSupportéeException {
+
+        if(version.equals("1.0"))
+            throw new VersionNonSupportéeException();
+        else if(version.equals("1.1"))
+            ;
+    }
+    void appelVersionSpecifiqueSave(String version, File f) throws VersionNonSupportéeException{
+        if(version.equals("1.0"))
+            throw new VersionNonSupportéeException();
+        else if(version.equals("1.1"))
+            ;
     }
 }
