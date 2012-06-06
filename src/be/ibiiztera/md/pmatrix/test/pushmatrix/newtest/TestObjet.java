@@ -164,4 +164,8 @@ public class TestObjet implements Test{
         return file;
     }
 
+    public void scene(Scene load) {
+        scene = load;
+    }
+
 }

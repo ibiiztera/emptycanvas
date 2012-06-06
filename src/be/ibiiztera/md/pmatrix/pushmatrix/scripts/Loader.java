@@ -450,4 +450,17 @@ public class Loader implements SceneLoader {
         else if(version.equals("1.1"))
             ;
     }
+
+    public Scene load(File file, Scene scene) throws VersionNonSupportéeException, ExtensionFichierIncorrecteException {
+        Scene sc = scene;
+        if(file.getAbsolutePath().toLowerCase().endsWith("moo") ||
+                file.getAbsolutePath().toLowerCase().endsWith("mood"))
+        {
+            loadIF(file, scene);
+            return scene;
+        } else if(file.getAbsolutePath().toLowerCase().endsWith("bmoo") ||
+                file.getAbsolutePath().toLowerCase().endsWith("bmood"))
+            return loadBin(file);
+        return scene;
+    }
 }

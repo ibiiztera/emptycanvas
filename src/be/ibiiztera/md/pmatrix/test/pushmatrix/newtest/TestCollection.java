@@ -4,10 +4,14 @@
  */
 package be.ibiiztera.md.pmatrix.test.pushmatrix.newtest;
 
+import be.ibiiztera.md.pmatrix.pushmatrix.scripts.ExtensionFichierIncorrecteException;
 import be.ibiiztera.md.pmatrix.pushmatrix.scripts.Loader;
+import be.ibiiztera.md.pmatrix.pushmatrix.scripts.VersionNonSupportéeException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -29,17 +33,36 @@ public class TestCollection {
     }
     public void add(File fichier)
     {
-        TestObjet to = new TestObjet();
-        new Loader().loadIF(fichier, to.scene());
-        add(to);
+        try {
+            TestObjet to = new TestObjet();
+                to.scene(new Loader().load(fichier, to.scene()));
+            add(to);
+        } catch (VersionNonSupportéeException ex) {
+            Logger.getLogger(TestCollection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExtensionFichierIncorrecteException ex) {
+            Logger.getLogger(TestCollection.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     public void add(File [] fichiers)
     {
         for(int i=0; i<fichiers.length; i++)
         {
-            TestObjet to = new TestObjet();
-            new Loader().loadIF(fichiers[i], to.scene());
-            add(to);
+            try {
+                TestObjet to = new TestObjet();
+                to.scene(new Loader().load(fichiers[i], to.scene()));
+                add(to);
+            } catch (VersionNonSupportéeException ex) {
+                Logger.getLogger(TestCollection.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ExtensionFichierIncorrecteException ex) {
+                Logger.getLogger(TestCollection.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+    }
+    
+    public void run()
+    {
+        Iterator<TestObjet> it = tests.iterator();
+        while(it.hasNext())
+            it.next().run();
     }
 }
