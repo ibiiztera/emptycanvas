@@ -110,4 +110,9 @@ public class Matrix33 {
         }
         return pa;
     }
+
+    public void set(int i, Point3D p) {
+        for(int j = 0; j<3; j++)
+            set(i, j, p.get(j));
+    }
 }
