@@ -46,6 +46,7 @@ public class Matrix33 {
     }
 
     public Matrix33(double[] d) {
+        this.d = d;
     }
 
     public double get(int i, int j) {
