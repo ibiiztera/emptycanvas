@@ -115,4 +115,12 @@ public class Matrix33 {
         for(int j = 0; j<3; j++)
             set(i, j, p.get(j));
     }
+
+    public double[][] getDoubleArray() {
+        double [][] d2 = new double[3][3];
+        for(int i=0; i<3; i++)
+            for(int j=0; j<3; j++)
+                d2[i][j] = get(i,j);
+        return d2;
+    }
 }

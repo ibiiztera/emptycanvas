@@ -297,4 +297,8 @@ public class Point3D implements Representable {
 
         return p;
     }
+    
+    public double [] getDoubleArray(){
+        return x;
+    }
 }

@@ -4,6 +4,12 @@
  */
 package be.ibiiztera.md.pmatrix.pushmatrix;
 
+import cern.colt.matrix.DoubleMatrix1D;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+import cern.colt.matrix.linalg.Algebra;
+
 /**
  *
  * @author Atelier
@@ -35,7 +41,14 @@ public class Camera implements Representable
     }
     public Point3D calculerPointDansRepere(Point3D p)
     {
-        return matrice/*.tild()*/.mult(p.moins(camera));
+        DoubleMatrix2D m2 = new DenseDoubleMatrix2D(matrice.getDoubleArray());
+        DoubleMatrix1D p2 = new DenseDoubleMatrix1D(p.moins(camera).getDoubleArray());
+        DoubleMatrix1D r2 = new Algebra().mult(m2, p2);
+                
+        Point3D ret = new Point3D(r2.get(0),r2.get(1),r2.get(2));
+        
+        
+        return ret;
     }
     
     @Override
