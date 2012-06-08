@@ -48,6 +48,7 @@ public class ZBufferImpl implements ZBuffer {
     public int type_perspective = PERSPECTIVE_ISOM;
     protected Point3D planproj = new Point3D(0, 0, -77);
     protected Point3D camera = new Point3D(0, 0, -100);
+    private Camera cameraC;
 
     @Override
     public void suivante() {
@@ -70,6 +71,16 @@ public class ZBufferImpl implements ZBuffer {
     @Override
     public void isometrique() {
         type_perspective = PERSPECTIVE_ISOM;
+    }
+
+    @Override
+    public void camera(Camera c) {
+        this.cameraC = c;
+    }
+
+    @Override
+    public Camera camera() {
+        return this.cameraC;
     }
 
     public class Box2DPerspective {
@@ -1277,6 +1288,8 @@ public class ZBufferImpl implements ZBuffer {
 
     @Override
     public Point coordonneesPointEcranPerspective(Point3D x3d) {
+        x3d = cameraC.calculerPointDansRepere(x3d);
+        planproj = cameraC.calculerPointDansRepere(cameraC.pointFocal());
         double scale = ((planproj.getZ() - camera.getZ()) / (x3d.getZ() - camera.getZ()));
         return new Point(
                 (int) ((x3d.getX() - 0)

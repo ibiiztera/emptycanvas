@@ -43,4 +43,6 @@ public interface ZBuffer
     public void suivante();
     public void isometrique();
     public void perspective(double camera, double planproj);
+    public void camera(Camera c);
+    public Camera camera();
 }

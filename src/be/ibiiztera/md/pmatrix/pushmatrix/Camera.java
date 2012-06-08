@@ -30,7 +30,7 @@ public class Camera implements Representable
         Matrix33 m = new Matrix33();
         m.set(2, lookat.moins(camera).norme1());
         m.set(0, lookat.moins(camera).norme1().prodVect(Point3D.Y));
-        m.set(1, lookat.moins(camera).norme1().prodVect(lookat.moins(camera).norme1().prodVect(Point3D.Y)));
+        m.set(1, lookat.moins(camera).norme1().prodVect(lookat.moins(camera).norme1().prodVect(Point3D.Y)).norme1());
         this.matrice = m;
     }
     public Point3D calculerPointDansRepere(Point3D p)
@@ -51,5 +51,9 @@ public class Camera implements Representable
     @Override
     public Representable place(MODObjet aThis) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Point3D pointFocal() {
+        return planproj;
     }
 }
