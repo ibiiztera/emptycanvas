@@ -43,7 +43,7 @@ public class ZBufferImpl implements ZBuffer {
 
     private Point3D INFINI = new Point3D(0, 0, 1100000);
     private Color COULEUR_FOND = Color.WHITE;
-    public static final int PERSPECTIVE_ISOM = 1;
+    public static final int PERSPECTIVE_ISOM = 0;
     public static final int PERSPECTIVE_OEIL = 1;
     public int type_perspective = PERSPECTIVE_OEIL;
     protected Point3D planproj = null;
@@ -70,7 +70,7 @@ public class ZBufferImpl implements ZBuffer {
 
     @Override
     public void isometrique() {
-        type_perspective = PERSPECTIVE_ISOM;
+        //type_perspective = PERSPECTIVE_ISOM;
     }
 
     @Override
@@ -1294,11 +1294,11 @@ public class ZBufferImpl implements ZBuffer {
         camera = cameraC.calculerPointDansRepere(cameraC.position());
         double scale = ((planproj.getZ()) / (x3d.getZ()));
         return new Point(
-                (int) ((x3d.getX() - 0)
+                (int) ((x3d.getX())
                 / (box.getMaxx() - box.getMinx()) * la * 2
                 * scale
                 + la / 2),
-                (int) ((x3d.getY() - 0)
+                (int) ((x3d.getY())
                 / (box.getMaxy() - box.getMiny()) * ha * 2
                 * scale
                 + ha / 2));
