@@ -19,6 +19,7 @@
 */
 package starbuck.tests;
 
+import be.ibiiztera.md.pmatrix.pushmatrix.Camera;
 import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 import be.ibiiztera.md.pmatrix.pushmatrix.TRI;
 import be.ibiiztera.md.pmatrix.test.pushmatrix.newtest.TestObjet;
@@ -43,7 +44,7 @@ public class TestTrianglePerspective extends TestObjet{
     public static void main(String [] args)
     {
         TestObjet testTriangle = new TestTrianglePerspective();
-        testTriangle.setPerspective(true);
+        testTriangle.camera(new Camera(new Point3D(0,0,-15000), new Point3D(0,0,0), new Point3D(0,0,-1000)));
         testTriangle.run();
     }
 }

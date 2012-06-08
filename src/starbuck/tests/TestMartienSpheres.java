@@ -19,6 +19,8 @@
 */
 package starbuck.tests;
 
+import be.ibiiztera.md.pmatrix.pushmatrix.Camera;
+import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 import be.ibiiztera.md.pmatrix.pushmatrix.scripts.Loader;
 import be.ibiiztera.md.pmatrix.test.pushmatrix.newtest.TestObjet;
 import java.util.ResourceBundle;
@@ -32,7 +34,7 @@ public class TestMartienSpheres extends TestObjet
     public static void main(String [] args)
     {
         TestMartienSpheres to = new TestMartienSpheres();
-        to.setPerspective(-100, -20);
+        to.camera(new Camera(new Point3D(0,0,-100), new Point3D(0,0,0), new Point3D(0,0,-20)));
         to.run();
         
     }

@@ -1,9 +1,6 @@
 package be.ibiiztera.md.pmatrix.test.pushmatrix.newtest;
 
-import be.ibiiztera.md.pmatrix.pushmatrix.Scene;
-import be.ibiiztera.md.pmatrix.pushmatrix.ZBuffer;
-import be.ibiiztera.md.pmatrix.pushmatrix.ZBufferFactory;
-import be.ibiiztera.md.pmatrix.pushmatrix.ZBufferImpl;
+import be.ibiiztera.md.pmatrix.pushmatrix.*;
 import be.ibiiztera.md.pmatrix.pushmatrix.scripts.Loader;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -36,6 +33,7 @@ public class TestObjet implements Test{
     private boolean perspective;
     private double camera;
     private double planproj;
+    private Camera c;
     @Override
     public Scene scene() {
         return scene;
@@ -106,6 +104,7 @@ public class TestObjet implements Test{
     {
         new ShowTestResult(getFile()).run();
     }
+    /*
     public void setPerspective(boolean b) {
         this.perspective = b;
         this.camera = -100;
@@ -115,7 +114,7 @@ public class TestObjet implements Test{
         this.camera = camera;
         this.planproj = plan;
     }
-
+    * */
     @Override
     public void run() {
         init();
@@ -166,6 +165,16 @@ public class TestObjet implements Test{
 
     public void scene(Scene load) {
         scene = load;
+    }
+
+    @Override
+    public void camera(Camera c) {
+        this.c = c;
+    }
+
+    @Override
+    public Camera camera() {
+        return c;
     }
 
 }

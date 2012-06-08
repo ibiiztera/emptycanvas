@@ -23,6 +23,8 @@
  */
 package starbuck.tests;
 
+import be.ibiiztera.md.pmatrix.pushmatrix.Camera;
+import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 import be.ibiiztera.md.pmatrix.pushmatrix.scripts.Loader;
 import be.ibiiztera.md.pmatrix.test.pushmatrix.newtest.TestObjet;
 import java.util.ResourceBundle;
@@ -35,8 +37,8 @@ public class TestMite extends TestObjet{
     public static void main(String [] args)
     {
         TestMite to = new TestMite();
-        to.setPerspective(-30, -27);
-        to.run();
+        to.camera(new Camera(new Point3D(0,0,-30), new Point3D(0,0,0), new Point3D(0,0,-27)));
+       to.run();
         
     }
     @Override

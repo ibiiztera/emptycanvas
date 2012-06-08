@@ -19,6 +19,7 @@
 */
 package starbuck.tests;
 
+import be.ibiiztera.md.pmatrix.pushmatrix.Camera;
 import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 import be.ibiiztera.md.pmatrix.pushmatrix.Polygone;
 import be.ibiiztera.md.pmatrix.test.pushmatrix.newtest.TestObjet;
@@ -55,7 +56,7 @@ public class TestCubeTroué extends TestObjet {
 
     public static void main(String[] args) {
         TestCubeTroué testObjet = new TestCubeTroué();
-        testObjet.setPerspective(-15, -10);
+        testObjet.camera(new Camera(new Point3D(0,0,-15), new Point3D(0,0,0), new Point3D(0,0,-10)));
         testObjet.run();
     }
 }

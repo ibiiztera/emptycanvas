@@ -20,6 +20,7 @@
 
 package starbuck.tests;
 
+import be.ibiiztera.md.pmatrix.pushmatrix.Camera;
 import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 import be.ibiiztera.md.pmatrix.pushmatrix.generator.TRISphere;
 import be.ibiiztera.md.pmatrix.test.pushmatrix.newtest.TestObjet;
@@ -72,7 +73,7 @@ public class TestSphère extends TestObjet{
     public static void main(String[] args)
     {
         TestSphère ts = new TestSphère();
-        ts.setPerspective(-10, -7);
+        ts.camera(new Camera(new Point3D(0,0,-10), new Point3D(0,0,0), new Point3D(0,0,-7)));
         ts.run();
     }
 }
