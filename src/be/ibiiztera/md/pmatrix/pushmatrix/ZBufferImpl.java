@@ -48,7 +48,7 @@ public class ZBufferImpl implements ZBuffer {
     public int type_perspective = PERSPECTIVE_ISOM;
     protected Point3D planproj = new Point3D(0, 0, -77);
     protected Point3D camera = new Point3D(0, 0, -100);
-    private Camera cameraC;
+    private Camera cameraC = new Camera(camera, Point3D.O0, planproj);
 
     @Override
     public void suivante() {

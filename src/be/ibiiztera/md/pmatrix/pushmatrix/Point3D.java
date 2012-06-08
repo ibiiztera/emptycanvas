@@ -24,9 +24,10 @@ import java.awt.Color;
 import be.ibiiztera.md.pmatrix.pushmatrix.math.matrix.Matrix;
 
 public class Point3D implements Representable {
-    public static final Point3D X = new Point3D(1,0,0);
-    public static final Point3D Y = new Point3D(0,1,0);
-    public static final Point3D Z = new Point3D(0,0,1);
+    public static final Point3D X  = new Point3D(1,0,0);
+    public static final Point3D Y  = new Point3D(0,1,0);
+    public static final Point3D Z  = new Point3D(0,0,1);
+    public static final Point3D O0 = new Point3D(0,0,0);
     
     private String id;
     private double[] x;
