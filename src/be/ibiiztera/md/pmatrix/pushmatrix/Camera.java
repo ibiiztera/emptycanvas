@@ -35,11 +35,11 @@ public class Camera implements Representable
     {
         DoubleMatrix2D m = new DenseDoubleMatrix2D(3,3);
         for(int j=0; j<3; j++)
-        m.set(2, j, lookat.moins(camera).norme1().get(j));
+        m.set(j, 2, lookat.moins(camera).norme1().get(j));
         for(int j=0; j<3; j++)
-        m.set(0, j, lookat.moins(camera).norme1().prodVect(Point3D.Y).get(j));
+        m.set(j, 0, lookat.moins(camera).norme1().prodVect(Point3D.Y).get(j));
         for(int j=0; j<3; j++)
-        m.set(1, j, lookat.moins(camera).norme1().prodVect(lookat.moins(camera).norme1().prodVect(Point3D.Y)).norme1().get(j));
+        m.set(j, 1, lookat.moins(camera).norme1().prodVect(lookat.moins(camera).norme1().prodVect(Point3D.Y)).norme1().get(j));
         this.matrice = m;
     }
     public Point3D calculerPointDansRepere(Point3D p)
