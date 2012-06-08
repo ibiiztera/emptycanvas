@@ -33,7 +33,7 @@ public class TestObjet implements Test{
     private boolean perspective;
     private double camera;
     private double planproj;
-    private Camera c;
+    private Camera c = new Camera(new Point3D(0,0,-1000), Point3D.O0, 0.1);
     @Override
     public Scene scene() {
         return scene;
