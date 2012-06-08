@@ -29,7 +29,7 @@ public class Camera implements Representable
     public Camera(Point3D camera, Point3D lookat, double distancePlan) {
         this.camera = camera;
         this.lookat = lookat;
-        this.planproj = camera.mult(1-distancePlan).plus(lookat.mult(distancePlan));
+        this.planproj = camera.mult(distancePlan).plus(lookat.mult(1-distancePlan));
     }
     public void calculerMatrice()
     {
@@ -67,5 +67,9 @@ public class Camera implements Representable
 
     public Point3D pointFocal() {
         return planproj;
+    }
+
+    Point3D position() {
+        return camera;
     }
 }

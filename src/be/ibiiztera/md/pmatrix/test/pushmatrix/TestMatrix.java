@@ -20,6 +20,7 @@
 
 package be.ibiiztera.md.pmatrix.test.pushmatrix;
 
+import be.ibiiztera.md.pmatrix.pushmatrix.Camera;
 import be.ibiiztera.md.pmatrix.pushmatrix.Matrix33;
 import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 
@@ -46,5 +47,15 @@ public class TestMatrix {
         System.out.println("I*Y " +m.mult(p).toString());
         p = Point3D.Z;
         System.out.println("I*Z " +m.mult(p).toString());
+        
+        
+        Camera c = new Camera(new Point3D(0,0,-100), new Point3D(0,0,0), 0.1);
+        c.calculerMatrice();
+        
+        System.out.println("O  -100 ="+c.calculerPointDansRepere(Point3D.O0).toString());
+        System.out.println("X  -100 ="+c.calculerPointDansRepere(Point3D.X).toString());
+        System.out.println("Y  -100 ="+c.calculerPointDansRepere(Point3D.Y).toString());
+        System.out.println("Z  -100 ="+c.calculerPointDansRepere(Point3D.Z).toString());
+        
     }
 }

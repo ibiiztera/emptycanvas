@@ -43,12 +43,12 @@ public class ZBufferImpl implements ZBuffer {
 
     private Point3D INFINI = new Point3D(0, 0, 1100000);
     private Color COULEUR_FOND = Color.WHITE;
-    public static final int PERSPECTIVE_ISOM = 0;
+    public static final int PERSPECTIVE_ISOM = 1;
     public static final int PERSPECTIVE_OEIL = 1;
-    public int type_perspective = PERSPECTIVE_ISOM;
-    protected Point3D planproj = new Point3D(0, 0, -77);
-    protected Point3D camera = new Point3D(0, 0, -100);
-    private Camera cameraC = new Camera(camera, Point3D.O0, planproj);
+    public int type_perspective = PERSPECTIVE_OEIL;
+    protected Point3D planproj = null;
+    protected Point3D camera = null;
+    private Camera cameraC = null;
 
     @Override
     public void suivante() {
@@ -75,6 +75,7 @@ public class ZBufferImpl implements ZBuffer {
 
     @Override
     public void camera(Camera c) {
+        type_perspective = PERSPECTIVE_OEIL;
         this.cameraC = c;
     }
 
@@ -1290,7 +1291,8 @@ public class ZBufferImpl implements ZBuffer {
     public Point coordonneesPointEcranPerspective(Point3D x3d) {
         x3d = cameraC.calculerPointDansRepere(x3d);
         planproj = cameraC.calculerPointDansRepere(cameraC.pointFocal());
-        double scale = ((planproj.getZ() - camera.getZ()) / (x3d.getZ() - camera.getZ()));
+        camera = cameraC.calculerPointDansRepere(cameraC.position());
+        double scale = ((planproj.getZ()) / (x3d.getZ()));
         return new Point(
                 (int) ((x3d.getX() - 0)
                 / (box.getMaxx() - box.getMinx()) * la * 2
