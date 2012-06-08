@@ -4,7 +4,7 @@
  */
 package be.ibiiztera.md.pmatrix.pushmatrix.newobjets;
 
-import be.ibiiztera.md.pmatrix.pushmatrix.Matrix33;
+import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 import java.util.HashMap;
 
@@ -41,7 +41,7 @@ public interface BaseObjet {
      * @param matriceRotation matrice de rotation
      * @return objet
      */
-    public BaseObjet orienter(Matrix33 matriceRotation);
+    public BaseObjet orienter(DenseDoubleMatrix2D matriceRotation);
     
     public TColor texture();
     

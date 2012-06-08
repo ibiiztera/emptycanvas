@@ -18,11 +18,14 @@
 
 */
 package be.ibiiztera.md.pmatrix.pushmatrix;
+
+import cern.colt.matrix.impl.DenseDoubleMatrix2D;
+
 	public class MODRotation
 	{
-		private Matrix33 matrix;
+		private DenseDoubleMatrix2D matrix;
 		private Point3D centre;
-		public void matrice(Matrix33 m)
+		public void matrice(DenseDoubleMatrix2D m)
 		{
 			this.matrix = m;
 		}
@@ -30,7 +33,7 @@ package be.ibiiztera.md.pmatrix.pushmatrix;
 		{
 			this.centre = p;
 		}
-		public Matrix33 matrice()
+		public DenseDoubleMatrix2D matrice()
 		{
 			return matrix;
 		}

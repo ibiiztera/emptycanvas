@@ -227,7 +227,8 @@ public class Point3D implements Representable {
     }
 
     public Point3D modificateurs(MODRotation r, MODTranslation t, MODHomothetie h) {
-        return movePoint(rotation(r.matrice(), r.centre(), homothetie(h.centre(), h.facteur(), (Point3D) clone())), t.vecteur());
+       return this;
+        // return movePoint(rotation(r.matrice(), r.centre(), homothetie(h.centre(), h.facteur(), (Point3D) clone())), t.vecteur());
     }
 
     public Point3D movePoint(Point3D translation) {
@@ -260,16 +261,16 @@ public class Point3D implements Representable {
      * return pPrim;
 	}
      */
-
-    public Point3D rotation(Matrix33 m, Point3D centre) {
+/*
+    public Point3D rotation(DoubleMatrix2D m, Point3D centre) {
         Point3D p = new Point3D(this);
         return m.mult(new Point3D(this).moins(centre)).plus(centre);
     }
 
-    public Point3D rotation(Matrix33 m, Point3D centre, Point3D p) {
+    public Point3D rotation(DoubleMatrix2D m, Point3D centre, Point3D p) {
         return m.mult(new Point3D(p).moins(centre)).plus(centre);
     }
-
+*/
     public Point3D homothetie(Point3D c, double d, Point3D p) {
         return new Point3D(p).moins(c).mult(d).plus(c);
     }
@@ -290,11 +291,11 @@ public class Point3D implements Representable {
     @Override
     public Representable place(MODObjet mod) {
         Point3D p = this;
-        p = p.homothetie(mod.homothetie().centre(), mod.homothetie().facteur());
-        Point3D r = mod.rotation().centre().homothetie(mod.homothetie().centre(), mod.homothetie().facteur());
+       /* p = p.homothetie(mod.homothetie().centre(), mod.homothetie().facteur());
+               Point3D r = mod.rotation().centre().homothetie(mod.homothetie().centre(), mod.homothetie().facteur());
         p = p.rotation(mod.rotation().matrice(), r);
         p = p.plus(mod.translation().vecteur());
-
+*/
         return p;
     }
     

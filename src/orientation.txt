@@ -1,7 +1,7 @@
 Orientation de la scène.
-Matrix33 -> Scene
+DenseDoubleMatrix2D -> Scene
 Orientation des objets
-Matrix33 -> Representable
+DenseDoubleMatrix2D -> Representable
 
 Eventuellement créer une interface Orientable.
 
