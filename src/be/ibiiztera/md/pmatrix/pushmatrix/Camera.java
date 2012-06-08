@@ -35,7 +35,7 @@ public class Camera implements Representable
     }
     public Point3D calculerPointDansRepere(Point3D p)
     {
-        return matrice.mult(p.moins(camera));
+        return matrice/*.tild()*/.mult(p.moins(camera));
     }
     
     @Override

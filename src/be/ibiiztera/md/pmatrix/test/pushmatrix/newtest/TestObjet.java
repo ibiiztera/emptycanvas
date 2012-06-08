@@ -123,12 +123,12 @@ public class TestObjet implements Test{
         try {
             ZBuffer z = ZBufferFactory.instance(resx, resy);
             z.scene(scene);
-            
-            if(perspective)
-                z.perspective(this.camera, this.planproj);
-            else
-                z.isometrique();
-            z.dessinerSilhouette3D();
+            z.camera(c);
+            //if(perspective)
+                //z.perspective(this.camera, this.planproj);
+            //else
+                //z.isometrique();
+            //z.dessinerSilhouette3D();
             
             
             BufferedImage ri = z.image();
