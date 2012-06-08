@@ -1295,11 +1295,11 @@ public class ZBufferImpl implements ZBuffer {
         double scale = ((planproj.getZ()) / (x3d.getZ()));
         return new Point(
                 (int) ((x3d.getX())
-                / (box.getMaxx() - box.getMinx()) * la * 2
+                / (box.getMaxx() - box.getMinx()) * la
                 * scale
                 + la / 2),
                 (int) ((x3d.getY())
-                / (box.getMaxy() - box.getMiny()) * ha * 2
+                / (box.getMaxy() - box.getMiny()) * ha
                 * scale
                 + ha / 2));
     }

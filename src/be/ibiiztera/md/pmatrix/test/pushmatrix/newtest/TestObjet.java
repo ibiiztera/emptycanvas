@@ -30,10 +30,7 @@ public class TestObjet implements Test{
     private File dir = null;
     protected Scene scene;
     protected String description;
-    private boolean perspective;
-    private double camera;
-    private double planproj;
-    private Camera c = new Camera(new Point3D(0,0,-1000), Point3D.O0, 0.1);
+    private Camera c = new Camera(new Point3D(0,0,-10), Point3D.O0, 0.1);
     @Override
     public Scene scene() {
         return scene;
