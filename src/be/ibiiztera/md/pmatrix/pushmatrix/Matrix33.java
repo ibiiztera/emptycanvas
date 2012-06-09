@@ -46,6 +46,7 @@ public class Matrix33 {
     }
 
     public Matrix33(double[] d) {
+        this.d = d;
     }
 
     public double get(int i, int j) {
@@ -114,5 +115,13 @@ public class Matrix33 {
     public void set(int i, Point3D p) {
         for(int j = 0; j<3; j++)
             set(i, j, p.get(j));
+    }
+
+    public double[][] getDoubleArray() {
+        double [][] d2 = new double[3][3];
+        for(int i=0; i<3; i++)
+            for(int j=0; j<3; j++)
+                d2[i][j] = get(i,j);
+        return d2;
     }
 }

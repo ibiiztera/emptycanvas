@@ -33,7 +33,7 @@ public class TestObjet implements Test{
     private boolean perspective;
     private double camera;
     private double planproj;
-    private Camera c;
+    private Camera c = new Camera(new Point3D(0,0,-1000), Point3D.O0, 0.1);
     @Override
     public Scene scene() {
         return scene;
@@ -123,12 +123,13 @@ public class TestObjet implements Test{
         try {
             ZBuffer z = ZBufferFactory.instance(resx, resy);
             z.scene(scene);
+            c.calculerMatrice();
             z.camera(c);
             //if(perspective)
                 //z.perspective(this.camera, this.planproj);
             //else
                 //z.isometrique();
-            //z.dessinerSilhouette3D();
+            z.dessinerSilhouette3D();
             
             
             BufferedImage ri = z.image();

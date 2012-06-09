@@ -73,7 +73,7 @@ public class TestSphère extends TestObjet{
     public static void main(String[] args)
     {
         TestSphère ts = new TestSphère();
-        ts.camera(new Camera(new Point3D(0,0,-10), new Point3D(0,0,0), new Point3D(0,0,-7)));
+        ts.camera(new Camera(new Point3D(0,0,-1), new Point3D(0,0,0), new Point3D(0,0,-0.5)));
         ts.run();
     }
 }
