@@ -20,7 +20,6 @@
 package be.ibiiztera.md.pmatrix.pushmatrix.scripts;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.*;
-import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import java.util.ArrayList;
 
 /**
@@ -120,24 +119,7 @@ public class InterpreteModdificateur implements Interprete {
                     pos = pp.getPosition();
                 }
 
-                mr.matrice(new DenseDoubleMatrix2D(
-                        new double [] []
-                        {
-                        {
-                                vAxe[0].get(0),
-                                vAxe[0].get(1),
-                                vAxe[0].get(2),
-                        },{
-                                vAxe[1].get(0),
-                                vAxe[1].get(1),
-                                vAxe[1].get(2),
-                        },{
-                                vAxe[2].get(0),
-                                vAxe[2].get(1),
-                                vAxe[2].get(2)
-                        }
-                        }
-                                ));
+                mr.matrice(new Matrix33(vAxe));
 
                 InterpretePoint3D pp = new InterpretePoint3D();
                 mr.centre((Point3D)pp.interprete(text, pos));
