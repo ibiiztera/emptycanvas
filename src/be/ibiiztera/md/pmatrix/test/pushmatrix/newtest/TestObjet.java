@@ -13,7 +13,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import starbuck.tests.ShowTestResult;
 
 /**
  *
@@ -30,10 +29,8 @@ public class TestObjet implements Test{
     private File dir = null;
     protected Scene scene;
     protected String description;
-    private boolean perspective;
-    private double camera;
-    private double planproj;
-    private Camera c = new Camera(new Point3D(0,0,-1000), Point3D.O0, 0.1);
+    private Camera c = new Camera(new Point3D(0,0,-10), Point3D.O0, 0.1);
+    private BufferedImage ri;
     @Override
     public Scene scene() {
         return scene;
@@ -43,10 +40,10 @@ public class TestObjet implements Test{
     public void init() {
         ResourceBundle bundle1 = ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/test/pushmatrix/newtest/Bundle");
         
-        File dir = new File(bundle1.getString("testpath"));
-        if(!dir.exists())
-            dir.mkdirs();
-        this.dir = new File(dir.getAbsolutePath()+File.separator+this.getClass().getName());
+        File dirl = new File(bundle1.getString("testpath"));
+        if(!dirl.exists())
+            dirl.mkdirs();
+        this.dir = new File(dirl.getAbsolutePath()+File.separator+this.getClass().getName());
         if(!this.dir.exists())
             this.dir.mkdirs();
        
@@ -102,7 +99,7 @@ public class TestObjet implements Test{
     @Override
     public void publishResult() 
     {
-        new ShowTestResult(getFile()).run();
+        new ShowTestResult(ri).run();
     }
     /*
     public void setPerspective(boolean b) {
@@ -132,7 +129,7 @@ public class TestObjet implements Test{
             z.dessinerSilhouette3D();
             
             
-            BufferedImage ri = z.image();
+            ri = z.image();
             Graphics g = ri.getGraphics();
             g.setColor(Color.black);
             g.drawString(description, 0, 1100);

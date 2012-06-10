@@ -21,7 +21,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package starbuck.tests;
+package be.ibiiztera.md.pmatrix.test.pushmatrix.newtest;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -57,6 +57,17 @@ public class ShowTestResult extends javax.swing.JFrame implements Runnable {
         } catch (IOException ex) {
             Logger.getLogger(ShowTestResult.class.getName()).log(Level.SEVERE, null, ex);
         }
+        if (image != null) {
+            setSize(new Dimension(image.getWidth(), image.getHeight()));
+        }
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+  public ShowTestResult(BufferedImage ri) {
+        initComponents();
+
+        image = ri;
+        
         if (image != null) {
             setSize(new Dimension(image.getWidth(), image.getHeight()));
         }
