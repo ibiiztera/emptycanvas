@@ -21,6 +21,7 @@ package be.ibiiztera.md.pmatrix.pushmatrix;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -34,6 +35,11 @@ public class Polygone implements Representable, TRIGenerable{
     public Polygone() {
     }
 
+    public Polygone(Point3D[] list, Color c) 
+    {
+        this.couleur = c;
+        points.addAll(Arrays.asList(list));
+    }
     public Polygone(Color couleur) {
         this.couleur = couleur;
     }

@@ -25,6 +25,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.Map.Entry;
 
+@Deprecated
 public abstract class BaseGenerator {
 	private int x;
 	private int y;

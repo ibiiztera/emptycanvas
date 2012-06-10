@@ -177,5 +177,8 @@ public class TestObjet implements Test{
     public Camera camera() {
         return c;
     }
-
+    public void description(String d)
+    {
+        description = d;
+    }
 }

@@ -22,6 +22,7 @@ package be.ibiiztera.md.pmatrix.pushmatrix;
 import be.ibiiztera.md.pmatrix.pushmatrix.extras.SimpleSphere;
 import be.ibiiztera.md.pmatrix.pushmatrix.generator.TRIObjetGenerateurAbstract;
 import be.ibiiztera.md.pmatrix.pushmatrix.gui.ZBufferInfo;
+import be.ibiiztera.pmatrix.extras.RepresentableConteneur;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -30,6 +31,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author MANUEL DAHMEN
@@ -770,7 +772,6 @@ public class ZBufferImpl implements ZBuffer {
             }
         }
     }
-
     @Override
     public void dessinerSilhouette() {
         Scene scene = scene1;
@@ -850,16 +851,27 @@ public class ZBufferImpl implements ZBuffer {
         }
     }
 
-    @Override
-    public void dessinerSilhouette3D() {
-        System.out.println("RENDERING");
-        Scene scene = scene1;
+    public void dessinerSilhouette3D(Representable re) {
         id++;
         box = new Box2D();
-        Iterator<Representable> it = scene.iterator();
+
+        Iterator<Representable> it = null;
+        // COLLECTION
+        if(re instanceof RepresentableConteneur)
+        {
+            RepresentableConteneur name = (RepresentableConteneur) re;
+            it = name.getListRepresentable().iterator();
+            }
+        if(re instanceof Scene)
+        {
+            Scene scene = (Scene) re;
+            it = scene.iterator();
+        }
+        if(it!=null)
         while (it.hasNext()) {
             Representable r = it.next();
 
+            
             // GENERATORS
             if (r instanceof TRIGenerable) {
                 r = ((TRIGenerable) r).generate();
@@ -968,6 +980,11 @@ public class ZBufferImpl implements ZBuffer {
             }
         }
 
+    }
+
+    @Override
+    public void dessinerSilhouette3D() {
+        dessinerSilhouette3D(scene1);
     }
 
     public void dessinerSilhouette3DPerspective(Scene scene) {
