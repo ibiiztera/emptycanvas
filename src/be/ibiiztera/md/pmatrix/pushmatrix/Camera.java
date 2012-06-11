@@ -24,7 +24,7 @@ package be.ibiiztera.md.pmatrix.pushmatrix;
  *
  * @author Atelier
  */
-public class Camera implements Representable
+public class Camera extends CameraBox implements Representable
 {
     private Point3D camera;
     private Point3D lookat;
