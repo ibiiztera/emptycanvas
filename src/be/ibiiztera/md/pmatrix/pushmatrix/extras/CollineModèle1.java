@@ -1,23 +1,22 @@
 /*
 
-    Copyright (C) 2010-2012  DAHMEN, Manuel, Daniel
+ Copyright (C) 2010-2012  DAHMEN, Manuel, Daniel
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-*/
-
+ */
 package be.ibiiztera.md.pmatrix.pushmatrix.extras;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.ID;
@@ -31,89 +30,67 @@ import java.util.Random;
 import be.ibiiztera.md.pmatrix.pushmatrix.MODObjet;
 
 /**
- * 
+ *
  * @author Manuel
  */
 public class CollineModèle1 implements TRIGenerable, Representable {
-	private TRIObject tris = new TRIObject();
-	Random r = new Random();
-	private String id;
 
-	public CollineModèle1(double altitudeMax) {
-		int altMax = 10;
-		int pMax = 100;
+    private TRIObject tris = new TRIObject();
+    Random r = new Random();
+    private String id;
+    private int numTRIS = 100;
+    private double deltaInterne = 10;
 
-		Point3D p0 = new Point3D(0, 0, 0);
-		Color c0 = new Color(128, 0, 255);
+    public CollineModèle1(double altitudeMax) {
 
-		Point3D[][] pA = new Point3D[altMax][pMax];
+        Point3D p0 = new Point3D(0, 0, 0);
+        Color c0 = new Color(128, 0, 255);
 
-		Point3D[][] pAB = null;
+        for (int i = 0; i < numTRIS; i++) {
+            Point3D[] p = new Point3D[3];
 
-		for (int alt = 1; alt < altMax; alt++) {
-			for (int i = 0; i < pMax; i++) {
-				Point3D[] p = new Point3D[3];
+            p[0] = p0.plus(new Point3D(aleatoireSigne(deltaInterne),
+                    aleatoireSigne(deltaInterne), aleatoireSigne(deltaInterne)));
+            p[1] = p[0].plus(new Point3D(aleatoireSigne(deltaInterne),
+                    aleatoireSigne(deltaInterne), aleatoireSigne(deltaInterne)));
+            p[2] = p[1].plus(new Point3D(aleatoireSigne(deltaInterne),
+                    aleatoireSigne(deltaInterne), aleatoireSigne(deltaInterne)));
 
-				p[0] = p0.plus(new Point3D(aleatoireSigne(alt),
-						aleatoireSigne(alt), aleatoireSigne(alt)));
-				p[1] = p[0].plus(new Point3D(aleatoireSigne(alt),
-						aleatoireSigne(alt), aleatoireSigne(alt)));
-				p[2] = p[1].plus(new Point3D(aleatoireSigne(alt),
-						aleatoireSigne(alt), aleatoireSigne(alt)));
+            p0 = p[2];
 
-				p0 = p[2];
+            TRI t = new TRI(p[0], p[1], p[2], c0);
 
-				pA[alt][i] = p0;
+            tris.add(t);
+        }
+    }
 
-				TRI t = new TRI(p[0], p[1], p[2], c0);
+    private double aleatoireSigne(double maxAmpl) {
 
-				tris.add(t);
+        return (r.nextDouble() - 0.5)*maxAmpl;
 
-				if (alt > 1 & i > 0) {
-					tris.add(new TRI(pA[alt - 1][i - 1], pA[alt][i - 1],
-							pA[alt][i], c0));
-					tris.add(new TRI(pA[alt][i - 1], pA[alt - 1][i - 1],
-							pA[alt - 1][i], c0));
-				}
+    }
 
-			}
+    @Override
+    public TRIObject generate() {
+        return tris;
+    }
 
-			c0 = new Color(128, 0, 255 - 10 * alt);
+    @Override
+    public String id() {
+        return id;
+    }
 
-			// TRI t = new TRI(pA[alt][0].plus(new Point3D(0,-1,0)),
-			// pA[alt][pMax/2].plus(new Point3D(0,-1,0)),
-			// pA[alt][pMax-1].plus(new Point3D(0,-1,0)), c0);
+    @Override
+    public void setId(String id) {
+        this.id = ID.GEN(this);
+    }
 
-			// tris.add(t);
+    @Override
+    public String toString() {
+        return "colline()\n";
+    }
 
-			p0 = p0.plus(new Point3D(0, 0, -10));
-		}
-	}
-
-	private double aleatoireSigne(double alt) {
-		return (r.nextInt(1000) - 499.5) / 1000.0 * 100.0 / alt / alt;
-	}
-
-	@Override
-	public TRIObject generate() {
-		return tris;
-	}
-
-	@Override
-	public String id() {
-		return id;
-	}
-
-	@Override
-	public void setId(String id) {
-		this.id = ID.GEN(this);
-	}
-
-	@Override
-	public String toString() {
-		return "colline()\n";
-	}
-   public Representable place(MODObjet aThis) {
+    public Representable place(MODObjet aThis) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
