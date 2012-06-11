@@ -36,9 +36,9 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Loader implements SceneLoader {
+
     public static final Long TYPE_TEXT = 2l;
     public static final Long TYPE_BINA = 1l;
-    
     private int pos;
     private String répertoire;
 
@@ -153,7 +153,6 @@ public class Loader implements SceneLoader {
                 pos = interpreteH.getPosition();
             } catch (InterpreteException e1) {
                 failed = true;
-                e1.printStackTrace();
             }
             if ("scene".equals(id)) {
                 InterpretesBase ib = new InterpretesBase();
@@ -260,9 +259,14 @@ public class Loader implements SceneLoader {
                 failed = false;
                 break;
             } else if ("colline".equals(id)) {
-                Colline c = (Colline) interpreteH.intepreteColline();
-                sc.add(c);
-                failed = false;
+                try {
+                    Representable r = interpreteH.intepreteColline();
+                    sc.add(r);
+                    failed = false;
+                } catch (InterpreteException e) {
+                    failed = true;
+                    e.printStackTrace();
+                }
                 break;
             } else if ("attracteuretrange".equals(id)) {
                 try {
@@ -345,7 +349,7 @@ public class Loader implements SceneLoader {
     }
 
     public Scene loadBin(File f) throws VersionNonSupportéeException, ExtensionFichierIncorrecteException {
-         if (f.getAbsolutePath().toLowerCase().endsWith("bmood") || f.getAbsolutePath().toLowerCase().endsWith("bmoo"))
+        if (f.getAbsolutePath().toLowerCase().endsWith("bmood") || f.getAbsolutePath().toLowerCase().endsWith("bmoo"))
             ; else {
             System.err.println("Extension de fichier requise: .bmood ou bmoo");
             throw new ExtensionFichierIncorrecteException();
@@ -357,26 +361,27 @@ public class Loader implements SceneLoader {
             Long type = (Long) objectInputStream.readObject();
             String version = (String) objectInputStream.readObject();
             appelVersionSpecifiqueLoad(version, f);
-            if(type==TYPE_TEXT)
+            if (type == TYPE_TEXT) {
                 return null;
+            }
             Scene sc = null;
             sc = (Scene) objectInputStream.readObject();
             return sc;
         } catch (IOException ex) {
             Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return null;
     }
 
     public boolean saveBin(File f, Scene sc) throws VersionNonSupportéeException, ExtensionFichierIncorrecteException {
-         if (f.getAbsolutePath().toLowerCase().endsWith("bmood") || f.getAbsolutePath().toLowerCase().endsWith("bmoo"))
+        if (f.getAbsolutePath().toLowerCase().endsWith("bmood") || f.getAbsolutePath().toLowerCase().endsWith("bmoo"))
             ; else {
             System.err.println("Extension de fichier requise: .bmood ou bmoo");
             throw new ExtensionFichierIncorrecteException();
         }
-       ObjectOutputStream objectOutputStream = null;
+        ObjectOutputStream objectOutputStream = null;
         try {
             FileOutputStream fis = new FileOutputStream(f);
             objectOutputStream = new ObjectOutputStream(fis);
@@ -385,8 +390,9 @@ public class Loader implements SceneLoader {
             objectOutputStream.writeObject(type);
             objectOutputStream.writeObject(version);
             appelVersionSpecifiqueSave(version, f);
-            if(type==TYPE_TEXT)
+            if (type == TYPE_TEXT) {
                 return false;
+            }
             objectOutputStream.writeObject(sc);
             return true;
         } catch (IOException ex) {
@@ -437,30 +443,32 @@ public class Loader implements SceneLoader {
     private void setRépertoire(String dir) {
         this.répertoire = dir;
     }
+
     void appelVersionSpecifiqueLoad(String version, File f) throws VersionNonSupportéeException {
 
-        if(version.equals("1.0"))
+        if (version.equals("1.0")) {
             throw new VersionNonSupportéeException();
-        else if(version.equals("1.1"))
+        } else if (version.equals("1.1"))
             ;
     }
-    void appelVersionSpecifiqueSave(String version, File f) throws VersionNonSupportéeException{
-        if(version.equals("1.0"))
+
+    void appelVersionSpecifiqueSave(String version, File f) throws VersionNonSupportéeException {
+        if (version.equals("1.0")) {
             throw new VersionNonSupportéeException();
-        else if(version.equals("1.1"))
+        } else if (version.equals("1.1"))
             ;
     }
 
     public Scene load(File file, Scene scene) throws VersionNonSupportéeException, ExtensionFichierIncorrecteException {
         Scene sc = scene;
-        if(file.getAbsolutePath().toLowerCase().endsWith("moo") ||
-                file.getAbsolutePath().toLowerCase().endsWith("mood"))
-        {
+        if (file.getAbsolutePath().toLowerCase().endsWith("moo")
+                || file.getAbsolutePath().toLowerCase().endsWith("mood")) {
             loadIF(file, scene);
             return scene;
-        } else if(file.getAbsolutePath().toLowerCase().endsWith("bmoo") ||
-                file.getAbsolutePath().toLowerCase().endsWith("bmood"))
+        } else if (file.getAbsolutePath().toLowerCase().endsWith("bmoo")
+                || file.getAbsolutePath().toLowerCase().endsWith("bmood")) {
             return loadBin(file);
+        }
         return scene;
     }
 }

@@ -21,30 +21,30 @@ package starbuck.tests;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.Camera;
 import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
-import be.ibiiztera.md.pmatrix.pushmatrix.scripts.Loader;
+import be.ibiiztera.md.pmatrix.pushmatrix.extras.CollineModèle1;
 import be.ibiiztera.md.pmatrix.test.pushmatrix.newtest.TestObjet;
-import java.util.ResourceBundle;
 
 /**
  *
- * @author Manuel DAHMEN
+ * @author Atelier
  */
-public class TestMite extends TestObjet{
+public class TestColline extends TestObjet
+{
     public static void main(String [] args)
     {
-        TestMite to = new TestMite();
-        to.camera(new Camera(new Point3D(0,0,-30), new Point3D(0,0,0), new Point3D(0,0,-27)));
-       to.run();
-        
+        TestColline to = new TestColline();
+        for(int i=0; i<1000;i++)
+        {
+            to.setFilename("image_"+i);
+            to.publishResult(false);
+            to.camera(new Camera(new Point3D(0,0,-i*10), new Point3D(0,0,0), new Point3D(0,0,-i*10+5)));
+            to.run();
+        }
     }
     @Override
     public void testScene()
     {
-        ResourceBundle rb = ResourceBundle.getBundle("starbuck/tests/Mite");
-        String mite = rb.getString("mite");
-        new Loader().loadIF(mite, scene);
-        description = "Primtive model. triangle mesh";
+         scene().add(new CollineModèle1(1000));
+         description("Rorschah-like object");
     }
-            
-    
 }

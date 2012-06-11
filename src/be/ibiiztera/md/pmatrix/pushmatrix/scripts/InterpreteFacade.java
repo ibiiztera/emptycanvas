@@ -306,8 +306,31 @@ public class InterpreteFacade {
         return okay;
     }
 
-    Representable intepreteColline() {
-        return new Colline(1000);
+    Representable intepreteColline() throws InterpreteException {
+        InterpretesBase interpreteH = new InterpretesBase();
+		ArrayList<Integer> pattern;
+		pattern = new ArrayList<Integer>();
+		pattern.add(interpreteH.BLANK);
+		pattern.add(interpreteH.LEFTPARENTHESIS);
+		pattern.add(interpreteH.BLANK);
+		pattern.add(interpreteH.INTEGER);
+		pattern.add(interpreteH.BLANK);
+		pattern.add(interpreteH.RIGHTPARENTHESIS);
+		interpreteH.compile(pattern);
+		Integer type = (Integer) interpreteH.read(text, pos).get(3);
+		this.pos = interpreteH.getPosition();
+		
+		switch(type)
+		{
+			case 1:
+				return new CollineModèle1(1000);
+			case 2:
+				return new CollineModèle2(1000);
+			case 3:
+				return new CollineModèle3(1000);
+			default:
+				return new CollineModèle1(1000);
+		}
     }
 
     public AttracteurEtrange intepreteAttracteurEtrange()
@@ -323,7 +346,6 @@ public class InterpreteFacade {
 
         }
         return t;
-
     }
 
     public Tubulaire intepreteTubulaire()

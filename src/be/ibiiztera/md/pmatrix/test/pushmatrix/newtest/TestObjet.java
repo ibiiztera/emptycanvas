@@ -31,11 +31,21 @@ public class TestObjet implements Test{
     protected String description;
     private Camera c = new Camera(new Point3D(0,0,-10), Point3D.O0, 0.1);
     private BufferedImage ri;
+    private String filename;
+    private String fileExtension;
+    private boolean publish = true;
     @Override
     public Scene scene() {
         return scene;
     }
-
+    public void setFilename(String fn)
+    {
+        this.filename = fn;
+    }
+    public void setFileExtesion(String ext)
+    {
+        this.fileExtension = ext;
+    }
     @Override
     public void init() {
         ResourceBundle bundle1 = ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/test/pushmatrix/newtest/Bundle");
@@ -47,7 +57,11 @@ public class TestObjet implements Test{
         if(!this.dir.exists())
             this.dir.mkdirs();
        
-        file = new File(this.dir.getAbsolutePath()+File.separator+bundle1.getString("src")+"."+bundle1.getString("type"));
+        if(filename==null)
+            filename = bundle1.getString("src");
+        if(fileExtension==null)
+            fileExtension = bundle1.getString("type");
+        file = new File(this.dir.getAbsolutePath()+File.separator+filename+"."+fileExtension);
         
         template = bundle1.getString("template");
         
@@ -96,10 +110,15 @@ public class TestObjet implements Test{
     
         }
     }
+    public void publishResult(boolean publish)
+    {
+        this.publish = publish;
+    }
     @Override
     public void publishResult() 
     {
-        new ShowTestResult(ri).run();
+        if(publish)
+            new ShowTestResult(ri).run();
     }
     /*
     public void setPerspective(boolean b) {
