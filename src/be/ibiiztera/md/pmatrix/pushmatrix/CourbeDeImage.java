@@ -27,12 +27,12 @@ import java.util.Set;
 public class CourbeDeImage {
 
     private BufferedImage image;
-    private Hashtable<Point, Color> points;
+    private Hashtable<Point2D, Color> points;
 
     public CourbeDeImage(BufferedImage image) {
         super();
         this.image = image;
-        this.points = new Hashtable<Point, Color>();
+        this.points = new Hashtable<Point2D, Color>();
 
         anayliserImage();
     }
@@ -45,15 +45,15 @@ public class CourbeDeImage {
         this.image = image;
     }
 
-    public Hashtable<Point, Color> getPoints() {
+    public Hashtable<Point2D, Color> getPoints() {
         return points;
     }
 
-    public void setPoints(Hashtable<Point, Color> points) {
+    public void setPoints(Hashtable<Point2D, Color> points) {
         this.points = points;
     }
 
-    public Set<Point> getPointsList() {
+    public Set<Point2D> getPointsList() {
         return points.keySet();
     }
 
@@ -67,7 +67,7 @@ public class CourbeDeImage {
                     y0 = y1;
                     y1 = j;
                     if (y0 == -1 || (y1 > y0 + 1)) {
-                        points.put(new Point(i, j), new Color(image.getRGB(i, j)));
+                        points.put(new Point2D(i, j), new Color(image.getRGB(i, j)));
                         break;
                     }
                 }

@@ -45,7 +45,7 @@ public final class Colliseum extends RepresentableConteneur
                         Math.sin(angle),0, Math.cos(angle)
                     }
                 ).mult(Point3D.X).mult(rayon)).plus(Point3D.Y.mult(hauteur));
-        System.out.println(p.toString());
+        //System.out.println(p.toString());
         return p;
     }
 

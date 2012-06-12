@@ -51,9 +51,9 @@ public class CercleReseau implements Representable, PGenerator, TRIGenerable {
 		points = new PObjet();
 
 		for (int i = 0; i < curves.size(); i++) {
-			Enumeration<Point> en = curves.get(i).getPoints().keys();
+			Enumeration<Point2D> en = curves.get(i).getPoints().keys();
 			while (en.hasMoreElements()) {
-				Point p2d = en.nextElement();
+				Point2D p2d = en.nextElement();
 
 				/*
 				 * for (double a = 0.0 - 2 * Math.PI * i / numAngles / 2; a <
@@ -133,9 +133,9 @@ public class CercleReseau implements Representable, PGenerator, TRIGenerable {
 		for (int i = 0; i < curves.size(); i++) {
 			System.out.println(curves.get(i).getPoints().size());
 			
-			Enumeration<Point> en = curves.get(i).getPoints().keys();
+			Enumeration<Point2D> en = curves.get(i).getPoints().keys();
 			while (en.hasMoreElements()) {
-				Point p2d = en.nextElement();
+				Point2D p2d = en.nextElement();
 
 				
 

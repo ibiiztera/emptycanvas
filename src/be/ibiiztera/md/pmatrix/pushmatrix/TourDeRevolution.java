@@ -61,9 +61,9 @@ public class TourDeRevolution implements Representable {
 		ArrayList<Point3D>[] points = new ArrayList[courbe.getPoints().size()];
 		for (int i = 0; i < courbe.getPoints().size(); i++)
 			points[i] = new ArrayList<Point3D>();
-		Enumeration<Point> en = courbe.getPoints().keys();
+		Enumeration<Point2D> en = courbe.getPoints().keys();
 		while (en.hasMoreElements()) {
-			Point p = en.nextElement();
+			Point2D p = en.nextElement();
 			double diamx = p.getX();
 			double diamy = p.getY();
 

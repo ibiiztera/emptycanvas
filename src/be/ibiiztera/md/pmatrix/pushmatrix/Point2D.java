@@ -19,21 +19,21 @@
 */
 package be.ibiiztera.md.pmatrix.pushmatrix;
 
-public class Point {
+public class Point2D {
 	private double x;
 	private double y;
 
-	public Point(double x, double y) {
+	public Point2D(double x, double y) {
 		super();
 		this.x = x;
 		this.y = y;
 	}
 
-	public Point() {
+	public Point2D() {
 		super();
 	}
 
-	public Point(Point p1) {
+	public Point2D(Point2D p1) {
 		x = p1.getX();
 		y = p1.getY();
 	}
@@ -65,11 +65,11 @@ public class Point {
 	 * @param e
 	 * @return
 	 */
-	public boolean distanceEntre(Point p2a, double d, double e) {
+	public boolean distanceEntre(Point2D p2a, double d, double e) {
 		double distance = Math.sqrt((x-p2a.getX())*(x-p2a.getX())+(y-p2a.getY())*(y-p2a.getY()));
 		return distance>d && distance<e;
 	}
-	public double distance(Point p2a) {
+	public double distance(Point2D p2a) {
 		double distance = Math.sqrt((x-p2a.getX())*(x-p2a.getX())+(y-p2a.getY())*(y-p2a.getY()));
 		return distance;
 	}
