@@ -19,9 +19,7 @@
  */
 package starbuck.tests;
 
-import be.ibiiztera.md.pmatrix.pushmatrix.Camera;
-import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
-import be.ibiiztera.md.pmatrix.pushmatrix.extras.CollineModèle1;
+import be.ibiiztera.md.pmatrix.pushmatrix.extras.CollineModele1;
 import be.ibiiztera.md.pmatrix.test.pushmatrix.newtest.TestObjet;
 
 /**
@@ -37,7 +35,6 @@ public class TestCollineIsometrique extends TestObjet {
             to.setResy(480);
             to.isometrique(true);
             to.publishResult(false);
-            to.camera(new Camera(new Point3D(0, 0, -100), new Point3D(0, 0, 0), new Point3D(0, 0, -99)));
             to.setFilename("image_" + i);
             to.run();
             
@@ -48,10 +45,10 @@ public class TestCollineIsometrique extends TestObjet {
 
     @Override
     public void testScene() {
-        scene().add(new CollineModèle1(40));
-        scene().add(new CollineModèle1(40));
-        scene().add(new CollineModèle1(40));
-        scene().add(new CollineModèle1(40));
+        scene().add(new CollineModele1(40));
+        scene().add(new CollineModele1(40));
+        scene().add(new CollineModele1(40));
+        scene().add(new CollineModele1(40));
         description("Rorschah-like object");
     }
 }

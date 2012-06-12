@@ -33,14 +33,14 @@ import be.ibiiztera.md.pmatrix.pushmatrix.MODObjet;
  *
  * @author Manuel
  */
-public class CollineModèle1 implements TRIGenerable, Representable {
+public class CollineModele1 implements TRIGenerable, Representable {
 
     private TRIObject tris = new TRIObject();
     Random r = new Random();
     private String id;
     private double deltaInterne = 100;
 
-    public CollineModèle1(int numTRIS) {
+    public CollineModele1(int numTRIS) {
 
         Point3D p0 = new Point3D(0, 0, 0);
         Color c0 = new Color(128, 0, 255);

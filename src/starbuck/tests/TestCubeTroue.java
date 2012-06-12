@@ -55,7 +55,7 @@ public class TestCubeTroue extends TestObjet {
     }
 
     public static void main(String[] args) {
-        TestCubeTroué testObjet = new TestCubeTroué();
+        TestCubeTroue testObjet = new TestCubeTroue();
         testObjet.camera(new Camera(new Point3D(0,0,-2), new Point3D(0,0,0), 0.1));
         testObjet.run();
     }

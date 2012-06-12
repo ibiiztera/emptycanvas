@@ -34,12 +34,12 @@ import be.ibiiztera.md.pmatrix.pushmatrix.MODObjet;
  * 
  * @author Manuel
  */
-public class CollineModèle3 implements TRIGenerable, Representable {
+public class CollineModele2 implements TRIGenerable, Representable {
 	private TRIObject tris = new TRIObject();
 	Random r = new Random();
 	private String id;
 
-	public CollineModèle3(double altitudeMax) {
+	public CollineModele2(double altitudeMax) {
 		int altMax = 10;
 		int pMax = 100;
 

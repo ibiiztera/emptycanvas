@@ -323,13 +323,13 @@ public class InterpreteFacade {
 		switch(type)
 		{
 			case 1:
-				return new CollineModèle1(1000);
+				return new CollineModele1(1000);
 			case 2:
-				return new CollineModèle2(1000);
+				return new CollineModele2(1000);
 			case 3:
-				return new CollineModèle3(1000);
+				return new CollineModele3(1000);
 			default:
-				return new CollineModèle1(1000);
+				return new CollineModele1(1000);
 		}
     }
 

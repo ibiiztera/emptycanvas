@@ -51,7 +51,7 @@ public class TestCubeTroueTriangles extends TestObjet {
     }
 
     public static void main(String[] args) {
-        TestCubeTrouéTriangles testObjet = new TestCubeTrouéTriangles();
+        TestCubeTroueTriangles testObjet = new TestCubeTroueTriangles();
         testObjet.camera(new Camera(new Point3D(0,0,-2), new Point3D(0,0,0), new Point3D(0,0,-1.7)));
         testObjet.run();
     }

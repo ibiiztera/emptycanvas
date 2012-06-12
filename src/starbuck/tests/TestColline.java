@@ -21,7 +21,7 @@ package starbuck.tests;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.Camera;
 import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
-import be.ibiiztera.md.pmatrix.pushmatrix.extras.CollineModèle1;
+import be.ibiiztera.md.pmatrix.pushmatrix.extras.CollineModele1;
 import be.ibiiztera.md.pmatrix.test.pushmatrix.newtest.TestObjet;
 
 /**
@@ -44,10 +44,10 @@ public class TestColline extends TestObjet {
 
     @Override
     public void testScene() {
-        scene().add(new CollineModèle1(40));
-        scene().add(new CollineModèle1(40));
-        scene().add(new CollineModèle1(40));
-        scene().add(new CollineModèle1(40));
+        scene().add(new CollineModele1(40));
+        scene().add(new CollineModele1(40));
+        scene().add(new CollineModele1(40));
+        scene().add(new CollineModele1(40));
         description("Rorschah-like object");
     }
 }

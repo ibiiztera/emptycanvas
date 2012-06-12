@@ -44,35 +44,35 @@ public class TestSphere extends TestObjet{
         try {
             s.map(ImageIO.read(new File("C:\\Users\\Mary\\Documents\\dev\\emptycanvas\\gitclone\\emptycanvas\\src\\starbuck\\tests\\2456614033-blue-texture.jpg")), "C:\\Users\\Mary\\Documents\\dev\\emptycanvas\\gitclone\\emptycanvas\\src\\starbuck\\tests\\2456614033-blue-texture.jpg");
         } catch (IOException ex) {
-            Logger.getLogger(TestSphère.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestSphere.class.getName()).log(Level.SEVERE, null, ex);
         }
         scene().add(s);
         s = new TRISphere(Point3D.X.mult(-3), 2);
         try {
             s.map(ImageIO.read(new File("C:\\Users\\Mary\\Documents\\dev\\emptycanvas\\gitclone\\emptycanvas\\src\\starbuck\\tests\\2456614033-blue-texture.jpg")), "C:\\Users\\Mary\\Documents\\dev\\emptycanvas\\gitclone\\emptycanvas\\src\\starbuck\\tests\\2456614033-blue-texture.jpg");
         } catch (IOException ex) {
-            Logger.getLogger(TestSphère.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestSphere.class.getName()).log(Level.SEVERE, null, ex);
         }
         scene().add(s);
         s = new TRISphere(Point3D.Y.mult(3), 2);
         try {
             s.map(ImageIO.read(new File("C:\\Users\\Mary\\Documents\\dev\\emptycanvas\\gitclone\\emptycanvas\\src\\starbuck\\tests\\2456614033-blue-texture.jpg")), "C:\\Users\\Mary\\Documents\\dev\\emptycanvas\\gitclone\\emptycanvas\\src\\starbuck\\tests\\2456614033-blue-texture.jpg");
         } catch (IOException ex) {
-            Logger.getLogger(TestSphère.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestSphere.class.getName()).log(Level.SEVERE, null, ex);
         }
         scene().add(s);
         s = new TRISphere(Point3D.Y.mult(-3), 2);
         try {
             s.map(ImageIO.read(new File("C:\\Users\\Mary\\Documents\\dev\\emptycanvas\\gitclone\\emptycanvas\\src\\starbuck\\tests\\2456614033-blue-texture.jpg")), "C:\\Users\\Mary\\Documents\\dev\\emptycanvas\\gitclone\\emptycanvas\\src\\starbuck\\tests\\2456614033-blue-texture.jpg");
         } catch (IOException ex) {
-            Logger.getLogger(TestSphère.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestSphere.class.getName()).log(Level.SEVERE, null, ex);
         }
         scene().add(s);
         description = "4 spheres with textures";
     }
     public static void main(String[] args)
     {
-        TestSphère ts = new TestSphère();
+        TestSphere ts = new TestSphere();
         ts.camera(new Camera(new Point3D(0,0,-4), new Point3D(0,0,0), 0.01));
         ts.run();
     }
