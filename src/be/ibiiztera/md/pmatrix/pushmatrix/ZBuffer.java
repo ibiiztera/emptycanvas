@@ -25,8 +25,6 @@ import java.awt.image.*;
 public interface ZBuffer
 {
     public ZBuffer getInstance(int x, int y);
-    public java.awt.Point coordonneesPointEcran(Point3D p);
-    public java.awt.Point coordonneesPointEcranPerspective(Point3D x3d);
     public int resX();
     public int resY();
     public Scene scene();
@@ -43,6 +41,8 @@ public interface ZBuffer
     public void suivante();
     public void isometrique();
     public void perspective(double camera, double planproj);
+    public Point coordonneesPoint2D(Point3D p) throws HorsDeLEcranException;
+    public double distanceCamera(Point3D p);
     public void camera(Camera c);
     public Camera camera();
 }

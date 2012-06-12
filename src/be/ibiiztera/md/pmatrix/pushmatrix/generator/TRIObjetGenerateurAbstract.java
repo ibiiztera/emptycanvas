@@ -19,9 +19,7 @@
 */
 package be.ibiiztera.md.pmatrix.pushmatrix.generator;
 
-import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
-import be.ibiiztera.md.pmatrix.pushmatrix.TRI;
-import be.ibiiztera.md.pmatrix.pushmatrix.ZBuffer;
+import be.ibiiztera.md.pmatrix.pushmatrix.*;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -169,15 +167,22 @@ public abstract class TRIObjetGenerateurAbstract implements TRIObjetGenerateur {
                     for (int numY = 0; numY < borneY; numY++) {
                         getTris(numX, numY, tris);
 
-                        double incrMax = 1.0;
+                        double incrMax = 100;
                         for (int t = 0; t < 2; t++) {
                             for (int c = 0; c < 3; c++) {
-                                Point p1 = z.coordonneesPointEcran(tris[t].getSommet()[c]);
-                                Point p2 = z.coordonneesPointEcran(tris[t].getSommet()[(c + 1) % 3]);
-                                double incr = 1.0 / (Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY()));
-                                if (incr < incrMax) {
-                                    incrMax = incr;
-                                }
+								try
+								{
+								
+									Point p1 = z.coordonneesPoint2D(tris[t].getSommet()[c]);
+									Point p2 = z.coordonneesPoint2D(tris[t].getSommet()[(c + 1) % 3]);
+									double incr = 1.0 / (Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY()));
+									if (incr < incrMax) {
+										incrMax = incr;
+									}
+								} catch(HorsDeLEcranException ex)
+								{
+							}
+
                             }
                         }
 

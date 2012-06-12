@@ -20,7 +20,7 @@ import javax.imageio.ImageIO;
  *
  * @author Atelier
  */
-public class TestSphèreInterieur extends TestObjet{
+public class TestSphereInterieur extends TestObjet{
         @Override
     public void testScene()
     {
@@ -36,13 +36,13 @@ public class TestSphèreInterieur extends TestObjet{
             camera(new Camera(new Point3D(0,0,-10), new Point3D(0,0,0), new Point3D(0,0,-9)));
             description = "Textured sphere seen from inside";
         } catch (IOException ex) {
-            Logger.getLogger(TestSphèreInterieur.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestSphereInterieur.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     public static void main(String [] args)
     {
-        TestSphèreInterieur to = new TestSphèreInterieur();
+        TestSphereInterieur to = new TestSphereInterieur();
         to.run();
     }
 

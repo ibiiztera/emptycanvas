@@ -41,7 +41,7 @@ public abstract class PGeneratorZ {
 	}
 	public java.awt.Point point(ZBuffer z, Point3D p)
 	{
-		return z.coordonneesPointEcran(p);
+		return z.coordonneesPoint2D(p);
 	}
 	
 	public abstract void generate(ZBuffer z);

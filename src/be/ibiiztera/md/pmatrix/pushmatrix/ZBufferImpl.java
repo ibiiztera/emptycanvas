@@ -59,6 +59,7 @@ public class ZBufferImpl implements ZBuffer {
     private int[][] Simeid;
     private float[][] Simeprof;
     public double INFINI_PROF = 1000000;
+    private Scene scene1;
 
     @Override
     public void suivante() {
@@ -97,6 +98,19 @@ public class ZBufferImpl implements ZBuffer {
 
     private void reglerCamera(double angleX, double angleY) {
         //
+    }
+
+    @Override
+    public Point coordonneesPoint2D(Point3D p) throws HorsDeLEcranException {
+        switch(type_perspective)
+        {
+            case PERSPECTIVE_ISOM:
+                return coordonneesPointEcranIsometrique(p);
+            case PERSPECTIVE_OEIL:
+                return coordonneesPointEcranPerspective(p);
+            default:
+                throw new UnsupportedOperationException("Type de perspective non reconnu");
+        }
     }
 
     public class Box2DPerspective {
@@ -285,13 +299,8 @@ public class ZBufferImpl implements ZBuffer {
         public void testProf(Point3D x3d, Point coordonneesPointEcra, Color c) {
             int x = (int) coordonneesPointEcra.getX();
             int y = (int) coordonneesPointEcra.getY();
-            double prof = 0;
-            if (type_perspective == PERSPECTIVE_ISOM) {
-                prof = x3d.getZ();
-            } else {
-                prof = camera.moins(x3d).norme();
-            }
-            if (x >= 0 & x < la & y >= 0 & y < ha
+            double prof = distanceCamera(x3d);
+             if (x >= 0 & x < la & y >= 0 & y < ha
                     & prof < ime.getElementProf(x, y)) {
                 ime.setElementID(x, y, id);
                 ime.setElementPoint(x, y, x3d);
@@ -302,16 +311,11 @@ public class ZBufferImpl implements ZBuffer {
         }
 
         public void testProf(Point3D x3d, Color c) {
-            Point ce;
-            double prof = 0;
-            if (type_perspective == PERSPECTIVE_ISOM) {
-                ce = coordonneesPointEcran(x3d);
-                prof = x3d.getZ();
-            } else {
-                ce = coordonneesPointEcranPerspective(x3d);
-                prof = camera.moins(x3d).norme();
-
-            }
+			try
+			{
+            Point ce = coordonneesPoint2D(x3d);
+            double prof = distanceCamera(x3d);
+            
             int x = (int) ce.getX();
             int y = (int) ce.getY();
             if (x >= 0 & x < la & y >= 0 & y < ha
@@ -322,18 +326,15 @@ public class ZBufferImpl implements ZBuffer {
                 ime.setProf(x, y, prof);
 
             }
+			} catch(HorsDeLEcranException ex)
+			{
+			}
         }
 
         public void dessine(Point3D x3d, Color c) {
-            Point ce;
-            double prof = 0;
-            if (type_perspective == PERSPECTIVE_ISOM) {
-                ce = coordonneesPointEcran(x3d);
-                prof = -1000;
-            } else {
-                ce = coordonneesPointEcranPerspective(x3d);
-                prof = camera.moins(x3d).norme();
-            }
+	try{
+ Point ce = coordonneesPoint2D(x3d);
+            double prof = -1000;
             int x = (int) ce.getX();
             int y = (int) ce.getY();
             if (x >= 0 & x < la & y >= 0 & y < ha) {
@@ -342,8 +343,13 @@ public class ZBufferImpl implements ZBuffer {
                 ime.setElementCouleur(x, y, c);
                 ime.setProf(x, y, prof);
             }
-        }
+        
+			} catch(HorsDeLEcranException ex)
+			{
+			}
+
     }
+	}
 
     public class Box2D {
 
@@ -501,8 +507,7 @@ public class ZBufferImpl implements ZBuffer {
             maxx = maxx2;
             maxy = maxy2;
 
-            //System.out.println("BOX2D : minx" + minx + " maxx " + maxx + " miny " + miny + " maxy " + maxy);
-
+ 
         }
 
         public Rectangle rectangle() {
@@ -574,7 +579,6 @@ public class ZBufferImpl implements ZBuffer {
     private Box2D box;
     private int ha;
     private int la;
-    //private Color couleurCourante;
     private Box2DPerspective boxPerspect;
 
     public ZBufferImpl(int l, int h) {
@@ -590,17 +594,6 @@ public class ZBufferImpl implements ZBuffer {
         return new ZBufferImpl(x, y);
     }
 
-    @Override
-    public java.awt.Point coordonneesPointEcran(Point3D p) {
-        java.awt.Point p2 = new java.awt.Point(
-                (int) (la / (box.getMaxx() - box.getMinx()) * (p.getX() - box.getMinx())),
-                ha - (int) (ha / (box.getMaxy() - box.getMiny()) * (p.getY() - box.getMiny())));
-        if (p2.getX() >= 0.0 && p2.getX() < la && p2.getY() >= 0 && p2.getY() < ha) {
-            return p2;
-        } else {
-            return new java.awt.Point(la / 2, ha / 2);
-        }
-    }
 
     public double echelleEcran() {
         return box.echelleEcran();
@@ -609,7 +602,6 @@ public class ZBufferImpl implements ZBuffer {
     public Image rendu() {
         return null;
     }
-    private Scene scene1;
 
     @Override
     public Scene scene() {
@@ -660,9 +652,11 @@ public class ZBufferImpl implements ZBuffer {
                 Point3D p = (Point3D) r;
                 ime.testProf(p, p.getC());
             } else if (r instanceof SegmentDroite) {
-                SegmentDroite s = (SegmentDroite) r;
-                Point x1 = coordonneesPointEcran(s.getOrigine());
-                Point x2 = coordonneesPointEcran(s.getExtremite());
+try {
+				SegmentDroite s = (SegmentDroite) r;
+				
+                Point x1 = coordonneesPoint2D(s.getOrigine());
+                Point x2 = coordonneesPoint2D(s.getExtremite());
 
                 double x = Math.max(x1.getX(), x2.getX());
                 double y = Math.max(x1.getY(), x2.getY());
@@ -673,6 +667,9 @@ public class ZBufferImpl implements ZBuffer {
                     p.setC(s.getC());
                     ime.testProf(p, p.getC());
                 }
+			} catch(HorsDeLEcranException ex)
+			{
+			}
 
             } else if (r instanceof BezierCubique) {
                 BezierCubique b = (BezierCubique) r;
@@ -738,9 +735,10 @@ public class ZBufferImpl implements ZBuffer {
                 Point3D p = (Point3D) r;
                 ime.testProf(p, p.getC());
             } else if (r instanceof SegmentDroite) {
-                SegmentDroite s = (SegmentDroite) r;
-                Point x1 = coordonneesPointEcran(s.getOrigine());
-                Point x2 = coordonneesPointEcran(s.getExtremite());
+try{
+			SegmentDroite s = (SegmentDroite) r;
+                Point x1 = coordonneesPoint2D(s.getOrigine());
+                Point x2 = coordonneesPoint2D(s.getExtremite());
 
                 double x = Math.max(x1.getX(), x2.getX());
                 double y = Math.max(x1.getY(), x2.getY());
@@ -751,6 +749,9 @@ public class ZBufferImpl implements ZBuffer {
                     p.setC(s.getC());
                     ime.testProf(p, p.getC());
                 }
+			} catch(HorsDeLEcranException ex)
+			{
+			}
 
             } else if (r instanceof BezierCubique) {
                 BezierCubique b = (BezierCubique) r;
@@ -908,158 +909,78 @@ public class ZBufferImpl implements ZBuffer {
             box = new Box2D();
         dessinerSilhouette3D(scene1);
     }
-/*
-    public void dessinerSilhouette3DPerspective(Scene scene) {
-        id++;
-        boxPerspect = new Box2DPerspective(scene);
-        Iterator<Representable> it = scene.iterator();
-        while (it.hasNext()) {
-            Representable r = it.next();
 
-            // GENERATORS
-            if (r instanceof TRIGenerable) {
-                r = ((TRIGenerable) r).generate();
-            } else if (r instanceof PGenerator) {
-                r = ((PGenerator) r).generatePO();
-            }
-            if (r instanceof TRIConteneur) {
-                r = ((TRIConteneur) r).getObj();
-            }
-
-            // OBJETS
-            if (r instanceof TRIObject) {
-                TRIObject o = (TRIObject) r;
-                Iterator<TRI> ts = o.triangles.iterator();
-                while (ts.hasNext()) {
-                    // System.out.println("Triangle suivant");
-
-                    TRI t = ts.next();
-
-                    tracerTriangle(t.getSommet()[0], t.getSommet()[1],
-                            t.getSommet()[2], t.getCouleur());
-
-                }
-            } else if (r instanceof Point3D) {
-                Point3D p = (Point3D) r;
-                ime.testProf(p, p.getC());
-            } else if (r instanceof BSpline) {
-                BSpline b = (BSpline) r;
-                int nt = 100;
-                for (double i = 0; i < nt; i++) {
-                    try {
-                        Point3D p3d = b.calculerPoint3D(3.0 + 1.0 * nt / 200);
-                        ime.testProf(p3d, b.getColor());
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            } else if (r instanceof BezierCubique) {
-                BezierCubique b = (BezierCubique) r;
-                int nt = largeur() / 10;
-                Point3D p0 = b.calculerPoint3D(0.0);
-                for (double t = 0; t < 1.0; t += 1.0 / nt) {
-                    try {
-                        Point3D p1 = b.calculerPoint3D(t);
-                        ligne(p0, p1, b.getColor());
-                        p0 = p1;
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-            } else if (r instanceof PObjet) {
-                PObjet b = (PObjet) r;
-                for (Point3D p : b.getPoints()) {
-                    ime.testProf(p, p.getC());
-                }
-            } else if (r instanceof POConteneur) {
-                POConteneur c = (POConteneur) r;
-                for (Point3D p : c.iterable()) {
-                    ime.testProf(p, p.getC());
-                }
-            } else if (r instanceof TRIConteneur) {
-                for (TRI t : ((TRIConteneur) r).iterable()) {
-                    //tracerTrianglePerspect(t.getSommet()[0], t.getSommet()[1],
-                      //      t.getSommet()[2], t.getCouleur());
-
-                }
-
-            } else if (r instanceof PGeneratorZ) {
-                PGeneratorZ p = (PGeneratorZ) r;
-                p.generate(this);
-                p.dessine(this);
-            }
-        }
-
-    }
-*/
     private void tracerAretes(Point3D point3d, Point3D point3d2, Color c) {
-        Point p1 = coordonneesPointEcran(point3d);
-        Point p2 = coordonneesPointEcran(point3d2);
-
-        // System.out.println("Tracer arete");
-        // System.out.println("p1 : x " + p1.getX() + " y " + p1.getY());
-        // System.out.println("p2 : x " + p2.getX() + " y " + p2.getY());
-        double iteres = Math.abs(p1.getX() - p2.getX())
+	try{
+        Point p1 = coordonneesPoint2D(point3d);
+        Point p2 = coordonneesPoint2D(point3d2);
+       double iteres = Math.abs(p1.getX() - p2.getX())
                 + Math.abs(p1.getY() - p2.getY());
         for (double a = 0; a < 1.0; a += 1 / iteres) {
-            // System.out.println("a = " + a);
             Point pp = new Point(p1);
             Point3D p = point3d.mult(a).plus(point3d2.mult(1 - a));
             pp.setLocation(p1.getX() + (int) (a * (p2.getX() - p1.getX())),
                     p1.getY() + (int) (a * (p2.getY() - p1.getY())));
-            // System.out.println("pp :  x " + pp.getX() + "  y " + pp.getY());
-            //plotPoint(pp);
             ime.testProf(p, c);
 
-        }
-    }
+        
+		}
+					} catch(HorsDeLEcranException ex)
+			{
+			}
 
+    }
+    private double maxDistance(Point p1, Point p2, Point p3)
+    {
+        return Math.max(
+                    Math.max(
+                        Point.distance(p1.x, p1.y, p2.x, p2.y), 
+                        Point.distance(p2.x, p2.y, p3.x, p3.y)),
+                    Point.distance(p3.x, p3.y, p1.x, p1.y)
+                    );
+    }
     public void tracerTriangle(Point3D pp1, Point3D pp2, Point3D pp3, Color c) {
         Point p1, p2, p3;
-        if (type_perspective == PERSPECTIVE_ISOM) {
-            p1 = coordonneesPointEcran(pp1);
-            p2 = coordonneesPointEcran(pp2);
-            p3 = coordonneesPointEcran(pp3);
+		try{
+            p1 = coordonneesPoint2D(pp1);
+            p2 = coordonneesPoint2D(pp2);
+            p3 = coordonneesPoint2D(pp3);
 
-        } else {
-            p1 = coordonneesPointEcranPerspective(pp1);
-            p2 = coordonneesPointEcranPerspective(pp2);
-            p3 = coordonneesPointEcranPerspective(pp3);
-
-        }
-
-        double iteres1 = 1.0 / (Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY()));
+        double iteres1 = 1.0 / maxDistance(p1, p2, p3);
         for (double a = 0; a < 1.0; a += iteres1) {
             Point3D p3d = pp1.plus(pp1.mult(-1).plus(pp2).mult(a));
-            Point pp = coordonneesPointEcran(p3d);
-            double iteres2 = 1.0 / (Math.abs(pp.getX() - p3.getX()) + Math.abs(pp.getY() - p3.getY()));
+            double iteres2 = 1.0 / maxDistance(p1, p2, p3);
             for (double b = 0; b < 1.0; b += iteres2) {
                 Point3D p = p3d.plus(p3d.mult(-1).plus(pp3).mult(b));
-                Point p22 = coordonneesPointEcran(p);
                 ime.testProf(p, c);
-                // System.out.println("TRIABGLE"+p.getZ());
             }
         }
+			} catch(HorsDeLEcranException ex)
+			{
+			}
 
     }
 
     public void tracerQuad(Point3D pp1, Point3D pp2, Point3D pp3, Color c) {
-        Point p1 = coordonneesPointEcran(pp1);
-        Point p2 = coordonneesPointEcran(pp2);
-        Point p3 = coordonneesPointEcran(pp3);
+ try{
+ Point p1 = coordonneesPoint2D(pp1);
+        Point p2 = coordonneesPoint2D(pp2);
+        Point p3 = coordonneesPoint2D(pp3);
         double iteres1 = 1.0 / (Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY()));
         for (double a = 0; a < 1.0; a += iteres1) {
             Point3D p3d = pp1.plus(pp1.mult(-1).plus(pp2).mult(a));
-            Point pp = coordonneesPointEcran(p3d);
+            Point pp = coordonneesPoint2D(p3d);
             double iteres2 = 1.0 / (Math.abs(pp.getX() - p3.getX()) + Math.abs(pp.getY() - p3.getY()));
             for (double b = 0; b < 1.0; b += iteres2) {
                 Point3D p = p3d.plus(p3d.mult(-1).plus(pp3).mult(b));
-                Point p22 = coordonneesPointEcran(p);
+                Point p22 = coordonneesPoint2D(p);
                 ime.testProf(p, c);
                 // System.out.println("TRIABGLE"+p.getZ());
             }
         }
+			} catch(HorsDeLEcranException ex)
+			{
+			}
 
     }
 
@@ -1102,16 +1023,13 @@ public class ZBufferImpl implements ZBuffer {
         return infos;
     }
 
-    /**
-     * @param p
-     * @return
-     */
-    public java.awt.Point point(Point3D p0) {
-        return perspective.coordonneeEcran(p0);
-    }
-
     public void plotPoint(Color color, Point3D p) {
-        ime.testProf(p, coordonneesPointEcran(p), color);
+        try{
+		ime.testProf(p, coordonneesPoint2D(p), color);
+					} catch(HorsDeLEcranException ex)
+			{
+			}
+
     }
 
     /**
@@ -1137,15 +1055,20 @@ public class ZBufferImpl implements ZBuffer {
     }
 
     public void ligne(Point3D p1, Point3D p2, Color c) {
-        Point x1 = coordonneesPointEcran(p1);
-        Point x2 = coordonneesPointEcran(p2);
+		try{	
+			Point x1 = coordonneesPoint2D(p1);
+        Point x2 = coordonneesPoint2D(p2);
         double itere = Math.max(Math.abs(x1.getX() - x2.getX()), Math.abs(x1.getY() - x2.getY())) * 4;
         for (int i = 0; i < itere; i++) {
             Point3D p = p1.mult(i / itere).plus(p2.mult(1 - i / itere));
             p.setC(c);
             ime.testProf(p, c);
         }
-    }
+			} catch(HorsDeLEcranException ex)
+			{
+			}
+
+		}
 
     @Override
     public void plotPoint(Point3D p, Color c) {
@@ -1172,21 +1095,48 @@ public class ZBufferImpl implements ZBuffer {
         this.angleX = Math.tan(angleXRad);
         this.angleY = Math.tan(angleYRad);
     }
-    @Override
-    public Point coordonneesPointEcranPerspective(Point3D x3d) {
+    
+    
+    
+    protected Point coordonneesPointEcranPerspective(Point3D x3d) throws HorsDeLEcranException {
         x3d = cameraC.calculerPointDansRepere(x3d);
         planproj = cameraC.calculerPointDansRepere(cameraC.pointFocal());
         camera = cameraC.calculerPointDansRepere(cameraC.position());
-        double scale = ((planproj.getZ()) / (x3d.getZ()));
-        return new Point(
-                (int) (x3d.getX() * scale * angleX
-                 * la
-                * scale
+        if(x3d.getZ()>planproj.getZ() && planproj.getZ()>0)
+        {
+            double scale = ((planproj.getZ()) / (x3d.getZ()));
+            return new Point(
+                    (int) (x3d.getX() * scale * angleX
+                     * la
                 + la / 2),
                 (int) (x3d.getY() * scale * angleY
                  * ha
-                * scale
                 + ha / 2)
         );
+        }
+        throw new HorsDeLEcranException();
     }
+    protected Point coordonneesPointEcranIsometrique(Point3D p) throws HorsDeLEcranException{
+        java.awt.Point p2 = new java.awt.Point(
+                (int) (la / (box.getMaxx() - box.getMinx()) * (p.getX() - box.getMinx())),
+                ha - (int) (ha / (box.getMaxy() - box.getMiny()) * (p.getY() - box.getMiny())));
+        if (p2.getX() >= 0.0 && p2.getX() < la && p2.getY() >= 0 && p2.getY() < ha) {
+            return p2;
+        } else {
+			throw new HorsDeLEcranException();
+        }
+    }
+        public double distanceCamera(Point3D x3d) {
+            switch(type_perspective) 
+            {
+                case PERSPECTIVE_ISOM:
+                    return x3d.getZ();
+                case PERSPECTIVE_OEIL:
+                    return camera.moins(x3d).norme();
+                default:
+                    throw new UnsupportedOperationException("Type de perspective non reconnu");
+            }
+
+        }
 }
+
