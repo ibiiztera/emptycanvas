@@ -31,10 +31,12 @@ import be.ibiiztera.md.pmatrix.test.pushmatrix.newtest.TestObjet;
 public class TestColline extends TestObjet {
 
     public static void main(String[] args) {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
             TestColline to = new TestColline();
+            to.setResx(640);
+            to.setResy(480);
             to.publishResult(false);
-            to.camera(new Camera(new Point3D(0, 0, -i * 10), new Point3D(0, 0, 0), new Point3D(0, 0, -i * 10 + 5)));
+            to.camera(new Camera(new Point3D(0, 0, -100), new Point3D(0, 0, 0), new Point3D(0, 0, -99)));
             to.setFilename("image_" + i);
             to.run();
         }
@@ -42,7 +44,10 @@ public class TestColline extends TestObjet {
 
     @Override
     public void testScene() {
-        scene().add(new CollineModèle1(1000));
+        scene().add(new CollineModèle1(40));
+        scene().add(new CollineModèle1(40));
+        scene().add(new CollineModèle1(40));
+        scene().add(new CollineModèle1(40));
         description("Rorschah-like object");
     }
 }

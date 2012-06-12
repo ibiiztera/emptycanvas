@@ -72,7 +72,7 @@ public class ZBufferImpl implements ZBuffer {
 
     @Override
     public void isometrique() {
-        //type_perspective = PERSPECTIVE_ISOM;
+        type_perspective = PERSPECTIVE_ISOM;
     }
 
     @Override

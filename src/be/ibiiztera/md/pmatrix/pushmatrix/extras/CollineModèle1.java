@@ -38,10 +38,9 @@ public class CollineModèle1 implements TRIGenerable, Representable {
     private TRIObject tris = new TRIObject();
     Random r = new Random();
     private String id;
-    private int numTRIS = 100;
-    private double deltaInterne = 10;
+    private double deltaInterne = 100;
 
-    public CollineModèle1(double altitudeMax) {
+    public CollineModèle1(int numTRIS) {
 
         Point3D p0 = new Point3D(0, 0, 0);
         Color c0 = new Color(128, 0, 255);

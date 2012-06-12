@@ -34,6 +34,11 @@ public class TestObjet implements Test{
     private String filename;
     private String fileExtension;
     private boolean publish = true;
+    private boolean isometrique = false;
+    public void isometrique(boolean isISO)
+    {
+        isometrique = isISO;
+    }
     @Override
     public Scene scene() {
         return scene;
@@ -140,13 +145,13 @@ public class TestObjet implements Test{
             ZBuffer z = ZBufferFactory.instance(resx, resy);
             z.scene(scene);
             c.calculerMatrice();
-            z.camera(c);
-            //if(perspective)
-                //z.perspective(this.camera, this.planproj);
-            //else
-                //z.isometrique();
-            z.dessinerSilhouette3D();
+            if(isometrique)
+                z.isometrique();
+            else
+                z.camera(c);
+    
             
+            z.dessinerSilhouette3D();
             
             ri = z.image();
             Graphics g = ri.getGraphics();
