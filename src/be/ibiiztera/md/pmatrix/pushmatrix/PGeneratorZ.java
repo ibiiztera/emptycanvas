@@ -17,10 +17,9 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 */
-/**
- * 
- */
 package be.ibiiztera.md.pmatrix.pushmatrix;
+
+import java.awt.Point;
 
 /**
  * @author MANUEL DAHMEN
@@ -39,7 +38,7 @@ public abstract class PGeneratorZ {
 	{
 		return z.resX();
 	}
-	public java.awt.Point point(ZBuffer z, Point3D p)
+	public Point point(ZBuffer z, Point3D p) throws HorsDeLEcranException
 	{
 		return z.coordonneesPoint2D(p);
 	}
