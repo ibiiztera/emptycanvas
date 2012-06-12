@@ -24,8 +24,8 @@ package be.ibiiztera.md.pmatrix.pushmatrix;
  * @date
  */
 public class CameraBox {
-    private double angleX;
-    private double angleY;
+    private double angleX = Math.PI*2/360*60;
+    private double angleY = Math.PI*2/360*60;
     public static final int PERSPECTIVE_ISOMETRIQUE = 1;
     public static final int PERSPECTIVE_POINTDEFUITE = 1;
     private int type = PERSPECTIVE_POINTDEFUITE;

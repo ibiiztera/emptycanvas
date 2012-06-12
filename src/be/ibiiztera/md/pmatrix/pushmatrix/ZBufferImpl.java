@@ -79,11 +79,16 @@ public class ZBufferImpl implements ZBuffer {
     public void camera(Camera c) {
         type_perspective = PERSPECTIVE_OEIL;
         this.cameraC = c;
+        reglerCamera(c.angleX(), c.angleY());
     }
 
     @Override
     public Camera camera() {
         return this.cameraC;
+    }
+
+    private void reglerCamera(double angleX, double angleY) {
+        //
     }
 
     public class Box2DPerspective {
