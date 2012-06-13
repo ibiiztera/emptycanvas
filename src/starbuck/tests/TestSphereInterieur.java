@@ -25,16 +25,15 @@ public class TestSphereInterieur extends TestObjet{
     public void testScene()
     {
         try {
-            setResx(320);
-            setResy(200);
+            //setResx(320);
+            //setResy(200);
             TRISphere ts =  new TRISphere(new Point3D(0,0,0), 100);
             
             ts.map(ImageIO.read(getClass().getResource("Coucherdesoleil.jpg")), "Coucherdesoleil.jpg");
             scene().add(ts);
-            scene().add(new TRI(new Point3D(1,1,0),new Point3D(1,0,0), new Point3D(0,1,0), Color.red));
             
             camera(new Camera(new Point3D(0,0,-10), new Point3D(0,0,0), new Point3D(0,0,-9)));
-            description = "Textured sphere seen from inside";
+            description("Textured sphere seen from inside");
         } catch (IOException ex) {
             Logger.getLogger(TestSphereInterieur.class.getName()).log(Level.SEVERE, null, ex);
         }

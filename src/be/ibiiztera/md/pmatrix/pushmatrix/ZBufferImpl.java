@@ -1066,8 +1066,8 @@ public class ZBufferImpl implements ZBuffer {
     protected double angleY = Math.PI / 6;
 
     public void setAngles(double angleXRad, double angleYRad) {
-        this.angleX = Math.tan(angleXRad);
-        this.angleY = Math.tan(angleYRad);
+        this.angleX = angleXRad;
+        this.angleY = angleYRad;
     }
 
     protected Point coordonneesPointEcranPerspective(Point3D x3d) {
