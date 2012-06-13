@@ -101,7 +101,7 @@ public class ZBufferImpl implements ZBuffer {
     }
 
     @Override
-    public Point coordonneesPoint2D(Point3D p) throws HorsDeLEcranException {
+    public Point coordonneesPoint2D(Point3D p)  {
         switch (type_perspective) {
             case PERSPECTIVE_ISOM:
                 return coordonneesPointEcranIsometrique(p);
@@ -310,8 +310,9 @@ public class ZBufferImpl implements ZBuffer {
         }
 
         public void testProf(Point3D x3d, Color c) {
-            try {
+            
                 Point ce = coordonneesPoint2D(x3d);
+                if(ce==null) return;
                 double prof = distanceCamera(x3d);
 
                 int x = (int) ce.getX();
@@ -324,13 +325,11 @@ public class ZBufferImpl implements ZBuffer {
                     ime.setProf(x, y, prof);
 
                 }
-            } catch (HorsDeLEcranException ex) {
-            }
         }
 
         public void dessine(Point3D x3d, Color c) {
-            try {
                 Point ce = coordonneesPoint2D(x3d);
+                if(ce==null) return;
                 double prof = -1000;
                 int x = (int) ce.getX();
                 int y = (int) ce.getY();
@@ -340,10 +339,6 @@ public class ZBufferImpl implements ZBuffer {
                     ime.setElementCouleur(x, y, c);
                     ime.setProf(x, y, prof);
                 }
-
-            } catch (HorsDeLEcranException ex) {
-            }
-
         }
     }
 
@@ -647,12 +642,12 @@ public class ZBufferImpl implements ZBuffer {
                 Point3D p = (Point3D) r;
                 ime.testProf(p, p.getC());
             } else if (r instanceof SegmentDroite) {
-                try {
                     SegmentDroite s = (SegmentDroite) r;
 
                     Point x1 = coordonneesPoint2D(s.getOrigine());
                     Point x2 = coordonneesPoint2D(s.getExtremite());
-
+                    if(x1!=null && x2!=null)
+                    {
                     double x = Math.max(x1.getX(), x2.getX());
                     double y = Math.max(x1.getY(), x2.getY());
 
@@ -662,8 +657,7 @@ public class ZBufferImpl implements ZBuffer {
                         p.setC(s.getC());
                         ime.testProf(p, p.getC());
                     }
-                } catch (HorsDeLEcranException ex) {
-                }
+                    }
 
             } else if (r instanceof BezierCubique) {
                 BezierCubique b = (BezierCubique) r;
@@ -730,11 +724,11 @@ public class ZBufferImpl implements ZBuffer {
                 Point3D p = (Point3D) r;
                 ime.testProf(p, p.getC());
             } else if (r instanceof SegmentDroite) {
-                try {
                     SegmentDroite s = (SegmentDroite) r;
                     Point x1 = coordonneesPoint2D(s.getOrigine());
                     Point x2 = coordonneesPoint2D(s.getExtremite());
-
+                    if(x1!=null && x2!=null)
+                    {
                     double x = Math.max(x1.getX(), x2.getX());
                     double y = Math.max(x1.getY(), x2.getY());
 
@@ -744,8 +738,7 @@ public class ZBufferImpl implements ZBuffer {
                         p.setC(s.getC());
                         ime.testProf(p, p.getC());
                     }
-                } catch (HorsDeLEcranException ex) {
-                }
+                    }
 
             } else if (r instanceof BezierCubique) {
                 BezierCubique b = (BezierCubique) r;
@@ -901,9 +894,10 @@ public class ZBufferImpl implements ZBuffer {
     }
 
     private void tracerAretes(Point3D point3d, Point3D point3d2, Color c) {
-        try {
             Point p1 = coordonneesPoint2D(point3d);
             Point p2 = coordonneesPoint2D(point3d2);
+            if(p1==null || p2==null)
+                return;
             double iteres = Math.abs(p1.getX() - p2.getX())
                     + Math.abs(p1.getY() - p2.getY());
             for (double a = 0; a < 1.0; a += 1 / iteres) {
@@ -915,8 +909,6 @@ public class ZBufferImpl implements ZBuffer {
 
 
             }
-        } catch (HorsDeLEcranException ex) {
-        }
 
     }
 
@@ -930,11 +922,11 @@ public class ZBufferImpl implements ZBuffer {
 
     public void tracerTriangle(Point3D pp1, Point3D pp2, Point3D pp3, Color c) {
         Point p1, p2, p3;
-        try {
             p1 = coordonneesPoint2D(pp1);
             p2 = coordonneesPoint2D(pp2);
             p3 = coordonneesPoint2D(pp3);
-
+            if(p1==null || p2==null || p3==null)
+                return;
             double iteres1 = 1.0 / maxDistance(p1, p2, p3);
             for (double a = 0; a < 1.0; a += iteres1) {
                 Point3D p3d = pp1.plus(pp1.mult(-1).plus(pp2).mult(a));
@@ -944,16 +936,14 @@ public class ZBufferImpl implements ZBuffer {
                     ime.testProf(p, c);
                 }
             }
-        } catch (HorsDeLEcranException ex) {
-        }
-
     }
 
     public void tracerQuad(Point3D pp1, Point3D pp2, Point3D pp3, Color c) {
-        try {
             Point p1 = coordonneesPoint2D(pp1);
             Point p2 = coordonneesPoint2D(pp2);
             Point p3 = coordonneesPoint2D(pp3);
+            if(p1==null || p2==null || p3==null)
+                return;
             double iteres1 = 1.0 / (Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY()));
             for (double a = 0; a < 1.0; a += iteres1) {
                 Point3D p3d = pp1.plus(pp1.mult(-1).plus(pp2).mult(a));
@@ -966,9 +956,6 @@ public class ZBufferImpl implements ZBuffer {
                     // System.out.println("TRIABGLE"+p.getZ());
                 }
             }
-        } catch (HorsDeLEcranException ex) {
-        }
-
     }
 
     @Override
@@ -1011,10 +998,8 @@ public class ZBufferImpl implements ZBuffer {
     }
 
     public void plotPoint(Color color, Point3D p) {
-        try {
+        if(p!=null)
             ime.testProf(p, coordonneesPoint2D(p), color);
-        } catch (HorsDeLEcranException ex) {
-        }
 
     }
 
@@ -1041,36 +1026,40 @@ public class ZBufferImpl implements ZBuffer {
     }
 
     public void ligne(Point3D p1, Point3D p2, Color c) {
-        try {
             Point x1 = coordonneesPoint2D(p1);
             Point x2 = coordonneesPoint2D(p2);
+            if(x1==null || x2==null)
+                return;
+
             double itere = Math.max(Math.abs(x1.getX() - x2.getX()), Math.abs(x1.getY() - x2.getY())) * 4;
             for (int i = 0; i < itere; i++) {
                 Point3D p = p1.mult(i / itere).plus(p2.mult(1 - i / itere));
                 p.setC(c);
                 ime.testProf(p, c);
             }
-        } catch (HorsDeLEcranException ex) {
-        }
 
     }
 
     @Override
     public void plotPoint(Point3D p, Color c) {
-        ime.dessine(p, c);
+        if(p!=null)
+            ime.dessine(p, c);
     }
 
     public void plotPoint(Point3D p) {
+        if(p!=null)
         ime.dessine(p, p.getC());
     }
 
     @Override
     public void testPoint(Point3D p, Color c) {
+        if(p!=null)
         ime.testProf(p, c);
     }
 
     @Override
     public void testPoint(Point3D p) {
+        if(p!=null)
         ime.testProf(p, p.getC());
     }
     protected double angleX = Math.PI / 6;
@@ -1081,7 +1070,7 @@ public class ZBufferImpl implements ZBuffer {
         this.angleY = Math.tan(angleYRad);
     }
 
-    protected Point coordonneesPointEcranPerspective(Point3D x3d) throws HorsDeLEcranException {
+    protected Point coordonneesPointEcranPerspective(Point3D x3d) {
         x3d = cameraC.calculerPointDansRepere(x3d);
         planproj = cameraC.calculerPointDansRepere(cameraC.pointFocal());
         camera = cameraC.calculerPointDansRepere(cameraC.position());
@@ -1095,17 +1084,17 @@ public class ZBufferImpl implements ZBuffer {
                     * ha
                     + ha / 2));
         }
-        throw new HorsDeLEcranException();
+        return null;
     }
 
-    protected Point coordonneesPointEcranIsometrique(Point3D p) throws HorsDeLEcranException {
+    protected Point coordonneesPointEcranIsometrique(Point3D p) {
         java.awt.Point p2 = new java.awt.Point(
                 (int) (la / (box.getMaxx() - box.getMinx()) * (p.getX() - box.getMinx())),
                 ha - (int) (ha / (box.getMaxy() - box.getMiny()) * (p.getY() - box.getMiny())));
         if (p2.getX() >= 0.0 && p2.getX() < la && p2.getY() >= 0 && p2.getY() < ha) {
             return p2;
         } else {
-            throw new HorsDeLEcranException();
+            return null;
         }
     }
 

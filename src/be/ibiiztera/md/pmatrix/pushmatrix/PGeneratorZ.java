@@ -38,7 +38,7 @@ public abstract class PGeneratorZ {
 	{
 		return z.resX();
 	}
-	public Point point(ZBuffer z, Point3D p) throws HorsDeLEcranException
+	public Point point(ZBuffer z, Point3D p)
 	{
 		return z.coordonneesPoint2D(p);
 	}
