@@ -1049,8 +1049,8 @@ public class ZBufferImpl implements ZBuffer {
         if(p!=null)
         ime.testProf(p, p.getC());
     }
-    protected double angleX = Math.PI / 6;
-    protected double angleY = Math.PI / 6;
+    protected double angleX = Math.PI / 6 / 2;
+    protected double angleY = Math.PI / 6 / 2;
 
     public void setAngles(double angleXRad, double angleYRad) {
         this.angleX = angleXRad;
@@ -1059,10 +1059,12 @@ public class ZBufferImpl implements ZBuffer {
 
     protected Point coordonneesPointEcranPerspective(Point3D x3d) {
         x3d = cameraC.calculerPointDansRepere(x3d);
-        planproj = cameraC.calculerPointDansRepere(cameraC.pointFocal());
-        camera = cameraC.calculerPointDansRepere(cameraC.position());
-        if (x3d.getZ() > planproj.getZ() && planproj.getZ() > 0) {
-            double scale = ((planproj.getZ()) / (x3d.getZ()));
+        //camera = cameraC.calculerPointDansRepere(cameraC.position());
+        //if (x3d.getZ() > planproj.getZ() && planproj.getZ() > 0) {
+		if (x3d.getZ() > 0 && -angleX<Math.atan(x3d.getX()/x3d.getZ()) && Math.atan(x3d.getX()/x3d.getZ())<angleX &&
+				-angleY<Math.atan(x3d.getY()/x3d.getZ()) && Math.atan(x3d.getY()/x3d.getZ())<angleY
+		) {
+            double scale = (1 / (x3d.getZ()));
             return new Point(
                     (int) (x3d.getX() * scale * angleX
                     * la
@@ -1092,7 +1094,7 @@ public class ZBufferImpl implements ZBuffer {
             case PERSPECTIVE_ISOM:
                 return x3d.getZ();
             case PERSPECTIVE_OEIL:
-                return camera.moins(x3d).norme();
+                return x3d.norme();
             default:
                 throw new UnsupportedOperationException("Type de perspective non reconnu");
         }
