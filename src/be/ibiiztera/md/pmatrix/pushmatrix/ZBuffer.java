@@ -40,9 +40,10 @@ public interface ZBuffer
     public void testPoint(Point3D point3D);
     public void suivante();
     public void isometrique();
-    public void perspective(double camera, double planproj);
+    public void perspective();
     public Point coordonneesPoint2D(Point3D p);
     public double distanceCamera(Point3D p);
     public void camera(Camera c);
     public Camera camera();
+
 }

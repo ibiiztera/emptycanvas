@@ -183,7 +183,7 @@ public abstract class TRIObjetGenerateurAbstract implements TRIObjetGenerateur {
 
                         Point p1 = z.coordonneesPoint2D(tris[t].getSommet()[c]);
                         Point p2 = z.coordonneesPoint2D(tris[t].getSommet()[(c + 1) % 3]);
-                        if (p1 != null && p2 != null) {
+                        if (p1 != null & p2 != null) {
                             double incr = 1.0 / (Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY()));
                             if (incr < incrMax) {
                                 incrMax = incr;

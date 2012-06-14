@@ -144,12 +144,17 @@ public class TestObjet implements Test{
         try {
             ZBuffer z = ZBufferFactory.instance(resx, resy);
             z.scene(scene);
-            c.calculerMatrice();
             if(isometrique)
                 z.isometrique();
             else
+            {
+                z.perspective();
+            }
+            if(c!=null)
+            {
                 z.camera(c);
-    
+                c.calculerMatrice();
+            }
             
             z.dessinerSilhouette3D();
             

@@ -45,9 +45,8 @@ public class ZBufferImpl implements ZBuffer {
     public int type_perspective = PERSPECTIVE_OEIL;
     protected Point3D planproj = null;
     protected Point3D camera = null;
-    private Camera cameraC = null;
+    private Camera cameraC = new Camera();
     private BufferedImage bi;
-    private Perspective perspective = Perspective.getInstance(Perspective.P_CUBIQUE_LINEAIRE);
     private int id = 0;
     private ZBufferInfo infos = new ZBufferInfo();
     // PARAMETRES
@@ -73,20 +72,15 @@ public class ZBufferImpl implements ZBuffer {
     }
 
     @Override
-    public void perspective(double camera, double planproj) {
-        type_perspective = PERSPECTIVE_OEIL;
-        this.camera = new Point3D(0, 0, camera);
-        this.planproj = new Point3D(0, 0, planproj);
-    }
-
-    @Override
     public void isometrique() {
         type_perspective = PERSPECTIVE_ISOM;
+    }
+    public void perspective() {
+        type_perspective = PERSPECTIVE_OEIL;
     }
 
     @Override
     public void camera(Camera c) {
-        type_perspective = PERSPECTIVE_OEIL;
         this.cameraC = c;
         reglerCamera(c.angleX(), c.angleY());
     }
@@ -777,7 +771,7 @@ public class ZBufferImpl implements ZBuffer {
     }
 
     public void dessinerSilhouette3D(Representable re) {
-        id++;
+        
 
         Iterator<Representable> it = null;
         // COLLECTION
@@ -887,6 +881,7 @@ public class ZBufferImpl implements ZBuffer {
 
     @Override
     public void dessinerSilhouette3D() {
+        id++;
         if (type_perspective == PERSPECTIVE_ISOM) {
             box = new Box2D();
         }
@@ -1017,14 +1012,6 @@ public class ZBufferImpl implements ZBuffer {
         return la;
     }
 
-    /**
-     * @param perspective
-     */
-    public void perspective(Perspective p) {
-        this.perspective = p;
-
-    }
-
     public void ligne(Point3D p1, Point3D p2, Color c) {
             Point x1 = coordonneesPoint2D(p1);
             Point x2 = coordonneesPoint2D(p2);
@@ -1088,6 +1075,7 @@ public class ZBufferImpl implements ZBuffer {
     }
 
     protected Point coordonneesPointEcranIsometrique(Point3D p) {
+        p = cameraC.calculerPointDansRepere(p);
         java.awt.Point p2 = new java.awt.Point(
                 (int) (la / (box.getMaxx() - box.getMinx()) * (p.getX() - box.getMinx())),
                 ha - (int) (ha / (box.getMaxy() - box.getMiny()) * (p.getY() - box.getMiny())));
@@ -1098,6 +1086,7 @@ public class ZBufferImpl implements ZBuffer {
         }
     }
 
+    @Override
     public double distanceCamera(Point3D x3d) {
         switch (type_perspective) {
             case PERSPECTIVE_ISOM:

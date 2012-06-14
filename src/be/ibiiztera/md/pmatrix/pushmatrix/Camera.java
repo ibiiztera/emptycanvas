@@ -31,6 +31,13 @@ public class Camera extends CameraBox implements Representable
     private Point3D planproj;
     private Matrix33 matrice;
 
+    public Camera() {
+        this.camera = new Point3D(0,0,-100);
+        this.lookat = Point3D.O0;
+        this.planproj = new Point3D(0,0,-99);
+    }
+    
+    
     public Camera(Point3D camera, Point3D lookat, Point3D planproj) {
         this.camera = camera;
         this.lookat = lookat;
