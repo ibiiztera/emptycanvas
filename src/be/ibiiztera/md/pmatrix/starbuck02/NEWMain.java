@@ -29,7 +29,12 @@
 package be.ibiiztera.md.pmatrix.starbuck02;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.Scene;
+import java.awt.*;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 
 /**
@@ -61,6 +66,39 @@ public class NEWMain extends javax.swing.JFrame {
     }  
      /** Creates new form NEWMain */
     public NEWMain() {
+        // On vérifie que le "systray" est supporté
+	// par la JVM pour ce système d'exploitation
+	if (SystemTray.isSupported()) {
+            try {
+                PopupMenu popup = new PopupMenu();
+                popup.add(new MenuItem("Voir avancement des tâches"));
+                popup.add(new MenuItem("Quitter"));
+                // On Crée un TrayIcon qui représentera notre icône :
+                TrayIcon trayIcon = new TrayIcon(
+                                ImageIO.read(getClass().getResource("iconesystray.bmp")),		// L'image qui sera utilisé comme icône
+                                "Empty Canvas Waaa", 	// Le texte affiché lors du survol de la souris
+                                
+                        // Le PopupMenu qui s'affichera lors du clic droit
+                                popup);
+                
+                // On active le redimensionnement automatique de
+                // l'icône, afin qu'elle s'adapte au système
+                // (sinon l'icône peut être tronqué ou disproportionné)
+                trayIcon.setImageAutoSize(true);
+                
+                // On récupère l'instance du SystemTray
+                SystemTray systemTray = SystemTray.getSystemTray();
+                
+                // Et on ajoute notre TrayIcon dans le system tray
+                systemTray.add(trayIcon);
+            } catch (AWTException ex) {
+                Logger.getLogger(NEWMain.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(NEWMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+	}
+        
+        
         initComponents();
 	//        String h = System.getProperty(java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/starbuck02/Bundle").getString("USER_HOME"));
         //String p = System.getProperty(java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/starbuck02/Bundle").getString("FILE_SEPARATOR"));
