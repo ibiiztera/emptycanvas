@@ -43,7 +43,11 @@ public class Camera extends CameraBox implements Representable
         this.lookat = lookat;
         this.planproj = planproj;
     }
-    public Camera(Point3D camera, Point3D lookat, double distancePlan) {
+   public Camera(Point3D camera, Point3D lookat) {
+        this.camera = camera;
+        this.lookat = lookat;
+    }
+     public Camera(Point3D camera, Point3D lookat, double distancePlan) {
         this.camera = camera;
         this.lookat = lookat;
         this.planproj = camera.mult(distancePlan).plus(lookat.mult(1-distancePlan));
@@ -89,6 +93,6 @@ public class Camera extends CameraBox implements Representable
 	
 	public String toString()
 	{
-		return "camera (\n\teye : " +camera.toString() + "\n\tlookat" + lookat.toString()+"\n)";
+		return "camera (\n\t" +camera.toString() + "\n\t" + lookat.toString()+"\n)";
 	}
 }

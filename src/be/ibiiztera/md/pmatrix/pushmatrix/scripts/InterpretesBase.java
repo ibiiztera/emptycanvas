@@ -70,7 +70,10 @@ public class InterpretesBase {
                 pos += size;
                 this.pos = pos;
             } else {
-                throw new InterpreteException("Parser Error : " + o.toString());
+                if(o!=null)
+                    throw new InterpreteException("Parser Error : " + o.toString());
+                else
+                    throw new InterpreteException("Parser Error : ");
             }
 
         }

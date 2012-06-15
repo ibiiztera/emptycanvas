@@ -1,22 +1,22 @@
 /*
 
-    Copyright (C) 2010-2012  DAHMEN, Manuel, Daniel
+ Copyright (C) 2010-2012  DAHMEN, Manuel, Daniel
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-*/
+ */
 package be.ibiiztera.md.pmatrix.pushmatrix.scripts;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.generator.*;
@@ -197,7 +197,7 @@ public class InterpreteFacade {
 
     public TRIObject interpreteTriangles() throws InterpreteException {
         InterpreteListeTriangle interpreteH = new InterpreteListeTriangle();
-            interpreteH.setRépertoire(répertoire);
+        interpreteH.setRépertoire(répertoire);
         TRIObject fo = null;
         try {
             fo = (TRIObject) interpreteH.interprete(text, pos);
@@ -211,7 +211,7 @@ public class InterpreteFacade {
 
     public BSpline interpreteBSpline() throws InterpreteException {
         InterpreteBSpline interpreteH = new InterpreteBSpline();
-            interpreteH.setRépertoire(répertoire);
+        interpreteH.setRépertoire(répertoire);
         BSpline b = null;
         try {
             b = (BSpline) interpreteH.interprete(text, pos);
@@ -230,7 +230,7 @@ public class InterpreteFacade {
 
     public BezierCubique interpreteBezier() throws InterpreteException {
         InterpreteBezier interpreteH = new InterpreteBezier();
-            interpreteH.setRépertoire(répertoire);
+        interpreteH.setRépertoire(répertoire);
         BezierCubique b = null;
         try {
             b = (BezierCubique) interpreteH.interprete(text, pos);
@@ -244,7 +244,7 @@ public class InterpreteFacade {
 
     public BezierCubique2D interpreteBezier2d() throws InterpreteException {
         InterpreteBezier2D interpreteH = new InterpreteBezier2D();
-            interpreteH.setRépertoire(répertoire);
+        interpreteH.setRépertoire(répertoire);
         BezierCubique2D b = null;
         try {
             b = (BezierCubique2D) interpreteH.interprete(text, pos);
@@ -258,7 +258,7 @@ public class InterpreteFacade {
 
     public Tubulaire interpreteTubulaire() throws InterpreteException {
         InterpreteBezier2D interpreteH = new InterpreteBezier2D();
-            interpreteH.setRépertoire(répertoire);
+        interpreteH.setRépertoire(répertoire);
         Tubulaire t = null;
         try {
             t = (Tubulaire) interpreteH.interprete(text, pos);
@@ -308,35 +308,34 @@ public class InterpreteFacade {
 
     Representable intepreteColline() throws InterpreteException {
         InterpretesBase interpreteH = new InterpretesBase();
-		ArrayList<Integer> pattern;
-		pattern = new ArrayList<Integer>();
-		pattern.add(interpreteH.BLANK);
-		pattern.add(interpreteH.LEFTPARENTHESIS);
-		pattern.add(interpreteH.BLANK);
-		pattern.add(interpreteH.INTEGER);
-		pattern.add(interpreteH.BLANK);
-		pattern.add(interpreteH.RIGHTPARENTHESIS);
-		interpreteH.compile(pattern);
-		Integer type = (Integer) interpreteH.read(text, pos).get(3);
-		this.pos = interpreteH.getPosition();
-		
-		switch(type)
-		{
-			case 1:
-				return new CollineModele1(1000);
-			case 2:
-				return new CollineModele2(1000);
-			case 3:
-				return new CollineModele3(1000);
-			default:
-				return new CollineModele1(1000);
-		}
+        ArrayList<Integer> pattern;
+        pattern = new ArrayList<Integer>();
+        pattern.add(interpreteH.BLANK);
+        pattern.add(interpreteH.LEFTPARENTHESIS);
+        pattern.add(interpreteH.BLANK);
+        pattern.add(interpreteH.INTEGER);
+        pattern.add(interpreteH.BLANK);
+        pattern.add(interpreteH.RIGHTPARENTHESIS);
+        interpreteH.compile(pattern);
+        Integer type = (Integer) interpreteH.read(text, pos).get(3);
+        this.pos = interpreteH.getPosition();
+
+        switch (type) {
+            case 1:
+                return new CollineModele1(1000);
+            case 2:
+                return new CollineModele2(1000);
+            case 3:
+                return new CollineModele3(1000);
+            default:
+                return new CollineModele1(1000);
+        }
     }
 
     public AttracteurEtrange intepreteAttracteurEtrange()
             throws InterpreteException {
         InterpreteAttracteurEtrange interpreteH = new InterpreteAttracteurEtrange();
-            interpreteH.setRépertoire(répertoire);
+        interpreteH.setRépertoire(répertoire);
         AttracteurEtrange t = null;
         try {
             t = (AttracteurEtrange) interpreteH.interprete(text, pos);
@@ -351,7 +350,7 @@ public class InterpreteFacade {
     public Tubulaire intepreteTubulaire()
             throws InterpreteException {
         InterpreteTubulaire interpreteH = new InterpreteTubulaire();
-            interpreteH.setRépertoire(répertoire);
+        interpreteH.setRépertoire(répertoire);
         Tubulaire t = null;
         try {
             t = (Tubulaire) interpreteH.interprete(text, pos);
@@ -374,7 +373,7 @@ public class InterpreteFacade {
             throws InterpreteException {
 
         InterpreteSegment interpreteH = new InterpreteSegment();
-            interpreteH.setRépertoire(répertoire);
+        interpreteH.setRépertoire(répertoire);
         SegmentDroite t = null;
         try {
             t = (SegmentDroite) interpreteH.interprete(text, pos);
@@ -392,7 +391,7 @@ public class InterpreteFacade {
      */
     public SimpleSphere intepreteSimpleSphere() throws InterpreteException {
         InterpreteSimpleSphere interpreteH = new InterpreteSimpleSphere();
-            interpreteH.setRépertoire(répertoire);
+        interpreteH.setRépertoire(répertoire);
         SimpleSphere t = null;
         try {
             t = (SimpleSphere) interpreteH.interprete(text, pos);
@@ -407,7 +406,7 @@ public class InterpreteFacade {
 
     public SimpleSphereAvecTexture interpreteSimpleSphereAvecTexture() throws InterpreteException {
         InterpreteSimpleSphereTexture interpreteH = new InterpreteSimpleSphereTexture();
-            interpreteH.setRépertoire(répertoire);
+        interpreteH.setRépertoire(répertoire);
         SimpleSphereAvecTexture t = null;
         try {
             t = (SimpleSphereAvecTexture) interpreteH.interprete(text, pos);
@@ -426,7 +425,7 @@ public class InterpreteFacade {
      */
     public Tetraedre interpreteTetraedre() throws InterpreteException {
         InterpreteTetraedre interpreteH = new InterpreteTetraedre();
-            interpreteH.setRépertoire(répertoire);
+        interpreteH.setRépertoire(répertoire);
         Tetraedre t = null;
         try {
             t = (Tetraedre) interpreteH.interprete(text, pos);
@@ -442,7 +441,7 @@ public class InterpreteFacade {
 
     public Cube interpreteCube() throws InterpreteException {
         InterpreteCube interpreteH = new InterpreteCube();
-            interpreteH.setRépertoire(répertoire);
+        interpreteH.setRépertoire(répertoire);
         Cube c = null;
         try {
             c = (Cube) interpreteH.interprete(text, pos);
@@ -455,7 +454,7 @@ public class InterpreteFacade {
 
     public Plan3D interpretePlan3D() throws InterpreteException {
         InterpretePlan3D interpreteH = new InterpretePlan3D();
-            interpreteH.setRépertoire(répertoire);
+        interpreteH.setRépertoire(répertoire);
         Plan3D c = null;
         try {
             c = (Plan3D) interpreteH.interprete(text, pos);
@@ -468,7 +467,7 @@ public class InterpreteFacade {
 
     public TRIEllipsoide interpreteTRIEllipsoide() throws InterpreteException {
         InterpreteTRIEllipsoide interpreteH = new InterpreteTRIEllipsoide();
-            interpreteH.setRépertoire(répertoire);
+        interpreteH.setRépertoire(répertoire);
         TRIEllipsoide e = new TRIEllipsoide(new Point3D(0, 0, 0), new Point3D(1, 2, 3));
         try {
             e = (TRIEllipsoide) interpreteH.interprete(text, pos);
@@ -481,7 +480,7 @@ public class InterpreteFacade {
 
     public TRISphere interpreteTRISphere() throws InterpreteException {
         InterpreteTRISphere interpreteH = new InterpreteTRISphere();
-            interpreteH.setRépertoire(répertoire);
+        interpreteH.setRépertoire(répertoire);
         TRISphere s = new TRISphere(new Point3D(0, 0, 0), 1.0);
         try {
             s = (TRISphere) interpreteH.interprete(text, pos);
@@ -503,7 +502,7 @@ public class InterpreteFacade {
 
     Polygone interpretePolygone() throws InterpreteException {
         InterpretePolygone interpreteH = new InterpretePolygone();
-            interpreteH.setRépertoire(répertoire);
+        interpreteH.setRépertoire(répertoire);
         Polygone s = null;
         try {
             s = (Polygone) interpreteH.interprete(text, pos);
@@ -516,5 +515,18 @@ public class InterpreteFacade {
 
     void setRépertoire(String répertoire) {
         this.répertoire = répertoire;
+    }
+
+    public Camera interpreteCamera() throws InterpreteException {
+        InterpreteCamera interpreteH = new InterpreteCamera();
+        Camera c = null;
+        try {
+            
+            c = (Camera) interpreteH.interprete(text, pos);
+            pos = interpreteH.getPosition();
+        } catch (InterpreteException ex) {
+            throw new InterpreteException("CAMERA ???", ex);
+        }
+        return c;
     }
 }

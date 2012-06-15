@@ -340,7 +340,17 @@ public class Loader implements SceneLoader {
                     failed = false;
 
                 } catch (InterpreteException ex) {
+                    failed = true;
                     Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else if ("camera".equals(id)) {
+                try {
+                    Camera c = interpreteH.interpreteCamera();
+                    sc.camera(c);
+                    failed = false;
+                } catch (InterpreteException ex) {
+                    Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
+                    failed = true;
                 }
             }
             interpreteH.interpreteBlank();

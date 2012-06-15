@@ -373,11 +373,11 @@ public class NEWMain extends javax.swing.JFrame {
                     {
                         pc.modeleModifie();
                         controlsEditor1.setText(pc.modeleTXT());
-                        jFormattedTextField1.setText(java.util.ResourceBundle.getBundle(bundlePackage+ "Bundle_"+langue ).getString("NOUVEAU MODELE OK"));
+                        jFormattedTextField1.setText(java.util.ResourceBundle.getBundle(bundlePackage+ "Bundle").getString("NOUVEAU MODELE OK"));
                     }
                     else
                     {
-                        jFormattedTextField1.setText(java.util.ResourceBundle.getBundle(bundlePackage+ "Bundle_"+langue).getString("ERREUR"));
+                        jFormattedTextField1.setText(java.util.ResourceBundle.getBundle(bundlePackage+ "Bundle").getString("ERREUR"));
 
                     }
                 }//GEN-LAST:event_sv_edtActionPerformed
