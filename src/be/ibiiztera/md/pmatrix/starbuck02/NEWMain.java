@@ -142,6 +142,7 @@ public class NEWMain extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuEdite = new javax.swing.JMenu();
         jCheckBoxMenuItemEditerLaScene = new javax.swing.JCheckBoxMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuOptions = new javax.swing.JMenu();
         jMenuItemLangue = new javax.swing.JMenuItem();
 
@@ -261,6 +262,15 @@ public class NEWMain extends javax.swing.JFrame {
             }
         });
         jMenuEdite.add(jCheckBoxMenuItemEditerLaScene);
+
+        jMenuItem3.setText(bundle.getString("QUADTEXT")); // NOI18N
+        jMenuItem3.setName("jMenuItem3");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenuEdite.add(jMenuItem3);
 
         jMenuBar1.add(jMenuEdite);
 
@@ -400,6 +410,10 @@ public class NEWMain extends javax.swing.JFrame {
         v4.addModel(this.pc.modele());
         v4.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        new QuadTexture(pc.modele()).setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
    public final void loadConfig()
    {
        prefs = Preferences.userNodeForPackage(this.getClass());
@@ -437,6 +451,7 @@ public class NEWMain extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuFichier;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItemLangue;
     private javax.swing.JMenu jMenuOptions;
     private javax.swing.JScrollPane jScrollPaneEditor;
