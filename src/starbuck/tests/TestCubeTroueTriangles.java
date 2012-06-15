@@ -46,13 +46,13 @@ public class TestCubeTroueTriangles extends TestObjet {
         c = new Cube(1, Point3D.Z.mult(3));
         scene().add(c);
         
+        scene().camera(new Camera(new Point3D(0,0,-15), new Point3D(0,0,0), null));
 
         description = "5 cubes";
     }
 
     public static void main(String[] args) {
         TestCubeTroueTriangles testObjet = new TestCubeTroueTriangles();
-        testObjet.camera(new Camera(new Point3D(0,0,-2), new Point3D(0,0,0), new Point3D(0,0,-1.7)));
         testObjet.run();
     }
 }

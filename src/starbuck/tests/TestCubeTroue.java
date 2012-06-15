@@ -49,14 +49,14 @@ public class TestCubeTroue extends TestObjet {
         p = new Polygone(Color.black);
         p.setPoints(new Point3D[]{new Point3D(-0.5, -0.5, 0.5), new Point3D(0.5, -0.5, 0.5), new Point3D(0.5, 0.5, 0.5), new Point3D(-0.5, 0.5, 0.5)});
         scene().add(p);
-
+		
+		scene().camera(new Camera(new Point3D(0,0,-10), new Point3D(0,0,0), new Point3D(0,0,-9)));
 
         description = "Cube troué au centre en perspective";
     }
 
     public static void main(String[] args) {
         TestCubeTroue testObjet = new TestCubeTroue();
-        testObjet.camera(new Camera(new Point3D(0,0,-10), new Point3D(0,0,0), new Point3D(0,0,-9)));
         testObjet.run();
     }
 }

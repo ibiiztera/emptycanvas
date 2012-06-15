@@ -83,7 +83,12 @@ public class Camera extends CameraBox implements Representable
         return planproj;
     }
 
-    Point3D position() {
+    public Point3D position() {
         return camera;
     }
+	
+	public String toString()
+	{
+		return "camera (\n\teye : " +camera.toString() + "\n\tlookat" + lookat.toString()+"\n)";
+	}
 }

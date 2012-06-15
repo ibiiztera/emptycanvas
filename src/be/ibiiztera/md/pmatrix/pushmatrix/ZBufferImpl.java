@@ -772,7 +772,6 @@ public class ZBufferImpl implements ZBuffer {
 
     public void dessinerSilhouette3D(Representable re) {
         
-
         Iterator<Representable> it = null;
         // COLLECTION
         if (re instanceof RepresentableConteneur) {
@@ -882,7 +881,13 @@ public class ZBufferImpl implements ZBuffer {
     @Override
     public void dessinerSilhouette3D() {
         id++;
+		if(scene1.camera()!=null)
+		{
+			camera ( scene1.camera() );
+		}
+		cameraC.calculerMatrice();
         if (type_perspective == PERSPECTIVE_ISOM) {
+
             box = new Box2D();
         }
         dessinerSilhouette3D(scene1);
@@ -922,10 +927,10 @@ public class ZBufferImpl implements ZBuffer {
             p3 = coordonneesPoint2D(pp3);
             if(p1==null || p2==null || p3==null)
                 return;
-            double iteres1 = 1.0 / maxDistance(p1, p2, p3);
+            double iteres1 = 1.0 / maxDistance(p1, p2, p3)/3;
             for (double a = 0; a < 1.0; a += iteres1) {
                 Point3D p3d = pp1.plus(pp1.mult(-1).plus(pp2).mult(a));
-                double iteres2 = 1.0 / maxDistance(p1, p2, p3);
+                double iteres2 = 1.0 / maxDistance(p1, p2, p3)/3;
                 for (double b = 0; b < 1.0; b += iteres2) {
                     Point3D p = p3d.plus(p3d.mult(-1).plus(pp3).mult(b));
                     ime.testProf(p, c);
@@ -1049,8 +1054,8 @@ public class ZBufferImpl implements ZBuffer {
         if(p!=null)
         ime.testProf(p, p.getC());
     }
-    protected double angleX = Math.PI / 6 / 2;
-    protected double angleY = Math.PI / 6 / 2;
+    protected double angleX = Math.PI / 3;
+    protected double angleY = Math.PI / 3;
 
     public void setAngles(double angleXRad, double angleYRad) {
         this.angleX = angleXRad;
@@ -1059,19 +1064,12 @@ public class ZBufferImpl implements ZBuffer {
 
     protected Point coordonneesPointEcranPerspective(Point3D x3d) {
         x3d = cameraC.calculerPointDansRepere(x3d);
-        //camera = cameraC.calculerPointDansRepere(cameraC.position());
-        //if (x3d.getZ() > planproj.getZ() && planproj.getZ() > 0) {
 		if (x3d.getZ() > 0 && -angleX<Math.atan(x3d.getX()/x3d.getZ()) && Math.atan(x3d.getX()/x3d.getZ())<angleX &&
 				-angleY<Math.atan(x3d.getY()/x3d.getZ()) && Math.atan(x3d.getY()/x3d.getZ())<angleY
 		) {
             double scale = (1 / (x3d.getZ()));
             return new Point(
-                    (int) (x3d.getX() * scale * angleX
-                    * la
-                    + la / 2),
-                    (int) (x3d.getY() * scale * angleY
-                    * ha
-                    + ha / 2));
+                    (int) (x3d.getX() * scale * la + la / 2), (int) (x3d.getY() * scale * ha + ha / 2));
         }
         return null;
     }
@@ -1079,8 +1077,8 @@ public class ZBufferImpl implements ZBuffer {
     protected Point coordonneesPointEcranIsometrique(Point3D p) {
         p = cameraC.calculerPointDansRepere(p);
         java.awt.Point p2 = new java.awt.Point(
-                (int) (la / (box.getMaxx() - box.getMinx()) * (p.getX() - box.getMinx())),
-                ha - (int) (ha / (box.getMaxy() - box.getMiny()) * (p.getY() - box.getMiny())));
+                (int) (1.0 * la / (box.getMaxx() - box.getMinx()) * (p.getX() - box.getMinx())),
+                ha - (int) (1.0 * ha / (box.getMaxy() - box.getMiny()) * (p.getY() - box.getMiny())));
         if (p2.getX() >= 0.0 && p2.getX() < la && p2.getY() >= 0 && p2.getY() < ha) {
             return p2;
         } else {
@@ -1090,6 +1088,7 @@ public class ZBufferImpl implements ZBuffer {
 
     @Override
     public double distanceCamera(Point3D x3d) {
+		x3d = cameraC.calculerPointDansRepere(x3d);
         switch (type_perspective) {
             case PERSPECTIVE_ISOM:
                 return x3d.getZ();

@@ -26,14 +26,16 @@ import java.util.Iterator;
 @SuppressWarnings("serial")
 public class Scene implements Representable, Serializable {
 
-    public static final String VERSION = "1.1";
+    public static final String VERSION = "1.2";
     private String id;
     private ArrayList<Representable> objets = new ArrayList<Representable>();
     private ArrayList<Animation> animations = new ArrayList<Animation>();
     private ArrayList<TColor> colors = new ArrayList<TColor>();
     private SceneCadre cadre = new SceneCadre();
-    private String DESCRIPTION;
-
+    private Camera camera;
+	
+	private String DESCRIPTION;
+	
     public Iterator<Representable> iterator() {
         return objets.iterator();
     }
@@ -85,6 +87,8 @@ public class Scene implements Representable, Serializable {
                 str += r.toString();
             }
         }
+		if(camera!=null)
+			str+= camera.toString();
         str += "\n\n)\n";
         return str;
     }
@@ -144,4 +148,14 @@ public class Scene implements Representable, Serializable {
     public void texture(TColor c) {
         colors.add(c);
     }
+	
+	public Camera camera()
+	{
+		return camera;
+	}
+	public void camera(Camera c)
+	{
+		camera = c;
+	}
+	
 }

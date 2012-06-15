@@ -31,7 +31,9 @@ public interface ZBuffer
     public void scene(Scene s);
     public void couleurDeFond(Color c);
     public void zoom(float z);
+	@Deprecated
     public void dessinerContours();
+	@Deprecated
     public void dessinerSilhouette();
     public void dessinerSilhouette3D();
     public BufferedImage image();
