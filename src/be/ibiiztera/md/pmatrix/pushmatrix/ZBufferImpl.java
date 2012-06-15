@@ -75,6 +75,7 @@ public class ZBufferImpl implements ZBuffer {
     public void isometrique() {
         type_perspective = PERSPECTIVE_ISOM;
     }
+
     public void perspective() {
         type_perspective = PERSPECTIVE_OEIL;
     }
@@ -95,7 +96,7 @@ public class ZBufferImpl implements ZBuffer {
     }
 
     @Override
-    public Point coordonneesPoint2D(Point3D p)  {
+    public Point coordonneesPoint2D(Point3D p) {
         switch (type_perspective) {
             case PERSPECTIVE_ISOM:
                 return coordonneesPointEcranIsometrique(p);
@@ -129,10 +130,12 @@ public class ZBufferImpl implements ZBuffer {
         return dimy;
     }
 
+    @Override
     public void couleurDeFond(Color c) {
         COULEUR_FOND = c;
     }
 
+    @Override
     public void zoom(float z) {
         if (z > 0) {
             zoom = z;
@@ -178,23 +181,16 @@ public class ZBufferImpl implements ZBuffer {
         }
 
         public Color getElementCouleur(int x, int y) {
-            if (checkCoordonnees(x, y)) {
-                if (Simeid[x][y] == id) {
+            if (checkCoordonnees(x, y) && Simeid[x][y] == id) {
                     return Sc[x][y];
                 } else {
                     return COULEUR_FOND;
                 }
-            }
-            return COULEUR_FOND;
         }
 
         public Point3D getElementPoint(int x, int y) {
-            if (checkCoordonnees(x, y)) {
-                if (Simeid[x][y] == id) {
-                    return Sx[x][y];
-                } else {
-                    return INFINI;
-                }
+            if (checkCoordonnees(x, y) && Simeid[x][y] == id) {
+                return Sx[x][y];
             } else {
                 return INFINI;
             }
@@ -219,19 +215,15 @@ public class ZBufferImpl implements ZBuffer {
         }
 
         public boolean checkID(int x, int y, int id2) {
-            if (checkCoordonnees(x, y)) {
-                if (Simeid[x][y] == id2) {
+            if (checkCoordonnees(x, y) &&Simeid[x][y] == id2) {
                     return true;
                 } else {
                     return false;
                 }
-            } else {
-                return false;
-            }
         }
 
         private double getElementProf(int x, int y) {
-            if (checkCoordonnees(x, y)) {
+            if (checkCoordonnees(x, y) && Simeid[x][y] == id) {
                 return Simeprof[x][y];
             } else {
                 return INFINI_PROF;
@@ -304,35 +296,39 @@ public class ZBufferImpl implements ZBuffer {
         }
 
         public void testProf(Point3D x3d, Color c) {
-            
-                Point ce = coordonneesPoint2D(x3d);
-                if(ce==null) return;
-                double prof = distanceCamera(x3d);
 
-                int x = (int) ce.getX();
-                int y = (int) ce.getY();
-                if (x >= 0 & x < la & y >= 0 & y < ha
-                        && prof < ime.getElementProf(x, y)) {
-                    ime.setElementID(x, y, id);
-                    ime.setElementPoint(x, y, x3d);
-                    ime.setElementCouleur(x, y, c);
-                    ime.setProf(x, y, prof);
+            Point ce = coordonneesPoint2D(x3d);
+            if (ce == null) {
+                return;
+            }
+            double prof = distanceCamera(x3d);
 
-                }
+            int x = (int) ce.getX();
+            int y = (int) ce.getY();
+            if (x >= 0 & x < la & y >= 0 & y < ha
+                    && (prof < ime.getElementProf(x, y)||ime.getElementID(x, y)!=id)) {
+                ime.setElementID(x, y, id);
+                ime.setElementPoint(x, y, cameraC.calculerPointDansRepere(x3d));
+                ime.setElementCouleur(x, y, c);
+                ime.setProf(x, y, prof);
+
+            }
         }
 
         public void dessine(Point3D x3d, Color c) {
-                Point ce = coordonneesPoint2D(x3d);
-                if(ce==null) return;
-                double prof = -1000;
-                int x = (int) ce.getX();
-                int y = (int) ce.getY();
-                if (x >= 0 & x < la & y >= 0 & y < ha) {
-                    ime.setElementID(x, y, id);
-                    ime.setElementPoint(x, y, x3d);
-                    ime.setElementCouleur(x, y, c);
-                    ime.setProf(x, y, prof);
-                }
+            Point ce = coordonneesPoint2D(x3d);
+            if (ce == null) {
+                return;
+            }
+            double prof = -1000;
+            int x = (int) ce.getX();
+            int y = (int) ce.getY();
+            if (x >= 0 & x < la & y >= 0 & y < ha) {
+                ime.setElementID(x, y, id);
+                ime.setElementPoint(x, y, x3d);
+                ime.setElementCouleur(x, y, c);
+                ime.setProf(x, y, prof);
+            }
         }
     }
 
@@ -636,12 +632,11 @@ public class ZBufferImpl implements ZBuffer {
                 Point3D p = (Point3D) r;
                 ime.testProf(p, p.getC());
             } else if (r instanceof SegmentDroite) {
-                    SegmentDroite s = (SegmentDroite) r;
+                SegmentDroite s = (SegmentDroite) r;
 
-                    Point x1 = coordonneesPoint2D(s.getOrigine());
-                    Point x2 = coordonneesPoint2D(s.getExtremite());
-                    if(x1!=null && x2!=null)
-                    {
+                Point x1 = coordonneesPoint2D(s.getOrigine());
+                Point x2 = coordonneesPoint2D(s.getExtremite());
+                if (x1 != null && x2 != null) {
                     double x = Math.max(x1.getX(), x2.getX());
                     double y = Math.max(x1.getY(), x2.getY());
 
@@ -651,7 +646,7 @@ public class ZBufferImpl implements ZBuffer {
                         p.setC(s.getC());
                         ime.testProf(p, p.getC());
                     }
-                    }
+                }
 
             } else if (r instanceof BezierCubique) {
                 BezierCubique b = (BezierCubique) r;
@@ -718,11 +713,10 @@ public class ZBufferImpl implements ZBuffer {
                 Point3D p = (Point3D) r;
                 ime.testProf(p, p.getC());
             } else if (r instanceof SegmentDroite) {
-                    SegmentDroite s = (SegmentDroite) r;
-                    Point x1 = coordonneesPoint2D(s.getOrigine());
-                    Point x2 = coordonneesPoint2D(s.getExtremite());
-                    if(x1!=null && x2!=null)
-                    {
+                SegmentDroite s = (SegmentDroite) r;
+                Point x1 = coordonneesPoint2D(s.getOrigine());
+                Point x2 = coordonneesPoint2D(s.getExtremite());
+                if (x1 != null && x2 != null) {
                     double x = Math.max(x1.getX(), x2.getX());
                     double y = Math.max(x1.getY(), x2.getY());
 
@@ -732,7 +726,7 @@ public class ZBufferImpl implements ZBuffer {
                         p.setC(s.getC());
                         ime.testProf(p, p.getC());
                     }
-                    }
+                }
 
             } else if (r instanceof BezierCubique) {
                 BezierCubique b = (BezierCubique) r;
@@ -771,7 +765,7 @@ public class ZBufferImpl implements ZBuffer {
     }
 
     public void dessinerSilhouette3D(Representable re) {
-        
+
         Iterator<Representable> it = null;
         // COLLECTION
         if (re instanceof RepresentableConteneur) {
@@ -881,11 +875,10 @@ public class ZBufferImpl implements ZBuffer {
     @Override
     public void dessinerSilhouette3D() {
         id++;
-		if(scene1.camera()!=null)
-		{
-			camera ( scene1.camera() );
-		}
-		cameraC.calculerMatrice();
+        if (scene1.camera() != null) {
+            camera(scene1.camera());
+        }
+        cameraC.calculerMatrice();
         if (type_perspective == PERSPECTIVE_ISOM) {
 
             box = new Box2D();
@@ -894,21 +887,22 @@ public class ZBufferImpl implements ZBuffer {
     }
 
     private void tracerAretes(Point3D point3d, Point3D point3d2, Color c) {
-            Point p1 = coordonneesPoint2D(point3d);
-            Point p2 = coordonneesPoint2D(point3d2);
-            if(p1==null || p2==null)
-                return;
-            double iteres = Math.abs(p1.getX() - p2.getX())
-                    + Math.abs(p1.getY() - p2.getY());
-            for (double a = 0; a < 1.0; a += 1 / iteres) {
-                Point pp = new Point(p1);
-                Point3D p = point3d.mult(a).plus(point3d2.mult(1 - a));
-                pp.setLocation(p1.getX() + (int) (a * (p2.getX() - p1.getX())),
-                        p1.getY() + (int) (a * (p2.getY() - p1.getY())));
-                ime.testProf(p, c);
+        Point p1 = coordonneesPoint2D(point3d);
+        Point p2 = coordonneesPoint2D(point3d2);
+        if (p1 == null || p2 == null) {
+            return;
+        }
+        double iteres = Math.abs(p1.getX() - p2.getX())
+                + Math.abs(p1.getY() - p2.getY());
+        for (double a = 0; a < 1.0; a += 1 / iteres) {
+            Point pp = new Point(p1);
+            Point3D p = point3d.mult(a).plus(point3d2.mult(1 - a));
+            pp.setLocation(p1.getX() + (int) (a * (p2.getX() - p1.getX())),
+                    p1.getY() + (int) (a * (p2.getY() - p1.getY())));
+            ime.testProf(p, c);
 
 
-            }
+        }
 
     }
 
@@ -922,40 +916,42 @@ public class ZBufferImpl implements ZBuffer {
 
     public void tracerTriangle(Point3D pp1, Point3D pp2, Point3D pp3, Color c) {
         Point p1, p2, p3;
-            p1 = coordonneesPoint2D(pp1);
-            p2 = coordonneesPoint2D(pp2);
-            p3 = coordonneesPoint2D(pp3);
-            if(p1==null || p2==null || p3==null)
-                return;
-            double iteres1 = 1.0 / maxDistance(p1, p2, p3)/3;
-            for (double a = 0; a < 1.0; a += iteres1) {
-                Point3D p3d = pp1.plus(pp1.mult(-1).plus(pp2).mult(a));
-                double iteres2 = 1.0 / maxDistance(p1, p2, p3)/3;
-                for (double b = 0; b < 1.0; b += iteres2) {
-                    Point3D p = p3d.plus(p3d.mult(-1).plus(pp3).mult(b));
-                    ime.testProf(p, c);
-                }
+        p1 = coordonneesPoint2D(pp1);
+        p2 = coordonneesPoint2D(pp2);
+        p3 = coordonneesPoint2D(pp3);
+        if (p1 == null || p2 == null || p3 == null) {
+            return;
+        }
+        double iteres1 = 1.0 / maxDistance(p1, p2, p3) / 3;
+        for (double a = 0; a < 1.0; a += iteres1) {
+            Point3D p3d = pp1.plus(pp1.mult(-1).plus(pp2).mult(a));
+            double iteres2 = 1.0 / maxDistance(p1, p2, p3) / 3;
+            for (double b = 0; b < 1.0; b += iteres2) {
+                Point3D p = p3d.plus(p3d.mult(-1).plus(pp3).mult(b));
+                ime.testProf(p, c);
             }
+        }
     }
 
     public void tracerQuad(Point3D pp1, Point3D pp2, Point3D pp3, Color c) {
-            Point p1 = coordonneesPoint2D(pp1);
-            Point p2 = coordonneesPoint2D(pp2);
-            Point p3 = coordonneesPoint2D(pp3);
-            if(p1==null || p2==null || p3==null)
-                return;
-            double iteres1 = 1.0 / (Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY()));
-            for (double a = 0; a < 1.0; a += iteres1) {
-                Point3D p3d = pp1.plus(pp1.mult(-1).plus(pp2).mult(a));
-                Point pp = coordonneesPoint2D(p3d);
-                double iteres2 = 1.0 / (Math.abs(pp.getX() - p3.getX()) + Math.abs(pp.getY() - p3.getY()));
-                for (double b = 0; b < 1.0; b += iteres2) {
-                    Point3D p = p3d.plus(p3d.mult(-1).plus(pp3).mult(b));
-                    Point p22 = coordonneesPoint2D(p);
-                    ime.testProf(p, c);
-                    // System.out.println("TRIABGLE"+p.getZ());
-                }
+        Point p1 = coordonneesPoint2D(pp1);
+        Point p2 = coordonneesPoint2D(pp2);
+        Point p3 = coordonneesPoint2D(pp3);
+        if (p1 == null || p2 == null || p3 == null) {
+            return;
+        }
+        double iteres1 = 1.0 / (Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY()));
+        for (double a = 0; a < 1.0; a += iteres1) {
+            Point3D p3d = pp1.plus(pp1.mult(-1).plus(pp2).mult(a));
+            Point pp = coordonneesPoint2D(p3d);
+            double iteres2 = 1.0 / (Math.abs(pp.getX() - p3.getX()) + Math.abs(pp.getY() - p3.getY()));
+            for (double b = 0; b < 1.0; b += iteres2) {
+                Point3D p = p3d.plus(p3d.mult(-1).plus(pp3).mult(b));
+                Point p22 = coordonneesPoint2D(p);
+                ime.testProf(p, c);
+                // System.out.println("TRIABGLE"+p.getZ());
             }
+        }
     }
 
     @Override
@@ -998,8 +994,9 @@ public class ZBufferImpl implements ZBuffer {
     }
 
     public void plotPoint(Color color, Point3D p) {
-        if(p!=null)
+        if (p != null) {
             ime.testProf(p, coordonneesPoint2D(p), color);
+        }
 
     }
 
@@ -1018,41 +1015,46 @@ public class ZBufferImpl implements ZBuffer {
     }
 
     public void ligne(Point3D p1, Point3D p2, Color c) {
-            Point x1 = coordonneesPoint2D(p1);
-            Point x2 = coordonneesPoint2D(p2);
-            if(x1==null || x2==null)
-                return;
+        Point x1 = coordonneesPoint2D(p1);
+        Point x2 = coordonneesPoint2D(p2);
+        if (x1 == null || x2 == null) {
+            return;
+        }
 
-            double itere = Math.max(Math.abs(x1.getX() - x2.getX()), Math.abs(x1.getY() - x2.getY())) * 4;
-            for (int i = 0; i < itere; i++) {
-                Point3D p = p1.mult(i / itere).plus(p2.mult(1 - i / itere));
-                p.setC(c);
-                ime.testProf(p, c);
-            }
+        double itere = Math.max(Math.abs(x1.getX() - x2.getX()), Math.abs(x1.getY() - x2.getY())) * 4;
+        for (int i = 0; i < itere; i++) {
+            Point3D p = p1.mult(i / itere).plus(p2.mult(1 - i / itere));
+            p.setC(c);
+            ime.testProf(p, c);
+        }
 
     }
 
     @Override
     public void plotPoint(Point3D p, Color c) {
-        if(p!=null)
+        if (p != null) {
             ime.dessine(p, c);
+        }
     }
 
     public void plotPoint(Point3D p) {
-        if(p!=null)
-        ime.dessine(p, p.getC());
+        if (p != null) {
+            ime.dessine(p, p.getC());
+        }
     }
 
     @Override
     public void testPoint(Point3D p, Color c) {
-        if(p!=null)
-        ime.testProf(p, c);
+        if (p != null) {
+            ime.testProf(p, c);
+        }
     }
 
     @Override
     public void testPoint(Point3D p) {
-        if(p!=null)
-        ime.testProf(p, p.getC());
+        if (p != null) {
+            ime.testProf(p, p.getC());
+        }
     }
     protected double angleX = Math.PI / 3;
     protected double angleY = Math.PI / 3;
@@ -1064,9 +1066,8 @@ public class ZBufferImpl implements ZBuffer {
 
     protected Point coordonneesPointEcranPerspective(Point3D x3d) {
         x3d = cameraC.calculerPointDansRepere(x3d);
-		if (x3d.getZ() > 0 && -angleX<Math.atan(x3d.getX()/x3d.getZ()) && Math.atan(x3d.getX()/x3d.getZ())<angleX &&
-				-angleY<Math.atan(x3d.getY()/x3d.getZ()) && Math.atan(x3d.getY()/x3d.getZ())<angleY
-		) {
+        if (x3d.getZ() > 0 && -angleX < Math.atan(x3d.getX() / x3d.getZ()) && Math.atan(x3d.getX() / x3d.getZ()) < angleX
+                && -angleY < Math.atan(x3d.getY() / x3d.getZ()) && Math.atan(x3d.getY() / x3d.getZ()) < angleY) {
             double scale = (1 / (x3d.getZ()));
             return new Point(
                     (int) (x3d.getX() * scale * la + la / 2), (int) (x3d.getY() * scale * ha + ha / 2));
@@ -1088,7 +1089,7 @@ public class ZBufferImpl implements ZBuffer {
 
     @Override
     public double distanceCamera(Point3D x3d) {
-		x3d = cameraC.calculerPointDansRepere(x3d);
+        x3d = cameraC.calculerPointDansRepere(x3d);
         switch (type_perspective) {
             case PERSPECTIVE_ISOM:
                 return x3d.getZ();
