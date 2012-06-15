@@ -109,16 +109,16 @@ public class InterpretePolygone implements Interprete {
 
     public static void main(String[] args) {
         InterpretePolygone ilp = new InterpretePolygone();
-        String text = "(\n(0.0, 10.0, 0.0) (10.0, 0.0, 0.0) (10.0, 10.0, 0.0) (0.0, 0.0, 0.0)\n)\n";
-        ArrayList<Point3D> points = new ArrayList<Point3D>();
+        String text = "(\n\n(\n(0.0E-12, 1.0, 0.0) (10.0, 0.0, 0.0) (10.0, 10.0, 0.0) (0.0, 0.0, 0.0)\n)\n(255,0,0))\n\n";
+        Polygone poly = null;
         try {
-            points = (ArrayList<Point3D>) ilp.interprete(text, 0);
+            poly = (Polygone) ilp.interprete(text, 0);
         } catch (InterpreteException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(text + "\n\n\t" + points.size());
+        System.out.println(text + "\n\n\t" + poly.getPoints().size());
 
     }
 }
