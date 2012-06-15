@@ -97,7 +97,7 @@ public class Polygone implements Representable, TRIGenerable{
         Iterator<Point3D> it = points.iterator();
         while(it.hasNext())
             t += "\n\t\t"+it.next().toString();
-        t += "\n\t)\n\t"+CouleurOutils.toStringColor(couleur)+"\n)";
+        t += "\n\t)\n\t"+CouleurOutils.toStringColor(couleur)+"\n)\n\n";
         return t;
      }
 
