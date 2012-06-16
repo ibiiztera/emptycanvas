@@ -7,21 +7,28 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 import javax.imageio.ImageIO;
 
 /**
  *
  * @author Manuel DAHMEN
  */
-public class TestObjet implements Test{
+public class TestObjet implements Test {
+
     private int version = 1;
-    private String template ="";
+    private String template = "";
     private String type = "png";
+    private String filenameZIP = "tests";
+    private String fileextZIP = "diapo";
     private File file = null;
     private int resx = 1600;
     private int resy = 1200;
@@ -29,7 +36,7 @@ public class TestObjet implements Test{
     private File dir = null;
     protected Scene scene;
     protected String description;
-    private Camera c = new Camera(new Point3D(0,0,-10), Point3D.O0, 0.1);
+    private Camera c = new Camera(new Point3D(0, 0, -10), Point3D.O0, 0.1);
     private BufferedImage ri;
     private String filename;
     private String fileExtension;
@@ -37,6 +44,8 @@ public class TestObjet implements Test{
     private boolean isometrique = false;
     private boolean loop = false;
     private int maxFrames = 5000;
+    private String text = "scene";
+    private File fileScene;
 
     public int getMaxFrames() {
         return maxFrames;
@@ -45,47 +54,51 @@ public class TestObjet implements Test{
     public void setMaxFrames(int maxFrames) {
         this.maxFrames = maxFrames;
     }
-    
-    public void isometrique(boolean isISO)
-    {
+
+    public void isometrique(boolean isISO) {
         isometrique = isISO;
     }
+
     @Override
     public Scene scene() {
         return scene;
     }
-    public void setFilename(String fn)
-    {
+
+    public void setFilename(String fn) {
         this.filename = fn;
     }
-    public void setFileExtesion(String ext)
-    {
+
+    public void setFileExtesion(String ext) {
         this.fileExtension = ext;
     }
+
     @Override
     public void init() {
         ResourceBundle bundle1 = ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/test/pushmatrix/newtest/Bundle");
-        
+
         File dirl = new File(bundle1.getString("testpath"));
-        if(!dirl.exists())
+        if (!dirl.exists()) {
             dirl.mkdirs();
-        this.dir = new File(dirl.getAbsolutePath()+File.separator+this.getClass().getName());
-        if(!this.dir.exists())
+        }
+        this.dir = new File(dirl.getAbsolutePath() + File.separator + this.getClass().getName());
+        if (!this.dir.exists()) {
             this.dir.mkdirs();
-       
-        if(filename==null)
+        }
+
+        if (filename == null) {
             filename = bundle1.getString("src");
-        if(fileExtension==null)
+        }
+        if (fileExtension == null) {
             fileExtension = bundle1.getString("type");
-        file = new File(this.dir.getAbsolutePath()+File.separator+filename+"."+fileExtension);
+        }
         
         template = bundle1.getString("template");
-        
+
         properties.put("name", this.getClass().getCanonicalName());
         properties.put("version", version);
-        
+
         resx = Integer.parseInt(bundle1.getString("resx"));
-        resy = Integer.parseInt(bundle1.getString("resy")); 
+        resy = Integer.parseInt(bundle1.getString("resy"));
         scene = new Scene();
 
     }
@@ -105,77 +118,77 @@ public class TestObjet implements Test{
     public int getResy() {
         return resy;
     }
-    
-    
+
     /**
      * Definir la scène scene().add(*)
      */
     @Override
     public void testScene() {
     }
+
     @Override
     public void testScene(File f) {
-        if(f.getAbsolutePath().endsWith("mood")||f.getAbsolutePath().endsWith("moo"))
-        {
+        if (f.getAbsolutePath().endsWith("mood") || f.getAbsolutePath().endsWith("moo")) {
             new Loader().loadIF(f, scene);
-        }
-        else
-        {
+        } else {
             System.err.println("Erreur: extension incorrecte");
             System.exit(1);
-    
+
         }
     }
-    public void publishResult(boolean publish)
-    {
+
+    public void publishResult(boolean publish) {
         this.publish = publish;
     }
+
     @Override
-    public void publishResult() 
-    {
-        if(publish)
+    public void publishResult() {
+        if (publish) {
             new ShowTestResult(ri).run();
+        }
     }
-    
     protected int frame = 0;
+
     @Override
     public void run() {
         init();
         testScene();
-        while(nextFrame())
-            {
+        while (nextFrame()) {
             try {
-            ZBuffer z = ZBufferFactory.instance(resx, resy);
-            z.scene(scene);
-            if(isometrique)
-                z.isometrique();
-            else
-            {
-                z.perspective();
+                ZBuffer z = ZBufferFactory.instance(resx, resy);
+                z.scene(scene);
+                if (isometrique) {
+                    z.isometrique();
+                } else {
+                    z.perspective();
+                }
+                if (c != null) {
+                    z.camera(c);
+                    c.calculerMatrice();
+                }
+
+                z.dessinerSilhouette3D();
+
+                ri = z.image();
+                FileOutputStream fileOutputStream = new FileOutputStream(fileScene);
+                fileOutputStream.write(scene.toString().getBytes());
+                fileOutputStream.close();
+                
+                
+                Graphics g = ri.getGraphics();
+                g.setColor(Color.black);
+                g.drawString(description, 0, 1100);
+                boolean write = ImageIO.write(((RenderedImage) ri), type, file);
+                System.out.println(file.getAbsolutePath());
+                System.out.println(scene.toString());
+
+
+            } catch (IOException ex) {
+                Logger.getLogger(TestObjet.class.getName()).log(Level.SEVERE, null, ex);
+                break;
             }
-            if(c!=null)
-            {
-                z.camera(c);
-                c.calculerMatrice();
-            }
-            
-            z.dessinerSilhouette3D();
-            
-            ri = z.image();
-            Graphics g = ri.getGraphics();
-            g.setColor(Color.black);
-            g.drawString(description, 0, 1100);
-            boolean write = ImageIO.write(((RenderedImage)ri), type, file);
-            System.out.println(file.getAbsolutePath());
-            System.out.println(scene.toString());
-            
-            
-        } catch (IOException ex) {
-            Logger.getLogger(TestObjet.class.getName()).log(Level.SEVERE, null, ex);
-            break;
         }
-            }
-        
+
         publishResult();
     }
 
@@ -190,6 +203,7 @@ public class TestObjet implements Test{
         return "";
         //throw new UnsupportedOperationException("Not supported yet.");
     }
+
     public File getFile() {
         return file;
     }
@@ -207,8 +221,8 @@ public class TestObjet implements Test{
     public Camera camera() {
         return c;
     }
-    public void description(String d)
-    {
+
+    public void description(String d) {
         description = d;
     }
 
@@ -225,10 +239,17 @@ public class TestObjet implements Test{
     @Override
     public boolean nextFrame() {
         frame++;
-        if(frame==1 && loop()==false)
+        
+        file = new File(this.dir.getAbsolutePath() + File.separator + filename+(1000000+frame) + "." + fileExtension);
+        fileScene = new File(this.dir.getAbsolutePath() + File.separator + text+(1000000+frame) + "." + "mood");
+
+        
+        if (frame == 1 && loop() == false) {
             return false;
-        if(loop() && frame>maxFrames)
+        }
+        if (loop() && frame > maxFrames) {
             return false;
+        }
         return true;
     }
 }

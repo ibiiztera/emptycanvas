@@ -74,16 +74,13 @@ public class TestAnimationSphereInterieur extends TestObjet {
     }
 
     public static void main(String[] args) {
-        for (int i = 0; i < 2000; i++) {
             TestAnimationSphereInterieur to = new TestAnimationSphereInterieur();
             to.setResx(640);
             to.setResy(480);
             to.loop(true);
-            to.setFilename("image_" + (i + 10000));
             to.publishResult(false);
             to.run();
 
 
-        }
     }
 }
