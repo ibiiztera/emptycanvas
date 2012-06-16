@@ -1,0 +1,5 @@
+defaultOutputType=jpg
+defaultFolder=/testresult/objets/$classname
+defaultFile=$classname
+
+uincr=1

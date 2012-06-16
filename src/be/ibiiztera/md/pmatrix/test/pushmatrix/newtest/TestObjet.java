@@ -35,6 +35,17 @@ public class TestObjet implements Test{
     private String fileExtension;
     private boolean publish = true;
     private boolean isometrique = false;
+    private boolean loop = false;
+    private int maxFrames = 5000;
+
+    public int getMaxFrames() {
+        return maxFrames;
+    }
+
+    public void setMaxFrames(int maxFrames) {
+        this.maxFrames = maxFrames;
+    }
+    
     public void isometrique(boolean isISO)
     {
         isometrique = isISO;
@@ -125,23 +136,15 @@ public class TestObjet implements Test{
         if(publish)
             new ShowTestResult(ri).run();
     }
-    /*
-    public void setPerspective(boolean b) {
-        this.perspective = b;
-        this.camera = -100;
-    }
-    public void setPerspective(double camera, double plan) {
-        setPerspective(true);
-        this.camera = camera;
-        this.planproj = plan;
-    }
-    * */
+    
+    protected int frame = 0;
     @Override
     public void run() {
         init();
         testScene();
-
-        try {
+        while(nextFrame())
+            {
+            try {
             ZBuffer z = ZBufferFactory.instance(resx, resy);
             z.scene(scene);
             if(isometrique)
@@ -162,15 +165,16 @@ public class TestObjet implements Test{
             Graphics g = ri.getGraphics();
             g.setColor(Color.black);
             g.drawString(description, 0, 1100);
-            ImageIO.write(((RenderedImage)ri), type, file);
+            boolean write = ImageIO.write(((RenderedImage)ri), type, file);
             System.out.println(file.getAbsolutePath());
             System.out.println(scene.toString());
             
             
-            
         } catch (IOException ex) {
             Logger.getLogger(TestObjet.class.getName()).log(Level.SEVERE, null, ex);
+            break;
         }
+            }
         
         publishResult();
     }
@@ -206,5 +210,25 @@ public class TestObjet implements Test{
     public void description(String d)
     {
         description = d;
+    }
+
+    @Override
+    public boolean loop() {
+        return loop;
+    }
+
+    @Override
+    public void loop(boolean isLooping) {
+        this.loop = isLooping;
+    }
+
+    @Override
+    public boolean nextFrame() {
+        frame++;
+        if(frame==1 && loop()==false)
+            return false;
+        if(loop() && frame>maxFrames)
+            return false;
+        return true;
     }
 }

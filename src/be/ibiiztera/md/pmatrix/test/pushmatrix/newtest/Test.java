@@ -18,7 +18,9 @@ public interface Test {
     public void testScene(File f);
     
     public void run();
-    
+    public boolean loop();
+    public boolean nextFrame();
+    public void loop(boolean isLooping);
     String getTemplate();
     String applyTemplate(String template, Properties properties);
     public void publishResult();
