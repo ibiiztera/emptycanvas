@@ -878,6 +878,9 @@ public class ZBufferImpl implements ZBuffer {
         if (scene1.camera() != null) {
             camera(scene1.camera());
         }
+        else {
+            scene1.camera(cameraC);
+        }
         cameraC.calculerMatrice();
         if (type_perspective == PERSPECTIVE_ISOM) {
 
