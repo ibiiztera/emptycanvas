@@ -23,7 +23,7 @@ import javax.swing.tree.TreeSelectionModel;
  *
  * @author Manuel DAHMEN
  */
-public class QuadTexture extends javax.swing.JFrame implements TreeSelectionListener, PaintControles{
+public class QuadTexture extends javax.swing.JFrame implements TreeSelectionListener, PaintControles {
 
     private final PreviewControleur previewControlleur;
 
@@ -32,24 +32,24 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
      */
     public QuadTexture(PreviewControleur pc) {
         previewControlleur = pc;
-          
+
         initComponents();
 
-        
-       
-        
+
+
+
         //Where the tree is initialized:
         jTree1.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
         //Listen for when the selection changes.
         jTree1.addTreeSelectionListener(this);
-    
-        
+
+
         preview.setView(previewControlleur);
         preview.run();
 
-        
-        
+
+
         preview.setView(pc);
 
     }
@@ -96,10 +96,11 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
-        setMaximizedBounds(new java.awt.Rectangle(0, 0, 0, 0));
         setMaximumSize(new java.awt.Dimension(2000, 2000));
 
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        jEditorPane1.setPreferredSize(null);
         jScrollPane1.setViewportView(jEditorPane1);
 
         jTree1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -148,8 +149,8 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))
                     .addComponent(preview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -161,11 +162,16 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
         int[] selectionRows = jTree1.getSelectionRows();
         if (selectionRows.length > 0) {
             TreePath pathForRow = jTree1.getPathForRow(selectionRows[0]);
-            Object o = pathForRow.getLastPathComponent();
-            if (o instanceof DefaultMutableTreeNode && ((DefaultMutableTreeNode) o).getUserObject() instanceof Representable) {
+            Object[] path = pathForRow.getPath();
+            for(int i=0; i<path.length; i++)
+            {
+                Object o = path[i];
+                if (o instanceof DefaultMutableTreeNode && ((DefaultMutableTreeNode) o).getUserObject() instanceof Representable) {
                 Representable r = (Representable) (((DefaultMutableTreeNode) o).getUserObject());
                 jEditorPane1.setText(r.toString());
-
+                if(r instanceof Polygone)
+                    display((Polygone )r);
+                }
             }
         }
     }//GEN-LAST:event_clicObjet
@@ -239,49 +245,49 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
         top.add(textures);
         top.add(cameras);
 
-        if (previewControlleur !=null && previewControlleur.modele() != null) {
+        if (previewControlleur != null && previewControlleur.modele() != null) {
             Iterator<Representable> it = previewControlleur.modele().iterator();
             while (it.hasNext()) {
                 Representable next = it.next();
-                
+
                 addObjet(next, objets);
             }
             Camera c = previewControlleur.modele().camera();
             if (c != null) {
                 cameras.add(new DefaultMutableTreeNode(c));
             }
-        }
-        else
-        {
+        } else {
             DefaultMutableTreeNode err = new DefaultMutableTreeNode("Erreur: objet ==null");
             objets.add(err);
-            
+
         }
 
-        
+
     }
-    
+
     private void addObjet(Representable next, DefaultMutableTreeNode objets) {
         DefaultMutableTreeNode n = new DefaultMutableTreeNode(next);
         objets.add(n);
+        if (next instanceof Polygone) {
+            Iterator<Point3D> it2 = ((Polygone) next).getPoints().iterator();
+            while (it2.hasNext()) {
+                n.add(new DefaultMutableTreeNode(it2.next()));
+            }
+        }
         if (next instanceof RepresentableConteneur) {
             Iterator<Representable> it = ((RepresentableConteneur) next).iterator();
             while (it.hasNext()) {
                 Representable r = it.next();
-                addObjet(next, n);
-                if(next instanceof Polygone)
-                {
-                    Iterator<Point3D> it2 = ((Polygone)next).getPoints().iterator();
-                    while(it2.hasNext())
-                        addObjet(next, new DefaultMutableTreeNode(n));
-                }
+                addObjet(r, n);
             }
         }
     }
+
     private void display(Polygone polygone) {
         dessinerControle(preview.getGraphics(), polygone);
     }
     private ArrayList<Representable> rs = new ArrayList<Representable>();
+
     @Override
     public void add(Representable r) {
         rs.add(r);
@@ -294,37 +300,34 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
 
     @Override
     public void dessinerTousLesControles(Graphics g) {
-        for(int i=0; i<rs.size(); i++)
-        {
-            if(rs.get(i) instanceof Polygone)
-            {
+        for (int i = 0; i < rs.size(); i++) {
+            if (rs.get(i) instanceof Polygone) {
                 Polygone p = (Polygone) rs.get(i);
-            for(int j=0; j<p.getPoints().size(); j++)
-            {
-                Point pt = previewControlleur.getPoint2D(p.getPoints().get(j));
-                g.setColor(Color.blue);
-                g.drawRect(pt.x-2, pt.y-2, pt.x+2, pt.y+2);
-            }
-                
+                for (int j = 0; j < p.getPoints().size(); j++) {
+                    Point pt = previewControlleur.getPoint2D(p.getPoints().get(j));
+                    g.setColor(Color.blue);
+                    g.drawRect(pt.x - 2, pt.y - 2, pt.x + 2, pt.y + 2);
+                }
+
             }
         }
     }
     private Point3D selected = null;
+
     @Override
     public void dessinerControle(Graphics g, Representable r) {
-           if(r instanceof Polygone)
-            {
-                Polygone p = (Polygone) r;
-            for(int j=0; j<p.getPoints().size(); j++)
-            {
+        if (r instanceof Polygone) {
+            Polygone p = (Polygone) r;
+            for (int j = 0; j < p.getPoints().size(); j++) {
                 Point pt = previewControlleur.getPoint2D(p.getPoints().get(j));
-                if(selected==p.getPoints().get(j))
+                if (selected == p.getPoints().get(j)) {
                     g.setColor(Color.red);
-                else
+                } else {
                     g.setColor(Color.blue);
-                g.fillRect(pt.x-2, pt.y-2, 4,4);
+                }
+                g.fillRect(pt.x - 2, pt.y - 2, 4, 4);
             }
-                
-            }
+
+        }
     }
 }
