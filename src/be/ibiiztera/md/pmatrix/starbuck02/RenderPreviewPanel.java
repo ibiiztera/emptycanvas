@@ -198,7 +198,7 @@ public class RenderPreviewPanel extends JPanel {
             @Override
             public void run() {
                 bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
-                while (true) {
+                while (isAlive()) {
                     if(bi!=null)
                         getGraphics().drawImage(bi, 0, 0, getWidth(), getHeight(), null);
                     try {
