@@ -4,10 +4,7 @@
  */
 package be.ibiiztera.md.pmatrix.starbuck02;
 
-import be.ibiiztera.md.pmatrix.pushmatrix.Camera;
-import be.ibiiztera.md.pmatrix.pushmatrix.Polygone;
-import be.ibiiztera.md.pmatrix.pushmatrix.Representable;
-import be.ibiiztera.md.pmatrix.pushmatrix.Scene;
+import be.ibiiztera.md.pmatrix.pushmatrix.*;
 import be.ibiiztera.pmatrix.extras.RepresentableConteneur;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -97,10 +94,10 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
-        setMaximizedBounds(new java.awt.Rectangle(0, 0, 640, 500));
+        setMaximizedBounds(new java.awt.Rectangle(0, 0, 0, 0));
         setMaximumSize(new java.awt.Dimension(2000, 2000));
-        setType(java.awt.Window.Type.UTILITY);
 
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jScrollPane1.setViewportView(jEditorPane1);
@@ -245,7 +242,9 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
         if (previewControlleur !=null && previewControlleur.modele() != null) {
             Iterator<Representable> it = previewControlleur.modele().iterator();
             while (it.hasNext()) {
-                addObjet(it.next(), objets);
+                Representable next = it.next();
+                
+                addObjet(next, objets);
             }
             Camera c = previewControlleur.modele().camera();
             if (c != null) {
@@ -268,7 +267,14 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
         if (next instanceof RepresentableConteneur) {
             Iterator<Representable> it = ((RepresentableConteneur) next).iterator();
             while (it.hasNext()) {
-                addObjet(it.next(), n);
+                Representable r = it.next();
+                addObjet(next, n);
+                if(next instanceof Polygone)
+                {
+                    Iterator<Point3D> it2 = ((Polygone)next).getPoints().iterator();
+                    while(it2.hasNext())
+                        addObjet(next, new DefaultMutableTreeNode(n));
+                }
             }
         }
     }
@@ -303,7 +309,7 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
             }
         }
     }
-
+    private Point3D selected = null;
     @Override
     public void dessinerControle(Graphics g, Representable r) {
            if(r instanceof Polygone)
@@ -312,7 +318,10 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
             for(int j=0; j<p.getPoints().size(); j++)
             {
                 Point pt = previewControlleur.getPoint2D(p.getPoints().get(j));
-                g.setColor(Color.blue);
+                if(selected==p.getPoints().get(j))
+                    g.setColor(Color.red);
+                else
+                    g.setColor(Color.blue);
                 g.fillRect(pt.x-2, pt.y-2, 4,4);
             }
                 

@@ -347,7 +347,7 @@ public class NEWMain extends javax.swing.JFrame {
                 if (chooser.getSelectedFile() != null) {
                     pc.chargerModele(chooser.getSelectedFile());
                     pc.modeleModifie();
-                    controlsEditor1.setText(pc.modeleTXT());
+                    controlsEditor1.setText(pc.modele().toString());
                 }
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
