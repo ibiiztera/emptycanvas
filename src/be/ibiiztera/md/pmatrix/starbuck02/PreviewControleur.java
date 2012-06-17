@@ -21,6 +21,7 @@ package be.ibiiztera.md.pmatrix.starbuck02;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.*;
 import java.awt.Image;
+import java.awt.Point;
 import java.io.File;
 
 /**
@@ -29,15 +30,15 @@ import java.io.File;
  */
 public interface PreviewControleur {
 
-    public ZBuffer zbuffer();
-    public Image preview();
+    public ZBuffer zbuffer(RenderPreviewPanel vue);
+    public Image preview(RenderPreviewPanel vue);
 
     public void HACHE();
     public void WAIT(String msg);
     public void RELACHE_HACHE();
 
     public boolean modifierModele(String text);
-    public void asssignerVue(RenderPreviewPanel rpv);
+    public void assignerVue(RenderPreviewPanel rpv);
 
     public void definirModele(Scene scene);
     public void chargerModele(File fichier);
@@ -56,5 +57,5 @@ public interface PreviewControleur {
 
     public Scene modele();
 
-
+    public Point getPoint2D(Point3D p);
 }

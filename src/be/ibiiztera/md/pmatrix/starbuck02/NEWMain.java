@@ -110,7 +110,7 @@ public class NEWMain extends javax.swing.JFrame {
         this.splitEdtorView.setLeftComponent(rpp);
         rpp.run();
 
-        pc.asssignerVue(rpp);
+        pc.assignerVue(rpp);
         pc.definirModele(new Scene());
     }
 
@@ -412,7 +412,10 @@ public class NEWMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        new QuadTexture(pc.modele()).setVisible(true);
+        if(pc!=null)
+            new QuadTexture(pc).setVisible(true);
+        else
+            System.exit(1);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
    public final void loadConfig()
    {
@@ -429,6 +432,7 @@ public class NEWMain extends javax.swing.JFrame {
     */
     public static void main(String args[]) {
             java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 NEWMain nm = new NEWMain();
                 nm.setVisible(true);

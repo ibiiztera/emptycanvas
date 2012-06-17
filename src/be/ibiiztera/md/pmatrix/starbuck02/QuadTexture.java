@@ -9,50 +9,71 @@ import be.ibiiztera.md.pmatrix.pushmatrix.Polygone;
 import be.ibiiztera.md.pmatrix.pushmatrix.Representable;
 import be.ibiiztera.md.pmatrix.pushmatrix.Scene;
 import be.ibiiztera.pmatrix.extras.RepresentableConteneur;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.PaintContext;
+import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 /**
  *
  * @author Manuel DAHMEN
  */
-public class QuadTexture extends javax.swing.JFrame implements TreeSelectionListener{
-    private final Scene scene;
+public class QuadTexture extends javax.swing.JFrame implements TreeSelectionListener, PaintControles{
+
+    private final PreviewControleur previewControlleur;
 
     /**
      * Creates new form QuadTexture
      */
-    public QuadTexture(Scene scene) {
-        this.scene = scene;
+    public QuadTexture(PreviewControleur pc) {
+        previewControlleur = pc;
+          
         initComponents();
-        //Where the tree is initialized:
-    jTree1.getSelectionModel().setSelectionMode
-            (TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-    //Listen for when the selection changes.
-    jTree1.addTreeSelectionListener(this);
+        
+       
+        
+        //Where the tree is initialized:
+        jTree1.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+
+        //Listen for when the selection changes.
+        jTree1.addTreeSelectionListener(this);
     
-     }
-public void valueChanged(TreeSelectionEvent e) {
+        
+        preview.setView(previewControlleur);
+        preview.run();
+
+        
+        
+        preview.setView(pc);
+
+    }
+
+    @Override
+    public void valueChanged(TreeSelectionEvent e) {
 //Returns the last path element of the selection.
 //This method is useful only when the selection model allows a single selection.
-    DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-                       jTree1.getLastSelectedPathComponent();
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTree1.getLastSelectedPathComponent();
 
-    if (node == null)
-    //Nothing is selected.     
-    return;
+        if (node == null) //Nothing is selected.     
+        {
+            return;
+        }
 
-    Object nodeInfo = node.getUserObject();
-    if (node.isLeaf() && node.getUserObject() instanceof Polygone) {
-        Polygone polygone = (Polygone)nodeInfo;
-        display(polygone);
+        Object nodeInfo = node.getUserObject();
+        if (node.isLeaf() && node.getUserObject() instanceof Polygone) {
+            Polygone polygone = (Polygone) nodeInfo;
+            display(polygone);
+        }
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -63,7 +84,6 @@ public void valueChanged(TreeSelectionEvent e) {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        previewEditor1 = new be.ibiiztera.md.pmatrix.starbuck02.PreviewEditor();
         jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPane1 = new javax.swing.JEditorPane();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -72,6 +92,7 @@ public void valueChanged(TreeSelectionEvent e) {
         createNodes(top);
         jTree1 = 
         new javax.swing.JTree(top);
+        preview = new be.ibiiztera.md.pmatrix.starbuck02.RenderPreviewPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -81,24 +102,26 @@ public void valueChanged(TreeSelectionEvent e) {
         setMaximumSize(new java.awt.Dimension(2000, 2000));
         setType(java.awt.Window.Type.UTILITY);
 
-        previewEditor1.setMaximumSize(new java.awt.Dimension(500, 500));
-        previewEditor1.setMinimumSize(new java.awt.Dimension(500, 500));
-
-        javax.swing.GroupLayout previewEditor1Layout = new javax.swing.GroupLayout(previewEditor1);
-        previewEditor1.setLayout(previewEditor1Layout);
-        previewEditor1Layout.setHorizontalGroup(
-            previewEditor1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        previewEditor1Layout.setVerticalGroup(
-            previewEditor1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jScrollPane1.setViewportView(jEditorPane1);
 
+        jTree1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                clicObjet(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTree1);
+
+        javax.swing.GroupLayout previewLayout = new javax.swing.GroupLayout(preview);
+        preview.setLayout(previewLayout);
+        previewLayout.setHorizontalGroup(
+            previewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 500, Short.MAX_VALUE)
+        );
+        previewLayout.setVerticalGroup(
+            previewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -114,11 +137,11 @@ public void valueChanged(TreeSelectionEvent e) {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(previewEditor1, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(preview, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2)
-                    .addComponent(jScrollPane1))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -126,16 +149,29 @@ public void valueChanged(TreeSelectionEvent e) {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(previewEditor1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(preview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void clicObjet(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clicObjet
+        int[] selectionRows = jTree1.getSelectionRows();
+        if (selectionRows.length > 0) {
+            TreePath pathForRow = jTree1.getPathForRow(selectionRows[0]);
+            Object o = pathForRow.getLastPathComponent();
+            if (o instanceof DefaultMutableTreeNode && ((DefaultMutableTreeNode) o).getUserObject() instanceof Representable) {
+                Representable r = (Representable) (((DefaultMutableTreeNode) o).getUserObject());
+                jEditorPane1.setText(r.toString());
+
+            }
+        }
+    }//GEN-LAST:event_clicObjet
 
     /**
      * @param args the command line arguments
@@ -173,8 +209,12 @@ public void valueChanged(TreeSelectionEvent e) {
          */
         java.awt.EventQueue.invokeLater(new Runnable() {
 
+            @Override
             public void run() {
-                new QuadTexture(new Scene()).setVisible(true);
+                PreviewControleurConcrete pc = new PreviewControleurConcrete();
+                pc.definirModele(new Scene());
+                new QuadTexture(pc).setVisible(true);
+
             }
         });
     }
@@ -186,14 +226,14 @@ public void valueChanged(TreeSelectionEvent e) {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTree jTree1;
-    private be.ibiiztera.md.pmatrix.starbuck02.PreviewEditor previewEditor1;
+    private be.ibiiztera.md.pmatrix.starbuck02.RenderPreviewPanel preview;
     // End of variables declaration//GEN-END:variables
 
     private void createNodes(DefaultMutableTreeNode top) {
         DefaultMutableTreeNode objets = null;
         DefaultMutableTreeNode textures = null;
         DefaultMutableTreeNode cameras = null;
-        
+
         objets = new DefaultMutableTreeNode("Objets");
         textures = new DefaultMutableTreeNode("Textures");
         cameras = new DefaultMutableTreeNode("Cameras");
@@ -201,32 +241,81 @@ public void valueChanged(TreeSelectionEvent e) {
         top.add(objets);
         top.add(textures);
         top.add(cameras);
-        
-        if(scene != null)
-        {
-            Iterator<Representable> it = scene.iterator();
-            while(it.hasNext())
-                addObjet(it.next(), objets);
-            Camera c = scene.camera();
-            if(c!=null)
-                cameras.add(new DefaultMutableTreeNode(c));
-        }
-        
-    
-    }
 
+        if (previewControlleur !=null && previewControlleur.modele() != null) {
+            Iterator<Representable> it = previewControlleur.modele().iterator();
+            while (it.hasNext()) {
+                addObjet(it.next(), objets);
+            }
+            Camera c = previewControlleur.modele().camera();
+            if (c != null) {
+                cameras.add(new DefaultMutableTreeNode(c));
+            }
+        }
+        else
+        {
+            DefaultMutableTreeNode err = new DefaultMutableTreeNode("Erreur: objet ==null");
+            objets.add(err);
+            
+        }
+
+        
+    }
+    
     private void addObjet(Representable next, DefaultMutableTreeNode objets) {
         DefaultMutableTreeNode n = new DefaultMutableTreeNode(next);
         objets.add(n);
-        if(next instanceof RepresentableConteneur)
-        {
-            Iterator<Representable> it = ((RepresentableConteneur)next).iterator();
-            while(it.hasNext())
+        if (next instanceof RepresentableConteneur) {
+            Iterator<Representable> it = ((RepresentableConteneur) next).iterator();
+            while (it.hasNext()) {
                 addObjet(it.next(), n);
+            }
+        }
+    }
+    private void display(Polygone polygone) {
+        dessinerControle(preview.getGraphics(), polygone);
+    }
+    private ArrayList<Representable> rs = new ArrayList<Representable>();
+    @Override
+    public void add(Representable r) {
+        rs.add(r);
+    }
+
+    @Override
+    public void remove(Representable r) {
+        rs.remove(r);
+    }
+
+    @Override
+    public void dessinerTousLesControles(Graphics g) {
+        for(int i=0; i<rs.size(); i++)
+        {
+            if(rs.get(i) instanceof Polygone)
+            {
+                Polygone p = (Polygone) rs.get(i);
+            for(int j=0; j<p.getPoints().size(); j++)
+            {
+                Point pt = previewControlleur.getPoint2D(p.getPoints().get(j));
+                g.setColor(Color.blue);
+                g.drawRect(pt.x-2, pt.y-2, pt.x+2, pt.y+2);
+            }
+                
+            }
         }
     }
 
-    private void display(Polygone polygone) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    @Override
+    public void dessinerControle(Graphics g, Representable r) {
+           if(r instanceof Polygone)
+            {
+                Polygone p = (Polygone) r;
+            for(int j=0; j<p.getPoints().size(); j++)
+            {
+                Point pt = previewControlleur.getPoint2D(p.getPoints().get(j));
+                g.setColor(Color.blue);
+                g.fillRect(pt.x-2, pt.y-2, 4,4);
+            }
+                
+            }
     }
 }

@@ -19,6 +19,7 @@
 */
 package be.ibiiztera.md.pmatrix.starbuck02;
 
+import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 import be.ibiiztera.md.pmatrix.pushmatrix.Scene;
 import be.ibiiztera.md.pmatrix.pushmatrix.ZBuffer;
 import be.ibiiztera.md.pmatrix.pushmatrix.ZBufferFactory;
@@ -83,7 +84,7 @@ public class RenderPreviewPanel extends JPanel {
     }
 
     public void render() {
-        BufferedImage i = (BufferedImage) previewController.preview();
+        BufferedImage i = (BufferedImage) previewController.preview(this);
         if(i!=null)
             this.bi = i;
     }

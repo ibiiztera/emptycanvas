@@ -27,6 +27,7 @@ import be.ibiiztera.md.pmatrix.pushmatrix.*;
 import be.ibiiztera.md.pmatrix.pushmatrix.scripts.Loader;
 import be.ibiiztera.md.pmatrix.pushmatrix.ui.ModeleIO;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.image.RenderedImage;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -38,15 +39,15 @@ import javax.imageio.ImageIO;
 public class PreviewControleurConcrete implements PreviewControleur {
 
     private Scene scene;
-    private RenderPreviewPanel vue;
     private int enAttente = 0;
     private int traite = 0;
-    private boolean libere = false;
     private int idW = 0;
     private ArrayList<Integer> file = new ArrayList<Integer>();
     private long tempsMOD = 1;
     private long tempsAFF = 0;
     private boolean besoinRA = true;
+    private ZBuffer z;
+    private boolean libere = false;
 
     public PreviewControleurConcrete() {
     }
@@ -57,10 +58,10 @@ public class PreviewControleurConcrete implements PreviewControleur {
     }
 
     public void enregistrerVue(RenderPreviewPanel rvp) {
-        this.vue = rvp;
+        //this.vue = rvp;
     }
 
-    public ZBuffer zbuffer() {
+    public ZBuffer zbuffer(RenderPreviewPanel vue) {
         return ZBufferFactory.instance(vue.getWidth(), vue.getHeight());
     }
 
@@ -73,7 +74,7 @@ public class PreviewControleurConcrete implements PreviewControleur {
         return false;
     }
 */
-    public Image preview() {
+    public Image preview(RenderPreviewPanel vue) {
         if (scene == null) {
             scene = new Scene();
         }
@@ -82,7 +83,7 @@ public class PreviewControleurConcrete implements PreviewControleur {
             WAIT("DESSINE SCENE");
             affichageDemarre();
             besoinRafraichirAffichage(false);
-            ZBuffer z = zbuffer();
+            z = zbuffer(vue);
             z.scene(scene);
             z.suivante();
             z.dessinerSilhouette3D();
@@ -136,18 +137,24 @@ public class PreviewControleurConcrete implements PreviewControleur {
         System.out.println("\t\tGO!!");
     }
 
+    @Override
     public void RELACHE_HACHE() {
         traite--;
     }
 
-    public void asssignerVue(RenderPreviewPanel rpv) {
-        this.vue = rpv;
+    @Override
+    public void assignerVue(RenderPreviewPanel rpv) {
+        //this.vue = rpv;
     }
-
+  
+    @Override
     public void definirModele(Scene scene) {
         this.scene = scene;
+        modeleModifie();
+        besoinRafraichirAffichage(true);
     }
     private String nomFichier = "scene";
+    @Override
     public void chargerModele(File fichier) {
         this.nomFichier = fichier.getName();
         HACHE();
@@ -234,6 +241,12 @@ public class PreviewControleurConcrete implements PreviewControleur {
         return scene;
     }
 
+    @Override
+    public Point getPoint2D(Point3D p) {
+        return z.coordonneesPoint2D(p);
+    }
 
+ 
 
+    
 }
