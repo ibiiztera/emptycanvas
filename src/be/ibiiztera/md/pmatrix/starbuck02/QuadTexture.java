@@ -48,10 +48,6 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
         preview.setView(previewControlleur);
         preview.run();
 
-
-
-        preview.setView(pc);
-
     }
 
     @Override

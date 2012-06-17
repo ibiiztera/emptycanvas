@@ -22,13 +22,14 @@ package be.ibiiztera.md.pmatrix.starbuck02;
 import be.ibiiztera.md.pmatrix.pushmatrix.*;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 /**
  *
  * @author manuel
  */
-public interface PreviewControleur {
+public interface PreviewControleur extends Runnable{
 
     public ZBuffer zbuffer(RenderPreviewPanel vue);
     public Image preview(RenderPreviewPanel vue);
@@ -58,4 +59,6 @@ public interface PreviewControleur {
     public Scene modele();
 
     public Point getPoint2D(Point3D p);
+    
+    public BufferedImage getImage();
 }

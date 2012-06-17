@@ -110,7 +110,6 @@ public class NEWMain extends javax.swing.JFrame {
         this.splitEdtorView.setLeftComponent(rpp);
         rpp.run();
 
-        pc.assignerVue(rpp);
         pc.definirModele(new Scene());
     }
 

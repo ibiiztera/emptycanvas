@@ -28,6 +28,7 @@ import be.ibiiztera.md.pmatrix.pushmatrix.scripts.Loader;
 import be.ibiiztera.md.pmatrix.pushmatrix.ui.ModeleIO;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -48,6 +49,7 @@ public class PreviewControleurConcrete implements PreviewControleur {
     private boolean besoinRA = true;
     private ZBuffer z;
     private boolean libere = false;
+    private BufferedImage image;
 
     public PreviewControleurConcrete() {
     }
@@ -244,6 +246,16 @@ public class PreviewControleurConcrete implements PreviewControleur {
     @Override
     public Point getPoint2D(Point3D p) {
         return z.coordonneesPoint2D(p);
+    }
+
+    @Override
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    @Override
+    public void run() {
+        
     }
 
  
