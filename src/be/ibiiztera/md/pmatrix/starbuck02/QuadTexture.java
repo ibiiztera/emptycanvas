@@ -86,13 +86,13 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
         jTree1 = 
         new javax.swing.JTree(top);
         preview = new be.ibiiztera.md.pmatrix.starbuck02.RenderPreviewPanel();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
-        setMaximumSize(new java.awt.Dimension(2000, 2000));
 
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -102,6 +102,11 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
         jTree1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 clicObjet(evt);
+            }
+        });
+        jTree1.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+                jTree1ValueChanged(evt);
             }
         });
         jScrollPane2.setViewportView(jTree1);
@@ -116,6 +121,13 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
             previewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
+
+        jButton1.setText("Soumettre");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -135,7 +147,8 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -146,7 +159,9 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
                     .addComponent(preview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -164,6 +179,7 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
                 Object o = path[i];
                 if (o instanceof DefaultMutableTreeNode && ((DefaultMutableTreeNode) o).getUserObject() instanceof Representable) {
                 Representable r = (Representable) (((DefaultMutableTreeNode) o).getUserObject());
+                selectedComponent = r;
                 jEditorPane1.setText(r.toString());
                 if(r instanceof Polygone)
                     display((Polygone )r);
@@ -171,6 +187,14 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
             }
         }
     }//GEN-LAST:event_clicObjet
+    private Representable selectedComponent;
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       previewControlleur.modele().updateFromText(selectedComponent, jEditorPane1.getText());
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTree1ValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTree1ValueChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTree1ValueChanged
 
     /**
      * @param args the command line arguments
@@ -218,6 +242,7 @@ public class QuadTexture extends javax.swing.JFrame implements TreeSelectionList
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JEditorPane jEditorPane1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

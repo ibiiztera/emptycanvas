@@ -157,5 +157,9 @@ public class Scene implements Representable, Serializable {
 	{
 		camera = c;
 	}
+
+    public void updateFromText(Representable selectedComponent, String text) {
+        //throw new UnsupportedOperationException("Not yet implemented");
+    }
 	
 }
