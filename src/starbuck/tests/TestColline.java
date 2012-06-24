@@ -36,9 +36,9 @@ public class TestColline extends TestObjet {
         to.setResy(480);
         to.publishResult(false);
         to.saveBMood(true);
-        to.camera(new Camera(new Point3D(0, 0, -100), new Point3D(0, 0, 0)));
+        to.camera(new Camera(new Point3D(0, 0, -50), new Point3D(0, 0, 0)));
+        to.setMaxFrames(100);
         to.loop(true);
-        to.setMaxFrames(1000);
         
         
         to.run();

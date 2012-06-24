@@ -38,8 +38,48 @@ public class TestCollisee extends TestObjet{
     public static void main(String [] args)
     {
         TestCollisee to = new TestCollisee();
-        to.camera(new Camera(new Point3D(0, 0, -10), Point3D.O0, 0.1));
+        to.publishResult(false);
+        to.camera(new Camera(new Point3D(0, 0, -10), Point3D.O0));
+        to.setFilename("01-front -- cylindre jaune");
         to.description("cylindre");
         to.run();
-    }
+
+        
+        to = new TestCollisee();
+        to.publishResult(false);
+        to.camera(new Camera(new Point3D(0, 0, 10), Point3D.O0));
+        to.setFilename("02-arriere -- cylindre jaune");
+        to.description("cylindre");
+        to.run();
+        
+        
+        to = new TestCollisee();
+        to.publishResult(false);
+        to.camera(new Camera(new Point3D(0, 10, 0), Point3D.O0));
+        to.setFilename("03-dessus -- cylindre");
+        to.description("cylindre");
+        to.run();
+
+        to = new TestCollisee();
+        to.publishResult(false);
+        to.camera(new Camera(new Point3D(0, -10, 0), Point3D.O0));
+        to.setFilename("04-dessous -- cylindre jaune");
+        to.description("cylindre");
+        to.run();
+
+        to = new TestCollisee();
+        to.publishResult(false);
+        to.camera(new Camera(new Point3D(-10, 0, 0), Point3D.O0));
+        to.setFilename("05-gauche -- cylindre jaune");
+        to.description("cylindre");
+        to.run();
+
+    
+        to = new TestCollisee();
+        to.publishResult(false);
+        to.camera(new Camera(new Point3D(10, 0, 0), Point3D.O0));
+        to.setFilename("06-droite -- cylindre jaune");
+        to.description("cylindre");
+        to.run();
+}
 }

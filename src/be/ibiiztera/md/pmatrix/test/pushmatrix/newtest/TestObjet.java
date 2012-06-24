@@ -40,7 +40,7 @@ public class TestObjet implements Test {
     protected String description;
     private Camera c = new Camera(new Point3D(0, 0, -10), Point3D.O0, 0.1);
     private BufferedImage ri;
-    private String filename;
+    private String filename = "frame";
     private String fileExtension;
     private boolean publish = true;
     private boolean isometrique = false;
@@ -87,6 +87,7 @@ public class TestObjet implements Test {
         if (!this.dir.exists()) {
             this.dir.mkdirs();
         }
+        else
 
         if (filename == null) {
             filename = bundle1.getString("src");
@@ -156,8 +157,8 @@ public class TestObjet implements Test {
     @Override
     public void run() {
         init();
-        testScene();
         while (nextFrame()) {
+            testScene();
             try {
                 ZBuffer z = ZBufferFactory.instance(resx, resy);
                 z.scene(scene);

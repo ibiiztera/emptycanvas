@@ -320,7 +320,7 @@ public class ZBufferImpl implements ZBuffer {
             Color cc = c.getCouleur();
             float[] compArray = new float[3];
             cc.getColorComponents(compArray);
-            double m = n.prodScalaire(p.norme1());
+            double m = Math.abs(n.norme1().prodScalaire(p.norme1()));
             if (m >= 0 && m <= 1.0) {
                 for (int i = 0; i < 3; i++) {
                     compArray[i] = (float) (compArray[i] * m);
