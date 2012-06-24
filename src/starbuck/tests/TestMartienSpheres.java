@@ -34,7 +34,7 @@ public class TestMartienSpheres extends TestObjet
     public static void main(String [] args)
     {
         TestMartienSpheres to = new TestMartienSpheres();
-        to.camera(new Camera(new Point3D(0,0,-100), new Point3D(0,0,0), new Point3D(0,0,-20)));
+        to.camera(new Camera(new Point3D(0,0,-10), new Point3D(0,0,0)));
         to.run();
         
     }
@@ -44,7 +44,7 @@ public class TestMartienSpheres extends TestObjet
         ResourceBundle rb = ResourceBundle.getBundle("starbuck/tests/Mite");
         String mite = rb.getString("sphere1");
         new Loader().loadIF(mite, scene());
-        description = "Primtive model. Green face made up with spheres";
+        description = "Primitive model. Green face made up with spheres";
     }
             
     

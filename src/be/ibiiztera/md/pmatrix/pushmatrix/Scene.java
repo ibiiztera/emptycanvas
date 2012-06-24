@@ -161,5 +161,10 @@ public class Scene implements Representable, Serializable {
     public void updateFromText(Representable selectedComponent, String text) {
         //throw new UnsupportedOperationException("Not yet implemented");
     }
+
+    public void clear() {
+        objets.clear();
+        texture().clear();
+    }
 	
 }

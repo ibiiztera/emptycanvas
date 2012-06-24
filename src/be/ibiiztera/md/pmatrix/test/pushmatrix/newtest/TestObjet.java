@@ -1,7 +1,9 @@
 package be.ibiiztera.md.pmatrix.test.pushmatrix.newtest;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.*;
+import be.ibiiztera.md.pmatrix.pushmatrix.scripts.ExtensionFichierIncorrecteException;
 import be.ibiiztera.md.pmatrix.pushmatrix.scripts.Loader;
+import be.ibiiztera.md.pmatrix.pushmatrix.scripts.VersionNonSupportéeException;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -46,7 +48,8 @@ public class TestObjet implements Test {
     private int maxFrames = 5000;
     private String text = "scene";
     private File fileScene;
-
+    private boolean saveTxt = true;
+    private String binaryExtension = "bmood";
     public int getMaxFrames() {
         return maxFrames;
     }
@@ -100,7 +103,8 @@ public class TestObjet implements Test {
         resx = Integer.parseInt(bundle1.getString("resx"));
         resy = Integer.parseInt(bundle1.getString("resy"));
         scene = new Scene();
-
+        
+        binaryExtension = bundle1.getString("binaryExtension");
     }
 
     public void setResx(int resx) {
@@ -166,6 +170,9 @@ public class TestObjet implements Test {
                     z.camera(c);
                     c.calculerMatrice();
                 }
+                
+                if(z instanceof ZBufferImpl)
+                    ((ZBufferImpl)z).setColoration(true);
 
                 z.dessinerSilhouette3D();
 
@@ -189,6 +196,18 @@ public class TestObjet implements Test {
             }
         }
 
+        if(isSaveBMood())
+        {
+            try {
+                File foutm = new File(this.dir.getAbsolutePath() + File.separator + filename + ".bmood");
+                new Loader().saveBin(foutm, scene);
+            } catch (VersionNonSupportéeException ex) {
+                Logger.getLogger(TestObjet.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ExtensionFichierIncorrecteException ex) {
+                Logger.getLogger(TestObjet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
         publishResult();
     }
 
@@ -241,15 +260,21 @@ public class TestObjet implements Test {
         frame++;
         
         file = new File(this.dir.getAbsolutePath() + File.separator + filename+(1000000+frame) + "." + fileExtension);
-        fileScene = new File(this.dir.getAbsolutePath() + File.separator + text+(1000000+frame) + "." + "mood");
+        fileScene = new File(this.dir.getAbsolutePath() + File.separator + text+(1000000+frame) + "." + binaryExtension);
 
         
-        if (frame == 1 && loop() == false) {
-            return false;
-        }
-        if (loop() && frame > maxFrames) {
+        if (loop() && frame > maxFrames || (frame>1 && !loop())) {
             return false;
         }
         return true;
     }
+    
+    public void saveBMood(boolean b) {
+        saveTxt = b;
+    }
+
+    private boolean isSaveBMood() {
+        return saveTxt;
+    }
+
 }

@@ -29,21 +29,24 @@ import be.ibiiztera.md.pmatrix.test.pushmatrix.newtest.TestObjet;
  * @author Atelier
  */
 public class TestColline extends TestObjet {
-
+    
     public static void main(String[] args) {
-        for (int i = 0; i < 100; i++) {
-            TestColline to = new TestColline();
-            to.setResx(640);
-            to.setResy(480);
-            to.publishResult(false);
-            to.camera(new Camera(new Point3D(0, 0, -100), new Point3D(0, 0, 0), new Point3D(0, 0, -99)));
-            to.setFilename("image_" + i);
-            to.run();
-        }
+        TestColline to = new TestColline();
+        to.setResx(640);
+        to.setResy(480);
+        to.publishResult(false);
+        to.saveBMood(true);
+        to.camera(new Camera(new Point3D(0, 0, -100), new Point3D(0, 0, 0)));
+        to.loop(true);
+        to.setMaxFrames(1000);
+        
+        
+        to.run();
     }
-
+    
     @Override
     public void testScene() {
+        scene().clear();
         scene().add(new CollineModele1(40));
         scene().add(new CollineModele1(40));
         scene().add(new CollineModele1(40));

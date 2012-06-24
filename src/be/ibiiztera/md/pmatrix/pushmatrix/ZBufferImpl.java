@@ -59,6 +59,7 @@ public class ZBufferImpl implements ZBuffer {
     private float[][] Simeprof;
     public double INFINI_PROF = 1000000;
     private Scene scene1;
+    private boolean colorationActive;
 
     @Override
     public void suivante() {
@@ -182,10 +183,10 @@ public class ZBufferImpl implements ZBuffer {
 
         public Color getElementCouleur(int x, int y) {
             if (checkCoordonnees(x, y) && Simeid[x][y] == id) {
-                    return Sc[x][y];
-                } else {
-                    return COULEUR_FOND;
-                }
+                return Sc[x][y];
+            } else {
+                return COULEUR_FOND;
+            }
         }
 
         public Point3D getElementPoint(int x, int y) {
@@ -215,11 +216,11 @@ public class ZBufferImpl implements ZBuffer {
         }
 
         public boolean checkID(int x, int y, int id2) {
-            if (checkCoordonnees(x, y) &&Simeid[x][y] == id2) {
-                    return true;
-                } else {
-                    return false;
-                }
+            if (checkCoordonnees(x, y) && Simeid[x][y] == id2) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         private double getElementProf(int x, int y) {
@@ -306,12 +307,27 @@ public class ZBufferImpl implements ZBuffer {
             int x = (int) ce.getX();
             int y = (int) ce.getY();
             if (x >= 0 & x < la & y >= 0 & y < ha
-                    && (prof < ime.getElementProf(x, y)||ime.getElementID(x, y)!=id)) {
+                    && (prof < ime.getElementProf(x, y) || ime.getElementID(x, y) != id)) {
                 ime.setElementID(x, y, id);
                 ime.setElementPoint(x, y, cameraC.calculerPointDansRepere(x3d));
                 ime.setElementCouleur(x, y, c);
                 ime.setProf(x, y, prof);
 
+            }
+        }
+
+        public void testProf(Point3D p, Point3D n, TColor c) {
+            Color cc = c.getCouleur();
+            float[] compArray = new float[3];
+            cc.getColorComponents(compArray);
+            double m = n.prodScalaire(p.norme1());
+            if (m >= 0 && m <= 1.0) {
+                for (int i = 0; i < 3; i++) {
+                    compArray[i] = (float) (compArray[i] * m);
+                }
+
+                cc = new Color(compArray[0], compArray[1], compArray[2]);
+                testProf(p, cc);
             }
         }
 
@@ -877,8 +893,7 @@ public class ZBufferImpl implements ZBuffer {
         id++;
         if (scene1.camera() != null) {
             camera(scene1.camera());
-        }
-        else {
+        } else {
             scene1.camera(cameraC);
         }
         cameraC.calculerMatrice();
@@ -922,6 +937,9 @@ public class ZBufferImpl implements ZBuffer {
         p1 = coordonneesPoint2D(pp1);
         p2 = coordonneesPoint2D(pp2);
         p3 = coordonneesPoint2D(pp3);
+
+        Point3D n = (pp3.moins(pp1)).prodVect(pp2.moins(pp1)).prodVect(Point3D.Z).norme1();
+
         if (p1 == null || p2 == null || p3 == null) {
             return;
         }
@@ -931,7 +949,11 @@ public class ZBufferImpl implements ZBuffer {
             double iteres2 = 1.0 / maxDistance(p1, p2, p3) / 3;
             for (double b = 0; b < 1.0; b += iteres2) {
                 Point3D p = p3d.plus(p3d.mult(-1).plus(pp3).mult(b));
-                ime.testProf(p, c);
+                if (!colorationActive) {
+                    ime.testProf(p, c);
+                } else {
+                    ime.testProf(p, n, new TColor(c));
+                }
             }
         }
     }
@@ -1102,5 +1124,9 @@ public class ZBufferImpl implements ZBuffer {
                 throw new UnsupportedOperationException("Type de perspective non reconnu");
         }
 
+    }
+
+    public void setColoration(boolean a) {
+        this.colorationActive = true;
     }
 }

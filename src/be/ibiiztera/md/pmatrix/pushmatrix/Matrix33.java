@@ -20,6 +20,8 @@
 
 package be.ibiiztera.md.pmatrix.pushmatrix;
 
+import java.io.Serializable;
+
 /**
  * @author MANUEL DAHMEN
  *
@@ -28,7 +30,7 @@ package be.ibiiztera.md.pmatrix.pushmatrix;
  * 17 nov. 2011
  *
  */
-public class Matrix33 {
+public class Matrix33 implements Serializable {
 
     private double[] d;
     public static final Matrix33 XYZ;
