@@ -87,7 +87,11 @@ public class TestObjet implements Test {
         if (!this.dir.exists()) {
             this.dir.mkdirs();
         }
-        else
+		else
+		{
+			System.err.println("Le chemin existe : fin du test : ECHEC");
+			System.exit(1);
+		}
 
         if (filename == null) {
             filename = bundle1.getString("src");

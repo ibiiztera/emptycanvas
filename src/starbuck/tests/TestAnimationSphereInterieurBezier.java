@@ -7,6 +7,7 @@ package starbuck.tests;
 import be.ibiiztera.md.pmatrix.pushmatrix.Camera;
 import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
 import be.ibiiztera.md.pmatrix.pushmatrix.TRI;
+import be.ibiiztera.md.pmatrix.pushmatrix.BezierCubique;
 import be.ibiiztera.md.pmatrix.pushmatrix.generator.TRISphere;
 import be.ibiiztera.md.pmatrix.test.pushmatrix.newtest.TestObjet;
 import java.awt.Color;
@@ -20,7 +21,31 @@ import javax.imageio.ImageIO;
  *
  * @author Atelier
  */
-public class TestAnimationSphereInterieur extends TestObjet {
+public class TestAnimationSphereInterieurBezier extends TestObjet {
+
+	private BezierCubique newBezier(BezierCubique old)
+	
+	{
+		Point3D [] xy = new Point3D[4];
+		if(old!=null)
+		{
+			xy[0] = old.get(3);
+		}
+		else
+		{
+			xy[0] = new Point3D(Math.PI*(Math.random()-0.5), Math.PI*2*(Math.random()-0.5), 0);
+		}
+		for(int i=1; i<4; i++)
+		{
+			xy[i] = new Point3D(Math.PI*(Math.random()-0.5), Math.PI*2*(Math.random()-0.5), 0);
+		}
+		BezierCubique bc = new BezierCubique();
+		for(int i=0; i<4; i++)
+		{
+			bc.add(xy[i]);
+		}
+		return bc;
+	}
 
     private static Point3D coordSphere(double a, double b, double radius) {
         return new Point3D(Math.cos(a) * Math.cos(b) * radius,
@@ -50,10 +75,16 @@ public class TestAnimationSphereInterieur extends TestObjet {
 		a = 0;
 		b = 0;
 	}
+	private BezierCubique bc;
+	private int n=50;
     @Override
     public void testScene() {
-        a += (Math.random()) * Math.PI / 36;
-        b += (Math.random()) * Math.PI / 36 / 2;
+		if(frame%n==0 || bc==null)
+		{
+			bc = newBezier(bc);
+        }
+		a = bc.calculerPoint3D((1.0*((frame+n)%n))/n).getX();
+        b = bc.calculerPoint3D((1.0*((frame+n)%n))/n).getY();
         if (a > Math.PI / 2) {
 			a = Math.PI / 2;
         }

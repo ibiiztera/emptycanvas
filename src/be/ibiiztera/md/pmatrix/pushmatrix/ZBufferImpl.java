@@ -938,7 +938,7 @@ public class ZBufferImpl implements ZBuffer {
         p2 = coordonneesPoint2D(pp2);
         p3 = coordonneesPoint2D(pp3);
 
-        Point3D n = (pp3.moins(pp1)).prodVect(pp2.moins(pp1)).prodVect(Point3D.Z).norme1();
+        Point3D n = (pp3.moins(pp1)).prodVect(pp2.moins(pp1)).norme1();
 
         if (p1 == null || p2 == null || p3 == null) {
             return;
