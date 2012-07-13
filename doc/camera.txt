@@ -1,0 +1,6 @@
+Camera
+
+Point camera
+Point lookat
+angle de rotation par rapport à l'horizontale
+Point planfocal

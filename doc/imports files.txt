@@ -1,0 +1,8 @@
+lecture des fichiers
+
+lireMOOD
+ -> opendir(mood.directory), listdir()
+ -> import listPNG, listJPG, listBMP, listGIF
+ -> importMOODS
+ -> importFONTS
+ -> importS config.properties:pot all
