@@ -6,6 +6,9 @@ package be.ibiiztera.md.pmatrix.starbuck02;
 
 import be.ibiiztera.md.pmatrix.test.pushmatrix.newtest.TestObjet;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -158,7 +161,13 @@ public class BatchProcessing extends javax.swing.JFrame {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Ajout d'un fichier");
         fileChooser.setMultiSelectionEnabled(true);
-        fileChooser.setCurrentDirectory(new File("c:\\dev\\projets\\emptycanvas-models\\testscripts"));
+        Properties config  = new Properties();
+        try {
+            config.load(new FileInputStream(System.getProperty("user.home")+File.separator+".starbuck"));
+            fileChooser.setCurrentDirectory(new File(config.getProperty("folder.samples")));
+        } catch (IOException ex) {
+            Logger.getLogger(NEWMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
         fileChooser.setFileFilter(new FileFilter() {
 
             @Override
@@ -269,7 +278,7 @@ public class BatchProcessing extends javax.swing.JFrame {
         try {
             TestObjet to = new TestObjet();
             to.init();
-            to.setFilename(file.getAbsolutePath());
+            to.setFilename(file.getName());
             to.publishResult(false);
             to.testScene(file);
             to.description(file.getAbsolutePath());
