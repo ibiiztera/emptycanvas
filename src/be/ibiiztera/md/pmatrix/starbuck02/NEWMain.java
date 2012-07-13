@@ -1,22 +1,22 @@
 /*
 
-    Copyright (C) 2010-2012  DAHMEN, Manuel, Daniel
+ Copyright (C) 2010-2012  DAHMEN, Manuel, Daniel
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
 
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-*/
+ */
 
 /*
  * NEWMain.java
@@ -25,12 +25,17 @@
  *
  * Created on 17-mars-2012, 12:16:55
  */
-
 package be.ibiiztera.md.pmatrix.starbuck02;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.Scene;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
@@ -42,53 +47,75 @@ import javax.swing.JFileChooser;
  * @author manuel
  */
 public class NEWMain extends javax.swing.JFrame {
+
     private static boolean restart;
     private String bundlePackage = "be/ibiiztera/md/pmatrix/starbuck02/";
     private String bundleExtension = ".properties";
     private RenderPreviewPanel rpp = null;
-    private PreviewControleur pc = new PreviewControleurConcrete(); 
+    private PreviewControleur pc = new PreviewControleurConcrete();
     protected String txtCHEMIN;
     private String langue;
     private Preferences prefs;
-    
-    
-    public void restart()
-    {
+
+    public void restart() {
         restart = true;
     }
-    public void sauvegarderChoixLangue(String langue)
-    {
+
+    public void sauvegarderChoixLangue(String langue) {
         Config c = new Config();
         c.load();
         c.saveProperty("Langue", langue);
         c.save();
         this.langue = langue;
-    }  
-     /** Creates new form NEWMain */
-    public NEWMain() {
+    }
+
+    /**
+     * Creates new form NEWMain
+     */
+    public NEWMain(boolean experimental) {
         // On vérifie que le "systray" est supporté
-	// par la JVM pour ce système d'exploitation
-	if (SystemTray.isSupported()) {
+        // par la JVM pour ce système d'exploitation
+        if (SystemTray.isSupported()) {
             try {
                 PopupMenu popup = new PopupMenu();
+                MenuItem batchMI = new MenuItem("Voir avancement des tâches");
+                MenuItem quitterMI = new MenuItem("Quitter");
+                batchMI.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        java.awt.EventQueue.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                new BatchProcessing().setVisible(true);
+                            }
+                        });
+                    }
+                });
+                quitterMI.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        System.out.println("Sortie du programme");
+                        System.exit(0);
+                    }
+                });
                 popup.add(new MenuItem("Voir avancement des tâches"));
                 popup.add(new MenuItem("Quitter"));
                 // On Crée un TrayIcon qui représentera notre icône :
                 TrayIcon trayIcon = new TrayIcon(
-                                ImageIO.read(getClass().getResource("iconesystray.bmp")),		// L'image qui sera utilisé comme icône
-                                "Empty Canvas Waaa", 	// Le texte affiché lors du survol de la souris
-                                
+                        ImageIO.read(getClass().getResource("iconesystray.bmp")), // L'image qui sera utilisé comme icône
+                        "Empty Canvas Waaa", // Le texte affiché lors du survol de la souris
+
                         // Le PopupMenu qui s'affichera lors du clic droit
-                                popup);
-                
+                        popup);
+
                 // On active le redimensionnement automatique de
                 // l'icône, afin qu'elle s'adapte au système
                 // (sinon l'icône peut être tronqué ou disproportionné)
                 trayIcon.setImageAutoSize(true);
-                
+
                 // On récupère l'instance du SystemTray
                 SystemTray systemTray = SystemTray.getSystemTray();
-                
+
                 // Et on ajoute notre TrayIcon dans le system tray
                 systemTray.add(trayIcon);
             } catch (AWTException ex) {
@@ -96,27 +123,28 @@ public class NEWMain extends javax.swing.JFrame {
             } catch (IOException ex) {
                 Logger.getLogger(NEWMain.class.getName()).log(Level.SEVERE, null, ex);
             }
-	}
-        
-        
+        }
+
+
         initComponents();
-	//        String h = System.getProperty(java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/starbuck02/Bundle").getString("USER_HOME"));
+        //        String h = System.getProperty(java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/starbuck02/Bundle").getString("USER_HOME"));
         //String p = System.getProperty(java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/starbuck02/Bundle").getString("FILE_SEPARATOR"));
         //txtCHEMIN = h + p + java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/starbuck02/Bundle").getString("PMMATRIX_DATA") + p + java.util.ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/starbuck02/Bundle").getString("TESTSCRIPTS");
         loadConfig();
-        
+
         rpp = new RenderPreviewPanel();
         rpp.setView(pc);
         this.splitEdtorView.setLeftComponent(rpp);
         rpp.run();
 
         pc.definirModele(new Scene());
+        pc.experimentale(experimental);
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -340,26 +368,33 @@ public class NEWMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-                JFileChooser chooser = new JFileChooser(txtCHEMIN);
-                chooser.setDialogType(JFileChooser.OPEN_DIALOG);
-                chooser.showOpenDialog(this);
-                if (chooser.getSelectedFile() != null) {
-                    pc.chargerModele(chooser.getSelectedFile());
-                    pc.modeleModifie();
-                    controlsEditor1.setText(pc.modele().toString());
-                }
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+        Properties config  = new Properties();
+        try {
+            config.load(new FileInputStream(System.getProperty("user.home")+File.separator+".starbuck"));
+            chooser.setCurrentDirectory(new File(config.getProperty("folder.samples")));
+        } catch (IOException ex) {
+            Logger.getLogger(NEWMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        chooser.showOpenDialog(this);
+        if (chooser.getSelectedFile() != null) {
+            pc.chargerModele(chooser.getSelectedFile());
+            pc.modeleModifie();
+            controlsEditor1.setText(pc.modele().toString());
+        }
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
                 private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-                                 JFileChooser chooser = new JFileChooser(
-                        txtCHEMIN);
-                chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-                chooser.showOpenDialog(this);
-                if (chooser.getSelectedFile() != null) {
-                    pc.sauvegarderModele(chooser.getSelectedFile());
-                }
-                
+                    JFileChooser chooser = new JFileChooser(
+                            txtCHEMIN);
+                    chooser.setDialogType(JFileChooser.SAVE_DIALOG);
+                    chooser.showOpenDialog(this);
+                    if (chooser.getSelectedFile() != null) {
+                        pc.sauvegarderModele(chooser.getSelectedFile());
+                    }
+
 
                 }//GEN-LAST:event_jMenuItem2ActionPerformed
 
@@ -368,15 +403,12 @@ public class NEWMain extends javax.swing.JFrame {
                 }//GEN-LAST:event_cg_edtActionPerformed
 
                 private void sv_edtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sv_edtActionPerformed
-                    if(pc.modifierModele(controlsEditor1.getText()))
-                    {
+                    if (pc.modifierModele(controlsEditor1.getText())) {
                         pc.modeleModifie();
                         controlsEditor1.setText(pc.modeleTXT());
-                        jFormattedTextField1.setText(java.util.ResourceBundle.getBundle(bundlePackage+ "Bundle").getString("NOUVEAU MODELE OK"));
-                    }
-                    else
-                    {
-                        jFormattedTextField1.setText(java.util.ResourceBundle.getBundle(bundlePackage+ "Bundle").getString("ERREUR"));
+                        jFormattedTextField1.setText(java.util.ResourceBundle.getBundle(bundlePackage + "Bundle").getString("NOUVEAU MODELE OK"));
+                    } else {
+                        jFormattedTextField1.setText(java.util.ResourceBundle.getBundle(bundlePackage + "Bundle").getString("ERREUR"));
 
                     }
                 }//GEN-LAST:event_sv_edtActionPerformed
@@ -386,21 +418,18 @@ public class NEWMain extends javax.swing.JFrame {
                 }//GEN-LAST:event_jButtonRenduFichierActionPerformed
 
                 private void jCheckBoxMenuItemEditerLaSceneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemEditerLaSceneActionPerformed
-                   if(jCheckBoxMenuItemEditerLaScene.isSelected())
-                   {
-                       System.out.println("IS SELECTED: TRUE");
-                   }
-                   else
-                   {
-                       System.out.println("IS NOT SELECTED");
-                   }
-                   controlsEditor1.setControls(jCheckBoxMenuItemEditerLaScene.isSelected());
+                    if (jCheckBoxMenuItemEditerLaScene.isSelected()) {
+                        System.out.println("IS SELECTED: TRUE");
+                    } else {
+                        System.out.println("IS NOT SELECTED");
+                    }
+                    controlsEditor1.setControls(jCheckBoxMenuItemEditerLaScene.isSelected());
                 }//GEN-LAST:event_jCheckBoxMenuItemEditerLaSceneActionPerformed
 
     private void jMenuItemLangueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLangueActionPerformed
         Langue l = new Langue(this, true);
         l.setVisible(true);
-        
+
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItemLangueActionPerformed
 
@@ -411,34 +440,37 @@ public class NEWMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        if(pc!=null)
+        if (pc != null) {
             new QuadTexture(pc).setVisible(true);
-        else
+        } else {
             System.exit(1);
+        }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
-   public final void loadConfig()
-   {
-       prefs = Preferences.userNodeForPackage(this.getClass());
-       
-       Config c = new Config();
-       c.load();
-       
-       this.langue = (String) c.getProperty("Langue");
-       System.out.println("locale: "+ langue);
-   } 
+    public final void loadConfig() {
+        prefs = Preferences.userNodeForPackage(this.getClass());
+
+        Config c = new Config();
+        c.load();
+
+        this.langue = (String) c.getProperty("Langue");
+        System.out.println("locale: " + langue);
+    }
+
     /**
-    * @param args the command line arguments
-    */
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
-            java.awt.EventQueue.invokeLater(new Runnable() {
+        final boolean experimental = Arrays.asList(args).contains("experimental");
+        System.out.println("Mode expérimental : ? " + (experimental ? "YES" : "NO"));
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
             @Override
             public void run() {
-                NEWMain nm = new NEWMain();
+                NEWMain nm = new NEWMain(experimental);
                 nm.setVisible(true);
             }
         });
     }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cg_edt;
     private be.ibiiztera.md.pmatrix.starbuck02.ControlsEditor controlsEditor1;
@@ -463,5 +495,4 @@ public class NEWMain extends javax.swing.JFrame {
     private javax.swing.JSplitPane splitEdtorView;
     private javax.swing.JButton sv_edt;
     // End of variables declaration//GEN-END:variables
-
 }

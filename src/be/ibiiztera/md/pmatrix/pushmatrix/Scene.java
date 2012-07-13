@@ -19,9 +19,11 @@
  */
 package be.ibiiztera.md.pmatrix.pushmatrix;
 
+import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+import javax.naming.OperationNotSupportedException;
 
 @SuppressWarnings("serial")
 public class Scene implements Representable, Serializable {
@@ -32,24 +34,34 @@ public class Scene implements Representable, Serializable {
     private ArrayList<Animation> animations = new ArrayList<Animation>();
     private ArrayList<TColor> colors = new ArrayList<TColor>();
     private SceneCadre cadre = new SceneCadre();
-    private Camera camera;
+    //private Camera camera;
+    private Camera cameraActive;
+    private ArrayList<Camera> cameras = new ArrayList<Camera>();
 	
 	private String DESCRIPTION;
+    private ArrayList<Lumiere> lumieres = new ArrayList<Lumiere>();
+    private Lumiere lumiereActive;
+    private Representable dernierAjout;
+
+    public Representable getDernierAjout() {
+        return dernierAjout;
+    }
 	
     public Iterator<Representable> iterator() {
         return objets.iterator();
     }
 
-    public boolean add(Representable arg0) {
-        return objets.add(arg0);
+    public boolean add(Representable add) {
+        this.dernierAjout = add;
+        return objets.add(add);
     }
 
-    public boolean remove(Representable arg0) {
-        return objets.remove(arg0);
+    public boolean remove(Representable rem) {
+        return objets.remove(rem);
     }
 
-    public Representable get(int arg0) {
-        return objets.get(arg0);
+    public Representable get(int index) {
+        return objets.get(index);
     }
 
     public String getId() {
@@ -87,8 +99,17 @@ public class Scene implements Representable, Serializable {
                 str += r.toString();
             }
         }
-		if(camera!=null)
-			str+= camera.toString();
+	str += "cameras (\n\t";
+        if(cameras.isEmpty())
+        {
+            str += "\n\t"+cameraActive().toString()+"\n";
+        }
+        Iterator<Camera> itC = cameras.iterator();
+        while (itC.hasNext()) {
+            str += "\n\t"+itC.next().toString()+"\n";
+        }
+	str += "\n)";
+        
         str += "\n\n)\n";
         return str;
     }
@@ -149,17 +170,98 @@ public class Scene implements Representable, Serializable {
         colors.add(c);
     }
 	
+        @Deprecated
 	public Camera camera()
 	{
-		return camera;
+		return cameraActive();
 	}
+        @Deprecated
 	public void camera(Camera c)
 	{
-		camera = c;
+		cameraActive = c;
 	}
+    public ArrayList<Camera> cameras()
+    {
+        return cameras;
+    }
+    public Camera cameraActive()
+    {
+        if(cameraActive!=null)
+            return cameraActive;
+        else if(cameras.size()>0)
+            return cameras.get(0);
+        return Camera.PARDEFAULT;
+    }
+    public Lumiere lumiereActive(){
+        if(lumiereActive!=null)
+            return lumiereActive;
+        else if(lumieres.size()>0)
+            return lumieres.get(0);
+        return LumierePointSimple.PARDEFAUT;
+    }
+    public void cameraActive(Camera c)
+    {
+        this.cameraActive = c;
+    }
 
     public void updateFromText(Representable selectedComponent, String text) {
         //throw new UnsupportedOperationException("Not yet implemented");
     }
-	
+
+    public void clear() {
+        objets.clear();
+        texture().clear();
+    }
+
+    public void cameras(ArrayList<Camera> cs) {
+        this.cameras = cs;
+    }
+
+    public void lumieres(ArrayList<Lumiere> lumieres) {
+        this.lumieres = lumieres;
+    }
+    public ArrayList<Lumiere> lumieres(){
+        return lumieres;
+    }
+
+    public void rotationPolygone(Representable da, Point3D axeBase, Point3D axeDirection, 
+            int numRotations) {
+        if(da instanceof Point3D)
+        {
+            for(int i = 0; i<numRotations; i++)
+                ((Point3D)da).rotatePoint(new Axe(axeBase, axeDirection), 
+                        2.0*Math.PI*i/numRotations);
+        }
+        else if(da instanceof Polygone)
+        {
+            for(int p= 0; p<((Polygone)da).getPoints().size(); p++)
+            for(int i = 0; i<numRotations; i++)
+                ((Polygone)da).getPoints().get(p).
+                        rotatePoint(new Axe(axeBase, axeDirection), 
+                        2.0*Math.PI*i/numRotations);
+        }
+        else if(da instanceof SegmentDroite)
+        {
+            Point3D p = ((SegmentDroite)da).getOrigine();
+            for(int i = 0; i<numRotations; i++)
+                p.
+                        rotatePoint(new Axe(axeBase, axeDirection), 
+                        2.0*Math.PI*i/numRotations);
+            p = ((SegmentDroite)da).getExtremite();
+            for(int i = 0; i<numRotations; i++)
+                p.
+                        rotatePoint(new Axe(axeBase, axeDirection), 
+                        2.0*Math.PI*i/numRotations);
+        }
+        else
+        {
+            throw new UnsupportedOperationException
+                    ("Non supporté: rotationPolygone" + 
+                    da.getClass().getSimpleName());
+        }
+    }
+	public void flushImports()
+        {
+            dernierAjout = null;
+        }
 }

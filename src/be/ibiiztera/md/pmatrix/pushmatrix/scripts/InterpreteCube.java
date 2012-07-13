@@ -34,6 +34,7 @@ class InterpreteCube implements Interprete {
         this.répertoire = r;
     }
     private int position;
+    @Override
     public Object interprete(String text, int pos) throws InterpreteException {
         InterpretesBase ib = new InterpretesBase();
         ArrayList<Integer> pattern;

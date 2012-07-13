@@ -1,0 +1,11 @@
+Representable
+envoyer(ZBuffer z);
+
+
+ZBuffer
+recevoir(Representable r);
+{
+ testpoint
+ segmentdroite
+ triangle
+}

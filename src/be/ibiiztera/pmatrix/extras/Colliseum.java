@@ -1,7 +1,22 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
+    Copyright (C) 2020-2012  DAHMEN, Manuel, Daniel
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02120-1301  USA
+
+*/
 package be.ibiiztera.pmatrix.extras;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.*;
@@ -15,22 +30,23 @@ import java.awt.Color;
 public final class Colliseum extends RepresentableConteneur
 {
     private int cotésBase = 100;
-    private int côtésHaut = 100;
+    private int côtésHaut = 10;
     
     private double hauteur1 = 10;
     private double rayon = 5;
     
-    public Colliseum()
+    public Colliseum(Point3D o, double hauteur)
     {
+		this.hauteur1 = hauteur;
         for(int i = 0; i<cotésBase; i++)
             for(int j = 0; j<côtésHaut; j++)
             {
                 add(
                         new Polygone(new Point3D[] {
-                            coordCylindre(Point3D.O0, hauteur1*j/côtésHaut, 1.0*i/cotésBase*2*Math.PI),
-                            coordCylindre(Point3D.O0, hauteur1*(j+1)/côtésHaut, 1.0*i/cotésBase*2*Math.PI),
-                            coordCylindre(Point3D.O0, hauteur1*(j+1)/côtésHaut, 1.0*(i+1)/cotésBase*2*Math.PI),
-                            coordCylindre(Point3D.O0, hauteur1*(j)/côtésHaut, 1.0*(i+1)/cotésBase*2*Math.PI)
+                            coordCylindre(o, hauteur1*j/côtésHaut, 1.0*i/cotésBase*2*Math.PI),
+                            coordCylindre(o, hauteur1*(j+1)/côtésHaut, 1.0*i/cotésBase*2*Math.PI),
+                            coordCylindre(o, hauteur1*(j+1)/côtésHaut, 1.0*(i+1)/cotésBase*2*Math.PI),
+                            coordCylindre(o, hauteur1*(j)/côtésHaut, 1.0*(i+1)/cotésBase*2*Math.PI)
                         },
                             Color.YELLOW));
             }
@@ -42,10 +58,9 @@ public final class Colliseum extends RepresentableConteneur
                     new double[]{
                         Math.cos(angle),0, Math.sin(angle),
                         0,              1, 0,
-                        Math.sin(angle),0, Math.cos(angle)
+                        -Math.sin(angle),0, Math.cos(angle)
                     }
                 ).mult(Point3D.X).mult(rayon)).plus(Point3D.Y.mult(hauteur));
-        //System.out.println(p.toString());
         return p;
     }
 

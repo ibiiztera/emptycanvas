@@ -87,6 +87,7 @@ public class InterpreteCamera implements Interprete {
 
             ax = (Double) a.get(1);
             ay = (Double) a.get(3);
+            
             camera = new Camera(cpos, lookat);
             camera.angleXY(ax, ay);
             pos = ib.getPosition();
@@ -125,10 +126,12 @@ public class InterpreteCamera implements Interprete {
 
     public static void main(String[] args) {
         try {
-            String str = "( (0.0, 0.0E-20, -10) (0.0, 0.0, 0.0) )";
+            String str = "( (0.0, 0.0E-20, -10) (0.0, 0.0, 0.0) )\n\n"
+                +"( (0.0, 0.0E-20, -10) (0.0, 0.0, 0.0) )";
             InterpreteCamera ic = new InterpreteCamera();
 
             Camera c = (Camera) ic.interprete(str, 0);
+            c = (Camera) ic.interprete(str, ic.getPosition());
 
             System.out.println(c.toString() 
                     + "\n\nPOS = " +ic.getPosition());

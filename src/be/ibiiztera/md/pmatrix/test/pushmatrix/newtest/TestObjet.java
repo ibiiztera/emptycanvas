@@ -1,14 +1,15 @@
 package be.ibiiztera.md.pmatrix.test.pushmatrix.newtest;
 
 import be.ibiiztera.md.pmatrix.pushmatrix.*;
+import be.ibiiztera.md.pmatrix.pushmatrix.scripts.ExtensionFichierIncorrecteException;
 import be.ibiiztera.md.pmatrix.pushmatrix.scripts.Loader;
+import be.ibiiztera.md.pmatrix.pushmatrix.scripts.VersionNonSupportéeException;
+import be.ibiiztera.md.pmatrix.starbuck02.NEWMain;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.jar.JarFile;
@@ -38,7 +39,7 @@ public class TestObjet implements Test {
     protected String description;
     private Camera c = new Camera(new Point3D(0, 0, -10), Point3D.O0, 0.1);
     private BufferedImage ri;
-    private String filename;
+    private String filename = "frame";
     private String fileExtension;
     private boolean publish = true;
     private boolean isometrique = false;
@@ -46,6 +47,11 @@ public class TestObjet implements Test {
     private int maxFrames = 5000;
     private String text = "scene";
     private File fileScene;
+    private boolean saveTxt = true;
+    private String binaryExtension = "bmood";
+    private int serie = 0;
+    private File serid = null;
+    private boolean initialise;
 
     public int getMaxFrames() {
         return maxFrames;
@@ -74,16 +80,31 @@ public class TestObjet implements Test {
 
     @Override
     public void init() {
+        if(initialise)
+            return;
         ResourceBundle bundle1 = ResourceBundle.getBundle("be/ibiiztera/md/pmatrix/test/pushmatrix/newtest/Bundle");
 
-        File dirl = new File(bundle1.getString("testpath"));
+        File dirl = null;
+        Properties config  = new Properties();
+        try {
+            config.load(new FileInputStream(System.getProperty("user.home")+File.separator+".starbuck"));
+            dirl = new File(config.getProperty("folder.objets"));
+        } catch (IOException ex) {
+            Logger.getLogger(NEWMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(dirl==null)
+            dirl = new File(bundle1.getString("testpath"));
         if (!dirl.exists()) {
             dirl.mkdirs();
         }
         this.dir = new File(dirl.getAbsolutePath() + File.separator + this.getClass().getName());
         if (!this.dir.exists()) {
             this.dir.mkdirs();
+        } else {
+            System.err.println("Le chemin existe : fin du test : ECHEC");
+            //System.exit(1);
         }
+        serid = new File(this.dir.getAbsolutePath() + File.separator + "__SERID");
 
         if (filename == null) {
             filename = bundle1.getString("src");
@@ -91,7 +112,7 @@ public class TestObjet implements Test {
         if (fileExtension == null) {
             fileExtension = bundle1.getString("type");
         }
-        
+
         template = bundle1.getString("template");
 
         properties.put("name", this.getClass().getCanonicalName());
@@ -101,6 +122,9 @@ public class TestObjet implements Test {
         resy = Integer.parseInt(bundle1.getString("resy"));
         scene = new Scene();
 
+        binaryExtension = bundle1.getString("binaryExtension");
+        
+        initialise = true;
     }
 
     public void setResx(int resx) {
@@ -128,8 +152,15 @@ public class TestObjet implements Test {
 
     @Override
     public void testScene(File f) {
-        if (f.getAbsolutePath().endsWith("mood") || f.getAbsolutePath().endsWith("moo")) {
-            new Loader().loadIF(f, scene);
+        if (f.getAbsolutePath().toLowerCase().endsWith("mood") || f.getAbsolutePath().toLowerCase().endsWith("moo")
+                || f.getAbsolutePath().toLowerCase().endsWith("bmood") || f.getAbsolutePath().toLowerCase().endsWith("bmoo")) {
+            try {
+                new Loader().load(f, scene);
+            } catch (VersionNonSupportéeException ex) {
+                Logger.getLogger(TestObjet.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ExtensionFichierIncorrecteException ex) {
+                Logger.getLogger(TestObjet.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             System.err.println("Erreur: extension incorrecte");
             System.exit(1);
@@ -152,8 +183,8 @@ public class TestObjet implements Test {
     @Override
     public void run() {
         init();
-        testScene();
         while (nextFrame()) {
+            testScene();
             try {
                 ZBuffer z = ZBufferFactory.instance(resx, resy);
                 z.scene(scene);
@@ -167,14 +198,22 @@ public class TestObjet implements Test {
                     c.calculerMatrice();
                 }
 
+                if (z instanceof ZBufferImpl) {
+                    ((ZBufferImpl) z).setColoration(true);
+                }
+
                 z.dessinerSilhouette3D();
 
                 ri = z.image();
-                FileOutputStream fileOutputStream = new FileOutputStream(fileScene);
-                fileOutputStream.write(scene.toString().getBytes());
+                ObjectOutputStream fileOutputStream =
+                        new ObjectOutputStream(new FileOutputStream(fileScene));
+                fileOutputStream.writeObject("/toString/");
+                fileOutputStream.writeObject(scene.toString());
+                fileOutputStream.writeObject("/serializable/");
+                fileOutputStream.writeObject(scene);
                 fileOutputStream.close();
-                
-                
+
+
                 Graphics g = ri.getGraphics();
                 g.setColor(Color.black);
                 g.drawString(description, 0, 1100);
@@ -189,6 +228,17 @@ public class TestObjet implements Test {
             }
         }
 
+        if (isSaveBMood()) {
+            try {
+                File foutm = new File(this.dir.getAbsolutePath() + File.separator + filename + ".bmood");
+                new Loader().saveBin(foutm, scene);
+            } catch (VersionNonSupportéeException ex) {
+                Logger.getLogger(TestObjet.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ExtensionFichierIncorrecteException ex) {
+                Logger.getLogger(TestObjet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
         publishResult();
     }
 
@@ -239,17 +289,69 @@ public class TestObjet implements Test {
     @Override
     public boolean nextFrame() {
         frame++;
-        
-        file = new File(this.dir.getAbsolutePath() + File.separator + filename+(1000000+frame) + "." + fileExtension);
-        fileScene = new File(this.dir.getAbsolutePath() + File.separator + text+(1000000+frame) + "." + "mood");
-
-        
-        if (frame == 1 && loop() == false) {
-            return false;
+        if (serid.exists()) {
+            ObjectInputStream ois = null;
+            try {
+                ois = new ObjectInputStream(new FileInputStream(serid));
+                serie = ois.readInt();
+            } catch (IOException ex) {
+                Logger.getLogger(TestObjet.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    ois.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(TestObjet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else {
+            ObjectOutputStream oos = null;
+            try {
+                oos = new ObjectOutputStream(new FileOutputStream(serid));
+                oos.writeInt(serie);
+            } catch (IOException ex) {
+                Logger.getLogger(TestObjet.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    oos.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(TestObjet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
-        if (loop() && frame > maxFrames) {
+
+        file = new File(this.dir.getAbsolutePath() + File.separator + "__SERID_" + (serie) + "__" + filename + (1000000 + frame) + "." + fileExtension);
+        fileScene = new File(this.dir.getAbsolutePath() + File.separator + "__SERID_" + (serie) + "__" + filename + (1000000 + frame) + "." + binaryExtension);
+        while (file == null || file.exists()) {
+            serie++;
+            file = new File(this.dir.getAbsolutePath() + File.separator + "__SERID_" + (serie) + "__" + filename + (1000000 + frame) + "." + fileExtension);
+            fileScene = new File(this.dir.getAbsolutePath() + File.separator + "__SERID_" + (serie) + "__" + filename + (1000000 + frame) + "." + binaryExtension);
+        }
+
+        ObjectOutputStream oos = null;
+        try {
+            oos = new ObjectOutputStream(new FileOutputStream(serid));
+            oos.writeInt(serie);
+        } catch (IOException ex) {
+            Logger.getLogger(TestObjet.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                oos.close();
+            } catch (IOException ex) {
+                Logger.getLogger(TestObjet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        if (loop() && frame > maxFrames || (frame > 1 && !loop())) {
             return false;
         }
         return true;
+    }
+
+    public void saveBMood(boolean b) {
+        saveTxt = b;
+    }
+
+    private boolean isSaveBMood() {
+        return saveTxt;
     }
 }

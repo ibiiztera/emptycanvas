@@ -42,28 +42,28 @@ public class TestSphere extends TestObjet{
         TRISphere s;
         s = new TRISphere(Point3D.X.mult(3), 2);
         try {
-            s.map(ImageIO.read(new File("C:\\Users\\Mary\\Documents\\dev\\emptycanvas\\gitclone\\emptycanvas\\src\\starbuck\\tests\\2456614033-blue-texture.jpg")), "C:\\Users\\Mary\\Documents\\dev\\emptycanvas\\gitclone\\emptycanvas\\src\\starbuck\\tests\\2456614033-blue-texture.jpg");
+            s.map(ImageIO.read(getClass().getResourceAsStream("2456614033-blue-texture.jpg")), "2456614033-blue-texture.jpg");
         } catch (IOException ex) {
             Logger.getLogger(TestSphere.class.getName()).log(Level.SEVERE, null, ex);
         }
         scene().add(s);
         s = new TRISphere(Point3D.X.mult(-3), 2);
         try {
-            s.map(ImageIO.read(new File("C:\\Users\\Mary\\Documents\\dev\\emptycanvas\\gitclone\\emptycanvas\\src\\starbuck\\tests\\2456614033-blue-texture.jpg")), "C:\\Users\\Mary\\Documents\\dev\\emptycanvas\\gitclone\\emptycanvas\\src\\starbuck\\tests\\2456614033-blue-texture.jpg");
+            s.map(ImageIO.read(getClass().getResourceAsStream("2456614033-blue-texture.jpg")), "2456614033-blue-texture.jpg");
         } catch (IOException ex) {
             Logger.getLogger(TestSphere.class.getName()).log(Level.SEVERE, null, ex);
         }
         scene().add(s);
         s = new TRISphere(Point3D.Y.mult(3), 2);
         try {
-            s.map(ImageIO.read(new File("C:\\Users\\Mary\\Documents\\dev\\emptycanvas\\gitclone\\emptycanvas\\src\\starbuck\\tests\\2456614033-blue-texture.jpg")), "C:\\Users\\Mary\\Documents\\dev\\emptycanvas\\gitclone\\emptycanvas\\src\\starbuck\\tests\\2456614033-blue-texture.jpg");
+            s.map(ImageIO.read(getClass().getResourceAsStream("2456614033-blue-texture.jpg")), "2456614033-blue-texture.jpg");
         } catch (IOException ex) {
             Logger.getLogger(TestSphere.class.getName()).log(Level.SEVERE, null, ex);
         }
         scene().add(s);
         s = new TRISphere(Point3D.Y.mult(-3), 2);
         try {
-            s.map(ImageIO.read(new File("C:\\Users\\Mary\\Documents\\dev\\emptycanvas\\gitclone\\emptycanvas\\src\\starbuck\\tests\\2456614033-blue-texture.jpg")), "C:\\Users\\Mary\\Documents\\dev\\emptycanvas\\gitclone\\emptycanvas\\src\\starbuck\\tests\\2456614033-blue-texture.jpg");
+            s.map(ImageIO.read(getClass().getResourceAsStream("2456614033-blue-texture.jpg")), "2456614033-blue-texture.jpg");
         } catch (IOException ex) {
             Logger.getLogger(TestSphere.class.getName()).log(Level.SEVERE, null, ex);
         }

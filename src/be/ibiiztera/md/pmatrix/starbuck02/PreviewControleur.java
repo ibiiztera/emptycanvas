@@ -19,7 +19,9 @@
 */
 package be.ibiiztera.md.pmatrix.starbuck02;
 
-import be.ibiiztera.md.pmatrix.pushmatrix.*;
+import be.ibiiztera.md.pmatrix.pushmatrix.Point3D;
+import be.ibiiztera.md.pmatrix.pushmatrix.Scene;
+import be.ibiiztera.md.pmatrix.pushmatrix.ZBuffer;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -61,4 +63,9 @@ public interface PreviewControleur extends Runnable{
     public Point getPoint2D(Point3D p);
     
     public BufferedImage getImage();
+
+    public void experimentale(boolean experimental);
+    
+    public boolean lock(ZBuffer z);
+    public boolean unlock(ZBuffer z);
 }

@@ -46,38 +46,39 @@ public class TestAnimationSphereInterieur extends TestObjet {
         }
 
     }
-
+	{
+		a = 0;
+		b = 0;
+	}
     @Override
     public void testScene() {
-        a = 0;
-        b = 0;
-        pos = coordSphere(a, b, 10);
-
-        a += (Math.random() - 0.5) * Math.PI / 36;
-        b += (Math.random() - 0.5) * Math.PI / 36 / 2;
+        a += (Math.random()) * Math.PI / 36;
+        b += (Math.random()) * Math.PI / 36 / 2;
         if (a > Math.PI / 2) {
-            a = Math.PI / 2;
+			a = Math.PI / 2;
         }
         if (a < -Math.PI / 2) {
             a = -Math.PI / 2;
         }
         if (b > Math.PI) {
-            a = Math.PI;
-        }
-        if (b < -Math.PI) {
             a = -Math.PI;
         }
-        camera(new Camera(pos, new Point3D(0, 0, 0), null));
+        if (b < -Math.PI) {
+            a = Math.PI;
+        }
         pos = coordSphere(a, b, 10);
+        scene().camera(new Camera(pos, new Point3D(0, 0, 0)));
+		camera(new Camera(pos, new Point3D(0, 0, 0)));
         description("Textured sphere seen from inside");
 
     }
 
     public static void main(String[] args) {
             TestAnimationSphereInterieur to = new TestAnimationSphereInterieur();
-            to.setResx(640);
-            to.setResy(480);
+            to.setResx(320);
+            to.setResy(240);
             to.loop(true);
+			to.setMaxFrames(1000);
             to.publishResult(false);
             to.run();
 

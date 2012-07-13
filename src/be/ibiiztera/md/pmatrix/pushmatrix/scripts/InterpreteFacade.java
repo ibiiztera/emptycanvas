@@ -24,6 +24,8 @@ import be.ibiiztera.md.pmatrix.pushmatrix.*;
 import be.ibiiztera.md.pmatrix.pushmatrix.extras.*;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class InterpreteFacade {
 
@@ -528,5 +530,131 @@ public class InterpreteFacade {
             throw new InterpreteException("CAMERA ???", ex);
         }
         return c;
+    }
+
+    ArrayList<Camera> interpreteCameraCollection() throws InterpreteException {
+        ArrayList<Camera> cameras = new ArrayList<Camera>();
+
+        interpreteBlank();
+        interpreteParentheseOuvrante();
+        interpreteBlank();
+        
+        Camera c;
+        try {
+            while(true)
+            {
+                String id = interpreteIdentifier();
+                System.out.println(id);
+                if("camera".equals(id==null?"NULL":id.toLowerCase()))
+                {
+                    interpreteBlank();
+                    c=interpreteCamera();
+                    cameras.add(c);
+                    System.out.println(id);
+                }
+                else
+                    break;
+                interpreteBlank();
+            }
+        } catch (InterpreteException ex) {
+        }
+
+        interpreteBlank();
+        interpreteParentheseFermante();
+        interpreteBlank();
+        
+        
+        
+        return cameras;
+    }
+
+    ArrayList<Lumiere> interpreteLumiereCollection() throws InterpreteException {
+         ArrayList<Lumiere> lumieres = new ArrayList<Lumiere>();
+        InterpretesBase ib = new InterpretesBase();
+        ArrayList<Integer> pattern = new ArrayList<Integer>();
+        pattern.add(ib.BLANK);
+        pattern.add(ib.LEFTPARENTHESIS);
+        pattern.add(ib.BLANK);
+        ib.compile(pattern);
+        ib.read(text, pos);
+        setPosition(ib.getPosition());
+        Lumiere c;
+        try {
+            while(true)
+            {
+                interpreteBlank();
+                String id = interpreteIdentifier();
+                interpreteBlank();
+                if("lumierepoint".equals(id==null?"NULL":id.toLowerCase()))
+                {
+                    c=interpreteLumierePoint();
+                    lumieres.add(c);
+                }
+                interpreteBlank();
+            }
+        } catch (InterpreteException ex) {
+        }
+
+        ib = new InterpretesBase();
+        pattern = new ArrayList<Integer>();
+        pattern.add(ib.BLANK);
+        pattern.add(ib.RIGHTPARENTHESIS);
+        pattern.add(ib.BLANK);
+        ib.compile(pattern);
+        ArrayList<Object> read = ib.read(text, pos);
+        setPosition(pos);
+  
+        
+        return lumieres;
+    }
+
+    public LumierePoint interpreteLumierePoint() throws InterpreteException
+    {
+        InterpretesBase ib = new InterpretesBase();
+        ArrayList<Integer> pattern = new ArrayList<Integer>();
+        pattern.add(ib.BLANK);
+        pattern.add(ib.LEFTPARENTHESIS);
+        pattern.add(ib.BLANK);
+        ib.compile(pattern);
+        ib.read(text, pos);
+        setPosition(ib.getPosition());
+    
+        // Point de lumiere
+        Point3D pl = interpretePoint3D();
+        // Intensite au point (*)
+        double intensite = 1.0;
+        Color c = interpreteColor();
+        
+        LumierePointSimple lps = new LumierePointSimple(c, pl, intensite);
+        
+        ib = new InterpretesBase();
+        pattern = new ArrayList<Integer>();
+        pattern.add(ib.BLANK);
+        pattern.add(ib.RIGHTPARENTHESIS);
+        pattern.add(ib.BLANK);
+        ib.compile(pattern);
+        ib.read(text, pos);
+        setPosition(ib.getPosition());
+        
+        return lps;
+        
+    }
+
+    public void interpreteParentheseOuvrante() throws InterpreteException {
+        InterpretesBase ib = new InterpretesBase();
+        ArrayList<Integer> pattern = new ArrayList<Integer>();
+        pattern.add(ib.LEFTPARENTHESIS);
+        ib.compile(pattern);
+        ib.read(text, pos);
+        setPosition(ib.getPosition());
+    }
+
+    public void interpreteParentheseFermante() throws InterpreteException {
+        InterpretesBase ib = new InterpretesBase();
+        ArrayList<Integer> pattern = new ArrayList<Integer>();
+        pattern.add(ib.RIGHTPARENTHESIS);
+        ib.compile(pattern);
+        ib.read(text, pos);
+        setPosition(ib.getPosition());
     }
 }

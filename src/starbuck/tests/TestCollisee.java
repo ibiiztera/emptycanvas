@@ -1,6 +1,6 @@
 /*
 
-    Copyright (C) 2010-2012  DAHMEN, Manuel, Daniel
+    Copyright (C) 2020-2012  DAHMEN, Manuel, Daniel
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -14,7 +14,7 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02120-1301  USA
 
 */
 package starbuck.tests;
@@ -31,15 +31,55 @@ import be.ibiiztera.pmatrix.extras.Colliseum;
 public class TestCollisee extends TestObjet{
     @Override
     public void testScene() {
-        scene().add(new Colliseum());
+        scene().add(new Colliseum(new Point3D (0, -10, 0), 20));
         
     }
 
     public static void main(String [] args)
     {
         TestCollisee to = new TestCollisee();
-        to.camera(new Camera(new Point3D(0, 0, -10), Point3D.O0, 0.1));
+        to.publishResult(false);
+        to.camera(new Camera(new Point3D(0, 0, -20), Point3D.O0));
+        to.setFilename("01-front -- cylindre jaune");
         to.description("cylindre");
         to.run();
-    }
+
+        
+        to = new TestCollisee();
+        to.publishResult(false);
+        to.camera(new Camera(new Point3D(0, 0, 20), Point3D.O0));
+        to.setFilename("02-arriere -- cylindre jaune");
+        to.description("cylindre");
+        to.run();
+        
+        
+        to = new TestCollisee();
+        to.publishResult(false);
+        to.camera(new Camera(new Point3D(0, 20, 0), Point3D.O0));
+        to.setFilename("03-dessus -- cylindre");
+        to.description("cylindre");
+        to.run();
+
+        to = new TestCollisee();
+        to.publishResult(false);
+        to.camera(new Camera(new Point3D(0, -20, 0), Point3D.O0));
+        to.setFilename("04-dessous -- cylindre jaune");
+        to.description("cylindre");
+        to.run();
+
+        to = new TestCollisee();
+        to.publishResult(false);
+        to.camera(new Camera(new Point3D(-20, 0, 0), Point3D.O0));
+        to.setFilename("05-gauche -- cylindre jaune");
+        to.description("cylindre");
+        to.run();
+
+    
+        to = new TestCollisee();
+        to.publishResult(false);
+        to.camera(new Camera(new Point3D(20, 0, 0), Point3D.O0));
+        to.setFilename("06-droite -- cylindre jaune");
+        to.description("cylindre");
+        to.run();
+}
 }

@@ -115,17 +115,16 @@ public class Loader implements SceneLoader {
         }
 
         DataInputStream ds = new DataInputStream(fis);
-        String text = "";
-        String t = "";
+        String ligne = "";
+        String texte = "";
         try {
-            while ((text = ds.readLine()) != null) {
-                t += text;
+            while ((ligne = ds.readLine()) != null) {
+                texte += ligne;
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return loadIF(t, sc);
+        return loadIF(texte, sc);
     }
 
     public boolean loadIF(String t, Scene sc) {
@@ -139,11 +138,11 @@ public class Loader implements SceneLoader {
         String id = "";
 
         while (interpreteH.getPosition() < t.length() && !end && !failed) {
+            failed = true;
             if (interpreteH.parseEND().equals(")")) {
                 end = true;
                 continue;
             }
-            failed = true;
             try {
                 id = interpreteH.interpreteIdentifier();
 
@@ -155,16 +154,11 @@ public class Loader implements SceneLoader {
                 failed = true;
             }
             if ("scene".equals(id)) {
-                InterpretesBase ib = new InterpretesBase();
-                ArrayList<Integer> p = new ArrayList<Integer>();
-                ib.compile(p);
-                p.add(ib.BLANK);
-                p.add(ib.LEFTPARENTHESIS);
-                p.add(ib.BLANK);
                 try {
-                    ib.read(t, pos);
-                    pos = ib.getPosition();
-                    interpreteH.setPosition(pos);
+                    interpreteH.interpreteBlank();
+                    interpreteH.interpreteParentheseOuvrante();
+                    interpreteH.interpreteBlank();
+
                     failed = false;
                 } catch (Exception ex) {
                     Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
@@ -333,6 +327,43 @@ public class Loader implements SceneLoader {
                 } catch (InterpreteException ex) {
                     Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            } else if ("cameras".equals(id)) {
+                ArrayList<Camera> cameras;
+                try {
+                    cameras = interpreteH.interpreteCameraCollection();
+                    sc.cameras(cameras);
+                    failed = false;
+                } catch (InterpreteException ex) {
+                    failed = true;
+                    Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else if ("lumieres".equals(id)) {
+                ArrayList<Lumiere> lumieres;
+                try {
+                    lumieres = interpreteH.interpreteLumiereCollection();
+                    sc.lumieres(lumieres);
+                    failed = false;
+                } catch (InterpreteException ex) {
+                    Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else if ("op".equals(id)) {
+                try {
+                    interpreteH.interpreteBlank();
+                    String idOp = interpreteH.interpreteIdentifier();
+                    if ("polyrot".equals(idOp)) {
+                        Point3D axeA = interpreteH.interpretePoint3D();
+                        Point3D axeB = interpreteH.interpretePoint3D();
+                        int numRotations = interpreteH.interpreteInteger();
+
+                        Representable da = sc.getDernierAjout();
+                        if (da != null) {
+                            sc.rotationPolygone(da, axeA, axeB, numRotations);
+                        }
+                    }
+                } catch (InterpreteException ex) {
+                    Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
+                    failed = true;
+                }
             } else if ("sphere".equals(id)) {
                 try {
                     TRISphere t2 = interpreteH.interpreteTRISphere();
@@ -343,17 +374,9 @@ public class Loader implements SceneLoader {
                     failed = true;
                     Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } else if ("camera".equals(id)) {
-                try {
-                    Camera c = interpreteH.interpreteCamera();
-                    sc.camera(c);
-                    failed = false;
-                } catch (InterpreteException ex) {
-                    Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
-                    failed = true;
-                }
             }
-            interpreteH.interpreteBlank();
+
+            sc.flushImports();
         }
         return !failed;
     }
@@ -470,7 +493,6 @@ public class Loader implements SceneLoader {
     }
 
     public Scene load(File file, Scene scene) throws VersionNonSupportéeException, ExtensionFichierIncorrecteException {
-        Scene sc = scene;
         if (file.getAbsolutePath().toLowerCase().endsWith("moo")
                 || file.getAbsolutePath().toLowerCase().endsWith("mood")) {
             loadIF(file, scene);
